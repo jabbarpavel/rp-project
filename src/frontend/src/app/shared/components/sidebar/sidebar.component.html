@@ -1,0 +1,15 @@
+<div class="sidebar">
+  <div class="sidebar__logo">Tenant Logo</div>
+
+  <nav class="sidebar__nav">
+    <a
+      *ngFor="let item of menu"
+      [routerLink]="item.link"
+      routerLinkActive="active"
+      class="sidebar__link"
+    >
+      <span class="sidebar__icon">{{ item.icon }}</span>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+</div>

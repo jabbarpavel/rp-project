@@ -1,0 +1,18 @@
+.topbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.topbar__email {
+  font-weight: 500;
+}
+
+.topbar__btn {
+  background: #0f70ff;
+  border: none;
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  cursor: pointer;
+}

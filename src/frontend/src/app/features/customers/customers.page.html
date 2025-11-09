@@ -1,0 +1,27 @@
+<div class="page-container">
+  <h2>Kunden</h2>
+
+  <div *ngIf="loading">Lade Kunden...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <table *ngIf="!loading && !error && customers.length > 0" class="customer-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>E-Mail</th>
+        <th>Erstellt am</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers">
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.createdAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !error && customers.length === 0">Keine Kunden gefunden.</p>
+</div>

@@ -1,0 +1,55 @@
+Auflistung der Ordnerpfade für Volume Windows
+Volumeseriennummer : FE76-2118
+C:\USERS\JABBA\DESKTOP\RP-PROJECT\SRC\FRONTEND\SRC\APP
+¦   app.config.ts
+¦   app.html
+¦   app.routes.ts
+¦   app.scss
+¦   app.spec.ts
+¦   app.ts
+¦   
++---components
+¦   +---sidebar
+¦           sidebar.html
+¦           sidebar.scss
+¦           sidebar.spec.ts
+¦           sidebar.ts
+¦           
++---guards
+¦       auth.guard.ts
+¦       
++---pages
+¦   +---customers
+¦   ¦       customers.html
+¦   ¦       customers.scss
+¦   ¦       customers.spec.ts
+¦   ¦       customers.ts
+¦   ¦       
+¦   +---dashboard
+¦   ¦       dashboard.html
+¦   ¦       dashboard.scss
+¦   ¦       dashboard.spec.ts
+¦   ¦       dashboard.ts
+¦   ¦       
+¦   +---login
+¦   ¦       login.html
+¦   ¦       login.scss
+¦   ¦       login.spec.ts
+¦   ¦       login.ts
+¦   ¦       
+¦   +---settings
+¦   ¦       settings.html
+¦   ¦       settings.scss
+¦   ¦       settings.spec.ts
+¦   ¦       settings.ts
+¦   ¦       
+¦   +---welcome
+¦           welcome.html
+¦           welcome.scss
+¦           welcome.ts
+¦           
++---services
+        auth.spec.ts
+        auth.ts
+        customer.ts
+        

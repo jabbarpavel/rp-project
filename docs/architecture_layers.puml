@@ -1,0 +1,39 @@
+@startuml
+!theme plain
+skinparam shadowing false
+skinparam linetype ortho
+skinparam rectangleFontStyle bold
+
+rectangle "API Layer\n(RP.CRM.Api)" as API {
+  [Controllers]
+}
+
+rectangle "Application Layer\n(RP.CRM.Application)" as APP {
+  [Services]
+  [Interfaces]
+  [DTOs]
+}
+
+rectangle "Infrastructure Layer\n(RP.CRM.Infrastructure)" as INFRA {
+  [Repositories]
+  [Context]
+  [Middleware]
+}
+
+rectangle "Domain Layer\n(RP.CRM.Domain)" as DOMAIN {
+  [Entities]
+}
+
+rectangle "Database\n(PostgreSQL rp_crm)" as DB {
+  [Tenants]
+  [Users]
+  [Customers]
+}
+
+API --> APP : calls
+APP --> INFRA : via DI + EF Core
+INFRA --> DB : ORM mapping
+INFRA --> DOMAIN : uses Entities
+APP --> DOMAIN : business models
+
+@enduml

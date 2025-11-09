@@ -1,0 +1,40 @@
+@startuml
+!theme plain
+skinparam shadowing false
+skinparam linetype ortho
+skinparam rectangleFontStyle bold
+
+' === DATABASE DIAGRAM ===
+entity "Tenants" as T {
+  * Id : int <<PK>>
+  --
+  Name : text
+  CreatedAt : timestamp
+  UpdatedAt : timestamp?
+}
+
+entity "Users" as U {
+  * Id : int <<PK>>
+  --
+  Email : text
+  PasswordHash : text
+  Role : text
+  TenantId : int <<FK>>
+  CreatedAt : timestamp
+  UpdatedAt : timestamp?
+}
+
+entity "Customers" as C {
+  * Id : int <<PK>>
+  --
+  Name : text
+  Email : text
+  TenantId : int <<FK>>
+  CreatedAt : timestamp
+  UpdatedAt : timestamp?
+}
+
+T ||--o{ U : has many
+T ||--o{ C : has many
+
+@enduml

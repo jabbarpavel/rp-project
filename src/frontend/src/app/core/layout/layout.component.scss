@@ -1,0 +1,33 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.layout__sidebar {
+  width: 220px;
+  background: #182436;
+  flex-shrink: 0;
+}
+
+.layout__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.layout__topbar {
+  height: 56px;
+  background: #182436;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1.5rem;
+}
+
+.layout__content {
+  padding: 1.5rem;
+  flex: 1;
+}

@@ -1,0 +1,31 @@
+@startuml
+skinparam shadowing false
+skinparam linetype ortho
+skinparam rectangleFontStyle bold
+title RP.CRM – System Overview
+
+' ----- ARCHITEKTUR -----
+rectangle "API Layer\n(RP.CRM.Api)\n- Controllers" as API
+rectangle "Application Layer\n(RP.CRM.Application)\n- Services\n- Interfaces\n- DTOs" as APP
+rectangle "Infrastructure Layer\n(RP.CRM.Infrastructure)\n- Repositories\n- Context\n- Middleware" as INFRA
+rectangle "Domain Layer\n(RP.CRM.Domain)\n- Entities" as DOMAIN
+
+API --> APP : calls
+APP --> INFRA : via DI + EF Core
+INFRA --> DOMAIN : uses Entities
+APP --> DOMAIN : business models
+
+' ----- DATENBANK -----
+rectangle "Tenants\nId:int (PK)\nName:text\nCreatedAt:timestamp\nUpdatedAt:timestamp?" as T
+rectangle "Users\nId:int (PK)\nEmail:text\nPasswordHash:text\nRole:text\nTenantId:int (FK)\nCreatedAt:timestamp\nUpdatedAt:timestamp?" as U
+rectangle "Customers\nId:int (PK)\nName:text\nEmail:text\nTenantId:int (FK)\nCreatedAt:timestamp\nUpdatedAt:timestamp?" as C
+
+T --> U : has many
+T --> C : has many
+
+' Verbindung Infra -> DB
+INFRA --> T : AppDbContext (Npgsql)
+INFRA --> U
+INFRA --> C
+
+@enduml
