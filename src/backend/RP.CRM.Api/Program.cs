@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 using RP.CRM.Domain.Entities;
+using RP.CRM.Infrastructure.Services;
+
 
 // -----------------------------
 // Load tenants.json
@@ -66,6 +68,8 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+
 
 builder.Services.AddControllers();
 

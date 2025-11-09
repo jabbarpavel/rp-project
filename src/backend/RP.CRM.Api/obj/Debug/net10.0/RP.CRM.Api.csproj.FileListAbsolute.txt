@@ -1,5 +1,6 @@
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\appsettings.json
+C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\tenants.json
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\RP.CRM.Api.staticwebassets.endpoints.json
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\RP.CRM.Api.exe
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\RP.CRM.Api.deps.json
@@ -136,4 +137,3 @@ C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\obj\Debug\net10.0\refin
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\obj\Debug\net10.0\RP.CRM.Api.pdb
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\obj\Debug\net10.0\RP.CRM.Api.genruntimeconfig.cache
 C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\obj\Debug\net10.0\ref\RP.CRM.Api.dll
-C:\Users\jabba\Desktop\rp-project\src\backend\RP.CRM.Api\bin\Debug\net10.0\tenants.json
