@@ -17,6 +17,8 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<Tenant> Tenants => Set<Tenant>();
         public DbSet<User> Users => Set<User>();
+        public DbSet<ChangeLog> ChangeLogs => Set<ChangeLog>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
