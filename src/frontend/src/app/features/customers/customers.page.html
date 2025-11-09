@@ -1,27 +1,42 @@
 <div class="page-container">
-  <h2>Kunden</h2>
+  <div class="header-bar">
+    <h2>Kundenverwaltung</h2>
+    <button class="add-btn" type="button" (click)="createCustomer()">+ Neuer Kunde</button>
+  </div>
 
-  <div *ngIf="loading">Lade Kunden...</div>
+  <div *ngIf="loading" class="loading">Lade Kunden...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 
-  <table *ngIf="!loading && !error && customers.length > 0" class="customer-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>E-Mail</th>
-        <th>Erstellt am</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let c of customers">
-        <td>{{ c.id }}</td>
-        <td>{{ c.name }}</td>
-        <td>{{ c.email }}</td>
-        <td>{{ c.createdAt | date:'short' }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-wrapper" *ngIf="!loading && !error && customers.length > 0">
+    <table class="customer-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>E-Mail</th>
+          <th>Erstellt am</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of customers">
+          <td>{{ c.id }}</td>
 
-  <p *ngIf="!loading && !error && customers.length === 0">Keine Kunden gefunden.</p>
+          <!-- Klickbarer Name -->
+          <td class="clickable" (click)="viewCustomer(c)">{{ c.name }}</td>
+
+          <td>{{ c.email }}</td>
+          <td>{{ c.createdAt | date: 'short' }}</td>
+          <td class="actions">
+            <button class="edit-btn" type="button" (click)="editCustomer(c)">Bearbeiten</button>
+            <button class="delete-btn" type="button" (click)="deleteCustomer(c.id)">Löschen</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p *ngIf="!loading && !error && customers.length === 0" class="no-data">
+    Keine Kunden gefunden.
+  </p>
 </div>

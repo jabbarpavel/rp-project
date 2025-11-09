@@ -1,56 +1,56 @@
-// src/app/core/services/api.service.ts
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
-import tenants from '../../../environments/tenants.json';
-import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
+import tenantsConfig from '../../../environments/tenants.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private http = inject(HttpClient);
-  private auth = inject(AuthService);
-  private baseUrl: string;
+  private apiUrl = '';
 
-  constructor() {
-    const currentHost = window.location.hostname.toLowerCase();
-
-    // einfach: Domain direkt aus apiUrl extrahieren und vergleichen
-    const tenant = tenants.tenants.find(t => {
-      const domain = new URL(t.apiUrl).hostname.toLowerCase();
-      return currentHost.includes(domain);
-    });
-
-    this.baseUrl = tenant ? tenant.apiUrl : 'http://localhost:5020';
-    console.log(`✅ API baseUrl set to: ${this.baseUrl}`);
+  constructor(private http: HttpClient) {
+    this.initializeApiUrl();
   }
 
+  private initializeApiUrl(): void {
+    const hostname = window.location.hostname.toLowerCase();
+    const tenants = tenantsConfig.tenants;
+
+    const tenant = tenants.find((t: any) =>
+      hostname.includes(t.name.toLowerCase())
+    );
+
+    if (tenant) {
+      this.apiUrl = tenant.apiUrl;
+      console.log('✅ API base URL gesetzt:', this.apiUrl);
+    } else {
+      console.error('❌ Kein passender Tenant für Host:', hostname);
+    }
+  }
 
   private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('jwt_token');
+    const tenantId = localStorage.getItem('tenant_id');
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const token = this.auth.getToken();
     if (token) headers = headers.set('Authorization', `Bearer ${token}`);
-
-    const tenantId = this.auth.getTenantId();
-    if (tenantId) headers = headers.set('TenantID', tenantId.toString());
-
+    if (tenantId) headers = headers.set('TenantID', tenantId);
     return headers;
   }
 
-  async get<T>(url: string): Promise<T> {
-    return await lastValueFrom(this.http.get<T>(`${this.baseUrl}${url}`, { headers: this.getHeaders() }));
+  get<T>(url: string): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}${url}`, { headers: this.getHeaders() });
   }
 
-  async post<T>(url: string, body: any): Promise<T> {
-    return await lastValueFrom(this.http.post<T>(`${this.baseUrl}${url}`, body, { headers: this.getHeaders() }));
+  post<T>(url: string, body: any): Observable<T> {
+    return this.http.post<T>(`${this.apiUrl}${url}`, body, { headers: this.getHeaders() });
   }
 
-  async put<T>(url: string, body: any): Promise<T> {
-    return await lastValueFrom(this.http.put<T>(`${this.baseUrl}${url}`, body, { headers: this.getHeaders() }));
+  put<T>(url: string, body: any): Observable<T> {
+    return this.http.put<T>(`${this.apiUrl}${url}`, body, { headers: this.getHeaders() });
   }
 
-  async delete<T>(url: string): Promise<T> {
-    return await lastValueFrom(this.http.delete<T>(`${this.baseUrl}${url}`, { headers: this.getHeaders() }));
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(`${this.apiUrl}${url}`, { headers: this.getHeaders() });
   }
 }

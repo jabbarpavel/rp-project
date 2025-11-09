@@ -1,40 +1,86 @@
-// src/app/features/customers/customers.page.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, NgIf, NgFor, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
-interface Customer {
+interface CustomerDto {
   id: number;
   name: string;
   email: string;
   createdAt?: string;
-  tenantId?: number;
+  updatedAt?: string;
 }
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, FormsModule, NgIf, NgFor, DatePipe],
   templateUrl: './customers.page.html',
   styleUrls: ['./customers.page.scss']
 })
 export class CustomersPage implements OnInit {
-  customers: Customer[] = [];
+  customers: CustomerDto[] = [];
   loading = false;
   error = '';
+  private sub?: Subscription;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private router: Router) {}
 
-  async ngOnInit() {
+  ngOnInit(): void {
+    this.loadCustomers();
+  }
+
+  loadCustomers(): void {
     this.loading = true;
     this.error = '';
-    try {
-      const data = await this.api.get<Customer[]>('/api/customer');
-      this.customers = data;
-    } catch {
-      this.error = 'Kunden konnten nicht geladen werden.';
-    } finally {
-      this.loading = false;
-    }
+
+    this.sub = this.api.get<CustomerDto[]>('/api/customer').subscribe({
+      next: (res: CustomerDto[]) => {
+        this.customers = res;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error('Fehler beim Laden:', err);
+        this.error = this.extractError(err, 'Fehler beim Laden der Kunden.');
+        this.loading = false;
+      }
+    });
+  }
+
+  createCustomer(): void {
+    this.router.navigate(['/customers/createCustomer']);
+  }
+
+  editCustomer(c: CustomerDto): void {
+    this.router.navigate(['/customers/editCustomer', c.id]);
+  }
+
+  /** NEU: Kunde anklicken → Detailseite */
+  viewCustomer(c: CustomerDto): void {
+    this.router.navigate(['/customers', c.id]);
+  }
+
+  deleteCustomer(id: number): void {
+    if (!confirm('Diesen Kunden wirklich löschen?')) return;
+
+    this.api.delete(`/api/customer/${id}`).subscribe({
+      next: () => this.loadCustomers(),
+      error: (err: any) => {
+        console.error('Fehler beim Löschen:', err);
+        this.error = this.extractError(err, 'Fehler beim Löschen des Kunden.');
+      }
+    });
+  }
+
+  private extractError(err: any, fallback: string): string {
+    if (typeof err?.error === 'string') return err.error;
+    if (err?.error?.message) return err.error.message;
+    return fallback;
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 }
