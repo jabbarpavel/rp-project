@@ -1,0 +1,557 @@
+Auflistung der Ordnerpfade für Volume Windows
+Volumeseriennummer : FE76-2118
+C:.
+¦   backend_structure.txt
+¦   RP.CRM.slnx
+¦   
++---RP.CRM.Api
+¦   ¦   appsettings.Development.json
+¦   ¦   appsettings.json
+¦   ¦   Program.cs
+¦   ¦   RP.CRM.Api.csproj
+¦   ¦   RP.CRM.Api.http
+¦   ¦   tenants.json
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦           ¦   appsettings.Development.json
+¦   ¦           ¦   appsettings.json
+¦   ¦           ¦   Humanizer.dll
+¦   ¦           ¦   Microsoft.AspNetCore.Authentication.JwtBearer.dll
+¦   ¦           ¦   Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+¦   ¦           ¦   Microsoft.AspNetCore.OpenApi.dll
+¦   ¦           ¦   Microsoft.Bcl.AsyncInterfaces.dll
+¦   ¦           ¦   Microsoft.Build.Locator.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.CSharp.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.Workspaces.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll
+¦   ¦           ¦   Microsoft.CodeAnalysis.Workspaces.MSBuild.dll
+¦   ¦           ¦   Microsoft.EntityFrameworkCore.Abstractions.dll
+¦   ¦           ¦   Microsoft.EntityFrameworkCore.Design.dll
+¦   ¦           ¦   Microsoft.EntityFrameworkCore.dll
+¦   ¦           ¦   Microsoft.EntityFrameworkCore.Relational.dll
+¦   ¦           ¦   Microsoft.Extensions.DependencyModel.dll
+¦   ¦           ¦   Microsoft.IdentityModel.Abstractions.dll
+¦   ¦           ¦   Microsoft.IdentityModel.JsonWebTokens.dll
+¦   ¦           ¦   Microsoft.IdentityModel.Logging.dll
+¦   ¦           ¦   Microsoft.IdentityModel.Protocols.dll
+¦   ¦           ¦   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+¦   ¦           ¦   Microsoft.IdentityModel.Tokens.dll
+¦   ¦           ¦   Microsoft.OpenApi.dll
+¦   ¦           ¦   Mono.TextTemplating.dll
+¦   ¦           ¦   Npgsql.dll
+¦   ¦           ¦   Npgsql.EntityFrameworkCore.PostgreSQL.dll
+¦   ¦           ¦   RP.CRM.Api.deps.json
+¦   ¦           ¦   RP.CRM.Api.dll
+¦   ¦           ¦   RP.CRM.Api.exe
+¦   ¦           ¦   RP.CRM.Api.pdb
+¦   ¦           ¦   RP.CRM.Api.runtimeconfig.json
+¦   ¦           ¦   RP.CRM.Api.staticwebassets.endpoints.json
+¦   ¦           ¦   RP.CRM.Application.dll
+¦   ¦           ¦   RP.CRM.Application.pdb
+¦   ¦           ¦   RP.CRM.Domain.dll
+¦   ¦           ¦   RP.CRM.Domain.pdb
+¦   ¦           ¦   RP.CRM.Infrastructure.dll
+¦   ¦           ¦   RP.CRM.Infrastructure.pdb
+¦   ¦           ¦   Scalar.AspNetCore.dll
+¦   ¦           ¦   System.CodeDom.dll
+¦   ¦           ¦   System.Composition.AttributedModel.dll
+¦   ¦           ¦   System.Composition.Convention.dll
+¦   ¦           ¦   System.Composition.Hosting.dll
+¦   ¦           ¦   System.Composition.Runtime.dll
+¦   ¦           ¦   System.Composition.TypedParts.dll
+¦   ¦           ¦   System.IdentityModel.Tokens.Jwt.dll
+¦   ¦           ¦   tenants.json
+¦   ¦           ¦   
+¦   ¦           +---cs
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---de
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---es
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---fr
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---it
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---ja
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---ko
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---pl
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---pt-BR
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---ru
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---tr
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---zh-Hans
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦           ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦           ¦       
+¦   ¦           +---zh-Hant
+¦   ¦                   Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦                   Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦                   Microsoft.CodeAnalysis.resources.dll
+¦   ¦                   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+¦   ¦                   Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦                   
+¦   +---Controllers
+¦   ¦       CustomersController.cs
+¦   ¦       TenantController.cs
+¦   ¦       UserController.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   RP.CRM.Api.csproj.nuget.dgspec.json
+¦   ¦   ¦   RP.CRM.Api.csproj.nuget.g.props
+¦   ¦   ¦   RP.CRM.Api.csproj.nuget.g.targets
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦           ¦   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+¦   ¦           ¦   apphost.exe
+¦   ¦           ¦   rjsmcshtml.dswa.cache.json
+¦   ¦           ¦   rjsmrazor.dswa.cache.json
+¦   ¦           ¦   RP.CRM.Api.AssemblyInfo.cs
+¦   ¦           ¦   RP.CRM.Api.AssemblyInfoInputs.cache
+¦   ¦           ¦   RP.CRM.Api.assets.cache
+¦   ¦           ¦   RP.CRM.Api.csproj.AssemblyReference.cache
+¦   ¦           ¦   RP.CRM.Api.csproj.CoreCompileInputs.cache
+¦   ¦           ¦   RP.CRM.Api.csproj.FileListAbsolute.txt
+¦   ¦           ¦   RP.CRM.Api.csproj.Up2Date
+¦   ¦           ¦   RP.CRM.Api.dll
+¦   ¦           ¦   RP.CRM.Api.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦           ¦   RP.CRM.Api.genruntimeconfig.cache
+¦   ¦           ¦   RP.CRM.Api.GlobalUsings.g.cs
+¦   ¦           ¦   RP.CRM.Api.MvcApplicationPartsAssemblyInfo.cache
+¦   ¦           ¦   RP.CRM.Api.MvcApplicationPartsAssemblyInfo.cs
+¦   ¦           ¦   RP.CRM.Api.pdb
+¦   ¦           ¦   RP.CRM.Api.sourcelink.json
+¦   ¦           ¦   rpswa.dswa.cache.json
+¦   ¦           ¦   staticwebassets.build.endpoints.json
+¦   ¦           ¦   staticwebassets.build.json
+¦   ¦           ¦   staticwebassets.build.json.cache
+¦   ¦           ¦   swae.build.ex.cache
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           ¦       RP.CRM.Api.dll
+¦   ¦           ¦       
+¦   ¦           +---refint
+¦   ¦           ¦       RP.CRM.Api.dll
+¦   ¦           ¦       
+¦   ¦           +---staticwebassets
+¦   +---Properties
+¦           launchSettings.json
+¦           
++---RP.CRM.Application
+¦   ¦   Class1.cs
+¦   ¦   RP.CRM.Application.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦               RP.CRM.Application.deps.json
+¦   ¦               RP.CRM.Application.dll
+¦   ¦               RP.CRM.Application.pdb
+¦   ¦               RP.CRM.Domain.dll
+¦   ¦               RP.CRM.Domain.pdb
+¦   ¦               
+¦   +---DTOs
+¦   ¦       CustomerDto.cs
+¦   ¦       TenantDto.cs
+¦   ¦       UserDto.cs
+¦   ¦       
+¦   +---Interfaces
+¦   ¦       IAuditLogService.cs
+¦   ¦       ICustomerRepository.cs
+¦   ¦       ICustomerService.cs
+¦   ¦       ITenantRepository.cs
+¦   ¦       ITenantService.cs
+¦   ¦       IUserRepository.cs
+¦   ¦       IUserService.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   RP.CRM.Application.csproj.nuget.dgspec.json
+¦   ¦   ¦   RP.CRM.Application.csproj.nuget.g.props
+¦   ¦   ¦   RP.CRM.Application.csproj.nuget.g.targets
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦           ¦   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+¦   ¦           ¦   RP.CRM.A.D30D9BF1.Up2Date
+¦   ¦           ¦   RP.CRM.Application.AssemblyInfo.cs
+¦   ¦           ¦   RP.CRM.Application.AssemblyInfoInputs.cache
+¦   ¦           ¦   RP.CRM.Application.assets.cache
+¦   ¦           ¦   RP.CRM.Application.csproj.AssemblyReference.cache
+¦   ¦           ¦   RP.CRM.Application.csproj.CoreCompileInputs.cache
+¦   ¦           ¦   RP.CRM.Application.csproj.FileListAbsolute.txt
+¦   ¦           ¦   RP.CRM.Application.dll
+¦   ¦           ¦   RP.CRM.Application.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦           ¦   RP.CRM.Application.GlobalUsings.g.cs
+¦   ¦           ¦   RP.CRM.Application.pdb
+¦   ¦           ¦   RP.CRM.Application.sourcelink.json
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           ¦       RP.CRM.Application.dll
+¦   ¦           ¦       
+¦   ¦           +---refint
+¦   ¦                   RP.CRM.Application.dll
+¦   ¦                   
+¦   +---Services
+¦           CustomerService.cs
+¦           TenantService.cs
+¦           UserService.cs
+¦           
++---RP.CRM.Domain
+¦   ¦   Class1.cs
+¦   ¦   RP.CRM.Domain.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦               RP.CRM.Domain.deps.json
+¦   ¦               RP.CRM.Domain.dll
+¦   ¦               RP.CRM.Domain.pdb
+¦   ¦               
+¦   +---Entities
+¦   ¦       BaseEntity.cs
+¦   ¦       ChangeLog.cs
+¦   ¦       Customer.cs
+¦   ¦       Tenant.cs
+¦   ¦       User.cs
+¦   ¦       
+¦   +---obj
+¦       ¦   project.assets.json
+¦       ¦   project.nuget.cache
+¦       ¦   RP.CRM.Domain.csproj.nuget.dgspec.json
+¦       ¦   RP.CRM.Domain.csproj.nuget.g.props
+¦       ¦   RP.CRM.Domain.csproj.nuget.g.targets
+¦       ¦   
+¦       +---Debug
+¦           +---net10.0
+¦               ¦   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+¦               ¦   RP.CRM.Domain.AssemblyInfo.cs
+¦               ¦   RP.CRM.Domain.AssemblyInfoInputs.cache
+¦               ¦   RP.CRM.Domain.assets.cache
+¦               ¦   RP.CRM.Domain.csproj.CoreCompileInputs.cache
+¦               ¦   RP.CRM.Domain.csproj.FileListAbsolute.txt
+¦               ¦   RP.CRM.Domain.dll
+¦               ¦   RP.CRM.Domain.GeneratedMSBuildEditorConfig.editorconfig
+¦               ¦   RP.CRM.Domain.GlobalUsings.g.cs
+¦               ¦   RP.CRM.Domain.pdb
+¦               ¦   RP.CRM.Domain.sourcelink.json
+¦               ¦   
+¦               +---ref
+¦               ¦       RP.CRM.Domain.dll
+¦               ¦       
+¦               +---refint
+¦                       RP.CRM.Domain.dll
+¦                       
++---RP.CRM.Infrastructure
+¦   ¦   RP.CRM.Infrastructure.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦               RP.CRM.Application.dll
+¦   ¦               RP.CRM.Application.pdb
+¦   ¦               RP.CRM.Domain.dll
+¦   ¦               RP.CRM.Domain.pdb
+¦   ¦               RP.CRM.Infrastructure.deps.json
+¦   ¦               RP.CRM.Infrastructure.dll
+¦   ¦               RP.CRM.Infrastructure.pdb
+¦   ¦               RP.CRM.Infrastructure.runtimeconfig.json
+¦   ¦               
+¦   +---Context
+¦   ¦       TenantContext.cs
+¦   ¦       
+¦   +---Data
+¦   ¦       AppDbContext.cs
+¦   ¦       AppDBContextFactory.cs
+¦   ¦       
+¦   +---Entities
+¦   ¦       ApplicationUser.cs
+¦   ¦       
+¦   +---Middleware
+¦   ¦       ErrorHandlingMiddleware.cs
+¦   ¦       TenantMiddleware.cs
+¦   ¦       
+¦   +---Migrations
+¦   ¦       20251109195934_InitWithChangeLog.cs
+¦   ¦       20251109195934_InitWithChangeLog.Designer.cs
+¦   ¦       AppDbContextModelSnapshot.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   RP.CRM.Infrastructure.csproj.nuget.dgspec.json
+¦   ¦   ¦   RP.CRM.Infrastructure.csproj.nuget.g.props
+¦   ¦   ¦   RP.CRM.Infrastructure.csproj.nuget.g.targets
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net10.0
+¦   ¦           ¦   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+¦   ¦           ¦   RP.CRM.I.408D211C.Up2Date
+¦   ¦           ¦   RP.CRM.Infrastructure.AssemblyInfo.cs
+¦   ¦           ¦   RP.CRM.Infrastructure.AssemblyInfoInputs.cache
+¦   ¦           ¦   RP.CRM.Infrastructure.assets.cache
+¦   ¦           ¦   RP.CRM.Infrastructure.csproj.AssemblyReference.cache
+¦   ¦           ¦   RP.CRM.Infrastructure.csproj.CoreCompileInputs.cache
+¦   ¦           ¦   RP.CRM.Infrastructure.csproj.FileListAbsolute.txt
+¦   ¦           ¦   RP.CRM.Infrastructure.dll
+¦   ¦           ¦   RP.CRM.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦           ¦   RP.CRM.Infrastructure.genruntimeconfig.cache
+¦   ¦           ¦   RP.CRM.Infrastructure.GlobalUsings.g.cs
+¦   ¦           ¦   RP.CRM.Infrastructure.pdb
+¦   ¦           ¦   RP.CRM.Infrastructure.sourcelink.json
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           ¦       RP.CRM.Infrastructure.dll
+¦   ¦           ¦       
+¦   ¦           +---refint
+¦   ¦                   RP.CRM.Infrastructure.dll
+¦   ¦                   
+¦   +---Repositories
+¦   ¦       CustomerRepository.cs
+¦   ¦       TenantRepository.cs
+¦   ¦       UserRepository.cs
+¦   ¦       
+¦   +---Services
+¦           AuditLogService.cs
+¦           
++---RP.CRM.Tests
+    ¦   RP.CRM.Tests.csproj
+    ¦   UnitTest1.cs
+    ¦   
+    +---bin
+    ¦   +---Debug
+    ¦       +---net10.0
+    ¦           ¦   .msCoverageSourceRootsMapping_RP.CRM.Tests
+    ¦           ¦   CoverletSourceRootsMapping_RP.CRM.Tests
+    ¦           ¦   Microsoft.AspNetCore.Authentication.JwtBearer.dll
+    ¦           ¦   Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+    ¦           ¦   Microsoft.EntityFrameworkCore.Abstractions.dll
+    ¦           ¦   Microsoft.EntityFrameworkCore.dll
+    ¦           ¦   Microsoft.EntityFrameworkCore.Relational.dll
+    ¦           ¦   Microsoft.IdentityModel.Abstractions.dll
+    ¦           ¦   Microsoft.IdentityModel.JsonWebTokens.dll
+    ¦           ¦   Microsoft.IdentityModel.Logging.dll
+    ¦           ¦   Microsoft.IdentityModel.Protocols.dll
+    ¦           ¦   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+    ¦           ¦   Microsoft.IdentityModel.Tokens.dll
+    ¦           ¦   Microsoft.TestPlatform.CommunicationUtilities.dll
+    ¦           ¦   Microsoft.TestPlatform.CoreUtilities.dll
+    ¦           ¦   Microsoft.TestPlatform.CrossPlatEngine.dll
+    ¦           ¦   Microsoft.TestPlatform.PlatformAbstractions.dll
+    ¦           ¦   Microsoft.TestPlatform.Utilities.dll
+    ¦           ¦   Microsoft.VisualStudio.CodeCoverage.Shim.dll
+    ¦           ¦   Microsoft.VisualStudio.TestPlatform.Common.dll
+    ¦           ¦   Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+    ¦           ¦   Newtonsoft.Json.dll
+    ¦           ¦   Npgsql.dll
+    ¦           ¦   Npgsql.EntityFrameworkCore.PostgreSQL.dll
+    ¦           ¦   RP.CRM.Application.dll
+    ¦           ¦   RP.CRM.Application.pdb
+    ¦           ¦   RP.CRM.Domain.dll
+    ¦           ¦   RP.CRM.Domain.pdb
+    ¦           ¦   RP.CRM.Infrastructure.dll
+    ¦           ¦   RP.CRM.Infrastructure.pdb
+    ¦           ¦   RP.CRM.Tests.deps.json
+    ¦           ¦   RP.CRM.Tests.dll
+    ¦           ¦   RP.CRM.Tests.pdb
+    ¦           ¦   RP.CRM.Tests.runtimeconfig.json
+    ¦           ¦   System.IdentityModel.Tokens.Jwt.dll
+    ¦           ¦   testhost.dll
+    ¦           ¦   testhost.exe
+    ¦           ¦   xunit.abstractions.dll
+    ¦           ¦   xunit.assert.dll
+    ¦           ¦   xunit.core.dll
+    ¦           ¦   xunit.execution.dotnet.dll
+    ¦           ¦   xunit.runner.visualstudio.testadapter.dll
+    ¦           ¦   
+    ¦           +---cs
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---de
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---es
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---fr
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---it
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---ja
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---ko
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---pl
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---pt-BR
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---ru
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---tr
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---zh-Hans
+    ¦           ¦       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦           ¦       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦           ¦       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦           ¦       
+    ¦           +---zh-Hant
+    ¦                   Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    ¦                   Microsoft.TestPlatform.CoreUtilities.resources.dll
+    ¦                   Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    ¦                   Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    ¦                   Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    ¦                   
+    +---obj
+        ¦   project.assets.json
+        ¦   project.nuget.cache
+        ¦   RP.CRM.Tests.csproj.nuget.dgspec.json
+        ¦   RP.CRM.Tests.csproj.nuget.g.props
+        ¦   RP.CRM.Tests.csproj.nuget.g.targets
+        ¦   
+        +---Debug
+            +---net10.0
+                ¦   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+                ¦   RP.CRM.T.2AE1E8D0.Up2Date
+                ¦   RP.CRM.Tests.AssemblyInfo.cs
+                ¦   RP.CRM.Tests.AssemblyInfoInputs.cache
+                ¦   RP.CRM.Tests.assets.cache
+                ¦   RP.CRM.Tests.csproj.AssemblyReference.cache
+                ¦   RP.CRM.Tests.csproj.CoreCompileInputs.cache
+                ¦   RP.CRM.Tests.csproj.FileListAbsolute.txt
+                ¦   RP.CRM.Tests.dll
+                ¦   RP.CRM.Tests.GeneratedMSBuildEditorConfig.editorconfig
+                ¦   RP.CRM.Tests.genruntimeconfig.cache
+                ¦   RP.CRM.Tests.GlobalUsings.g.cs
+                ¦   RP.CRM.Tests.pdb
+                ¦   RP.CRM.Tests.sourcelink.json
+                ¦   
+                +---ref
+                ¦       RP.CRM.Tests.dll
+                ¦       
+                +---refint
+                        RP.CRM.Tests.dll
+                        

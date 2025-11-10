@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { CustomerFormComponent } from './customerForm.component';
+import { ToastService } from '../../core/services/toast.service'; // neu
 
 @Component({
   selector: 'app-edit-customer',
@@ -11,13 +12,12 @@ import { CustomerFormComponent } from './customerForm.component';
   template: `
     <div class="page-container">
       <h2>Kunden bearbeiten</h2>
-
       <app-customer-form
         [model]="customer"
         [loading]="loading"
         [error]="error"
         submitLabel="Änderungen speichern"
-        (submit)="saveCustomer()"
+        (submit)="updateCustomer()"
         (cancel)="cancel()">
       </app-customer-form>
     </div>
@@ -25,50 +25,49 @@ import { CustomerFormComponent } from './customerForm.component';
   styleUrls: ['./customers.page.scss']
 })
 export class EditCustomerPage implements OnInit {
-  id!: number;
-  customer = { name: '', email: '' };
-  error = '';
+  customer = { id: 0, name: '', email: '' };
   loading = false;
+  error = '';
 
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService // neu
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
-    if (this.id) this.loadCustomer();
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadCustomer(id);
   }
 
-  loadCustomer(): void {
+  loadCustomer(id: number): void {
     this.loading = true;
-    this.api.get<any>(`/api/customer/${this.id}`).subscribe({
-      next: (res) => {
-        this.customer.name = res.name;
-        this.customer.email = res.email;
+    this.api.get(`/api/customer/${id}`).subscribe({
+      next: (res: any) => {
+        this.customer = res;
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Fehler beim Laden des Kunden:', err);
-        this.error = 'Kunde konnte nicht geladen werden.';
+      error: (err: any) => {
+        this.error = 'Fehler beim Laden des Kunden.';
+        this.toast.show('Fehler beim Laden des Kunden', 'error'); // neu
         this.loading = false;
       }
     });
   }
 
-  saveCustomer(): void {
-    if (!this.customer.name || !this.customer.email) return;
+  updateCustomer(): void {
+    if (this.loading) return;
     this.loading = true;
-
-    this.api.put(`/api/customer/${this.id}`, this.customer).subscribe({
+    this.api.put(`/api/customer/${this.customer.id}`, this.customer).subscribe({
       next: () => {
         this.loading = false;
+        this.toast.show('Kunde erfolgreich aktualisiert', 'success'); // neu
         this.router.navigate(['/customers']);
       },
-      error: (err) => {
-        console.error('Fehler beim Speichern:', err);
-        this.error = 'Änderungen konnten nicht gespeichert werden.';
+      error: (err: any) => {
+        this.error = 'Fehler beim Aktualisieren.';
+        this.toast.show('Fehler beim Aktualisieren', 'error'); // neu
         this.loading = false;
       }
     });

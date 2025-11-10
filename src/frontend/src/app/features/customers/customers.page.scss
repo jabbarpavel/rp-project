@@ -7,13 +7,20 @@
 .header-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1.5rem;
 
   h2 {
     font-size: 1.6rem;
     font-weight: 600;
     color: #1f2937;
+    line-height: 1.2;
+  }
+
+  .customer-count {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.35rem;
   }
 
   .add-btn {
@@ -21,10 +28,10 @@
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 0.6rem 1.2rem;
+    padding: 0.55rem 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.15s ease-in;
   }
 
   .add-btn:hover {
@@ -32,82 +39,134 @@
   }
 }
 
+.search-bar {
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  width: 280px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background: #ffffff;
+}
+
+.search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
 .table-wrapper {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
   overflow: hidden;
 }
 
 .customer-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+
+  thead tr {
+    background-color: #f3f4f6;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+  }
 
   th {
-    background-color: #f3f4f6;
     text-align: left;
-    padding: 0.9rem;
-    color: #374151;
     font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f9fafb;
+  }
+
+  tbody tr:hover {
+    background-color: #eff6ff;
   }
 
   td {
-    padding: 0.9rem;
-    border-top: 1px solid #e5e7eb;
-    color: #1f2937;
-  }
-
-  tr:hover td {
-    background-color: #f9fafb;
+    border-top: 1px solid #edf0f3;
+    color: #111827;
   }
 
   .actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   button {
     border: none;
-    padding: 0.45rem 0.9rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: transform 0.05s ease-in, background-color 0.1s ease-in;
+    font-size: 0.75rem;
+  }
+
+  button:active {
+    transform: translateY(1px);
   }
 
   .edit-btn {
-    background-color: #facc15;
-    color: #1f2937;
+    background-color: #fde68a;
+    color: #92400e;
   }
 
   .edit-btn:hover {
-    background-color: #eab308;
+    background-color: #fbbf24;
   }
 
   .delete-btn {
-    background-color: #ef4444;
-    color: white;
+    background-color: #fca5a5;
+    color: #7f1d1d;
   }
 
   .delete-btn:hover {
-    background-color: #dc2626;
+    background-color: #f87171;
   }
 
   .clickable {
     color: #2563eb;
     font-weight: 500;
     cursor: pointer;
-    background-color: transparent;
-    transition: background-color 0.2s ease, color 0.2s ease;
     border-radius: 4px;
-    padding: 0.2rem 0.4rem;
+    padding: 0.1rem 0.2rem;
   }
 
   .clickable:hover {
-    background-color: #eff6ff;
+    background-color: rgba(37, 99, 235, 0.08);
     color: #1d4ed8;
   }
+}
+
+/* Sortierbare Header */
+th {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background-color 0.15s ease;
+}
+
+th:hover {
+  background-color: #e5e7eb;
+}
+
+.sort-icon {
+  font-size: 0.7rem;
+  margin-left: 4px;
+  color: #6b7280;
 }
 
 .loading,

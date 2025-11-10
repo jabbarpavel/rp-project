@@ -33,7 +33,11 @@ namespace RP.CRM.Api.Controllers
                     Id = c.Id,
                     Name = c.Name,
                     Email = c.Email,
-                    TenantId = c.TenantId
+                    TenantId = c.TenantId,
+                    IsDeleted = c.IsDeleted,
+                    CreatedAt = c.CreatedAt,
+                    UpdatedAt = c.UpdatedAt
+
                 });
 
             return Ok(result);
@@ -54,7 +58,11 @@ namespace RP.CRM.Api.Controllers
                 Id = customer.Id,
                 Name = customer.Name,
                 Email = customer.Email,
-                TenantId = customer.TenantId
+                TenantId = customer.TenantId,
+                IsDeleted = customer.IsDeleted,
+                CreatedAt = customer.CreatedAt,
+                UpdatedAt = customer.UpdatedAt
+
             });
         }
 
@@ -78,7 +86,11 @@ namespace RP.CRM.Api.Controllers
                 Id = created.Id,
                 Name = created.Name,
                 Email = created.Email,
-                TenantId = created.TenantId
+                TenantId = created.TenantId,
+                IsDeleted = created.IsDeleted,
+                CreatedAt = created.CreatedAt,
+                UpdatedAt = created.UpdatedAt
+
             };
 
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
@@ -109,7 +121,11 @@ namespace RP.CRM.Api.Controllers
                 Id = updated.Id,
                 Name = updated.Name,
                 Email = updated.Email,
-                TenantId = updated.TenantId
+                TenantId = updated.TenantId,
+                IsDeleted = updated.IsDeleted,
+                CreatedAt = updated.CreatedAt,
+                UpdatedAt = updated.UpdatedAt
+
             });
         }
 

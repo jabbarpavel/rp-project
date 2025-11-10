@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="form-container">
-      <form (ngSubmit)="onSubmit()" class="customer-form">
+      <form (submit)="onSubmit($event)" class="customer-form">
         <div class="form-group">
           <label for="name">Name</label>
           <input
@@ -53,24 +53,20 @@ import { FormsModule } from '@angular/forms';
       margin: 2rem auto;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-
     .customer-form {
       display: flex;
       flex-direction: column;
       gap: 1.2rem;
     }
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
-
     label {
       font-weight: 600;
       margin-bottom: 0.4rem;
       color: #1f2937;
     }
-
     input {
       padding: 0.7rem;
       border: 1px solid #d1d5db;
@@ -78,18 +74,15 @@ import { FormsModule } from '@angular/forms';
       font-size: 0.95rem;
       transition: border-color 0.2s ease;
     }
-
     input:focus {
       border-color: #3b82f6;
       outline: none;
     }
-
     .button-group {
       display: flex;
       justify-content: flex-end;
       gap: 0.8rem;
     }
-
     button {
       padding: 0.6rem 1.2rem;
       border: none;
@@ -97,21 +90,17 @@ import { FormsModule } from '@angular/forms';
       cursor: pointer;
       font-weight: 600;
     }
-
     button[type="submit"] {
       background-color: #3b82f6;
       color: white;
     }
-
     button.cancel {
       background-color: #e5e7eb;
       color: #111827;
     }
-
     button:hover:not(:disabled) {
       opacity: 0.9;
     }
-
     .error {
       color: #dc2626;
       text-align: center;
@@ -128,7 +117,10 @@ export class CustomerFormComponent {
   @Output() submit = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
-  onSubmit(): void {
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.loading) return;
     this.submit.emit();
   }
 }

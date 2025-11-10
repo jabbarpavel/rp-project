@@ -24,15 +24,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard.page').then(m => m.DashboardPage)
       },
+      // ---- Kundenbereiche in richtiger Reihenfolge ----
       {
         path: 'customers',
         loadComponent: () =>
           import('./features/customers/customers.page').then(m => m.CustomersPage)
-      },
-      {
-        path: 'customers/:id',
-        loadComponent: () =>
-          import('./features/customers/customerDetail.page').then(m => m.CustomerDetailPage)
       },
       {
         path: 'customers/createCustomer',
@@ -44,6 +40,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/customers/editCustomer.page').then(m => m.EditCustomerPage)
       },
+      {
+        path: 'customers/:id',
+        loadComponent: () =>
+          import('./features/customers/customerDetail.page').then(m => m.CustomerDetailPage)
+      },
+      // -------------------------------------------------
       {
         path: 'settings',
         loadComponent: () =>

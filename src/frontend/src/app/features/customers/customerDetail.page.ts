@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { ToastService } from '../../core/services/toast.service';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-customer-detail',
@@ -12,8 +14,8 @@ import { ApiService } from '../../core/services/api.service';
       <div class="header-bar">
         <h2>Kundendetails</h2>
         <div class="actions">
-          <button class="edit-btn" (click)="editCustomer()">Bearbeiten</button>
-          <button class="delete-btn" (click)="deleteCustomer()">Löschen</button>
+          <button class="edit-btn" type="button" (click)="editCustomer()">Bearbeiten</button>
+          <button class="delete-btn" type="button" (click)="deleteCustomer()">Löschen</button>
         </div>
       </div>
 
@@ -54,31 +56,34 @@ import { ApiService } from '../../core/services/api.service';
       gap: 0.5rem;
     }
 
-    button {
+    .edit-btn {
+      background-color: #fde68a; /* wie liste */
+      color: #92400e;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    .edit-btn {
-      background-color: #facc15;
-      color: #1f2937;
+      transition: background-color 0.15s ease;
     }
 
     .edit-btn:hover {
-      background-color: #eab308;
+      background-color: #fbbf24;
     }
 
     .delete-btn {
-      background-color: #ef4444;
-      color: white;
+      background-color: #fca5a5; /* wie liste */
+      color: #7f1d1d;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
     }
 
     .delete-btn:hover {
-      background-color: #dc2626;
+      background-color: #f87171;
     }
 
     .detail-card {
@@ -123,7 +128,9 @@ export class CustomerDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -138,9 +145,9 @@ export class CustomerDetailPage implements OnInit {
         this.customer = res;
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Fehler beim Laden des Kunden:', err);
+      error: () => {
         this.error = 'Kunde konnte nicht geladen werden.';
+        this.toast.show('Fehler beim Laden des Kunden', 'error');
         this.loading = false;
       }
     });
@@ -150,16 +157,22 @@ export class CustomerDetailPage implements OnInit {
     this.router.navigate(['/customers/editCustomer', this.id]);
   }
 
-  deleteCustomer(): void {
-    if (!confirm('Diesen Kunden wirklich löschen?')) return;
+  async deleteCustomer(): Promise<void> {
+    const ok = await this.confirm.open(
+      'Diesen Kunden wirklich löschen?',
+      'Löschen',
+      'Abbrechen'
+    );
+    if (!ok) return;
 
     this.api.delete(`/api/customer/${this.id}`).subscribe({
       next: () => {
+        this.toast.show('Kunde gelöscht', 'success');
         this.router.navigate(['/customers']);
       },
-      error: (err) => {
-        console.error('Fehler beim Löschen:', err);
+      error: () => {
         this.error = 'Kunde konnte nicht gelöscht werden.';
+        this.toast.show('Fehler beim Löschen des Kunden', 'error');
       }
     });
   }
