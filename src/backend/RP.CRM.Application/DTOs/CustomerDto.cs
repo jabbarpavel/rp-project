@@ -5,6 +5,7 @@ namespace RP.CRM.Application.DTOs
     public class CustomerDto
     {
         public int Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public int TenantId { get; set; }  
@@ -15,6 +16,9 @@ namespace RP.CRM.Application.DTOs
 
     public class CreateCustomerDto
     {
+        [Required, MinLength(2)]
+        public string FirstName { get; set; } = string.Empty;   // neu
+
         [Required, MinLength(2)]
         public string Name { get; set; } = string.Empty;
 

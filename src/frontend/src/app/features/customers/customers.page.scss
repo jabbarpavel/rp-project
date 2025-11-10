@@ -185,3 +185,16 @@ th:hover {
   color: #6b7280;
   font-style: italic;
 }
+.icon-cell {
+  text-align: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #2563eb;
+  width: 42px;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.icon-cell:hover {
+  color: #1d4ed8;
+}

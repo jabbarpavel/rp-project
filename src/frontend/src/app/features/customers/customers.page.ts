@@ -9,6 +9,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
 
 interface CustomerDto {
   id: number;
+  firstName?: string;
   name: string;
   email: string;
   isDeleted?: boolean;

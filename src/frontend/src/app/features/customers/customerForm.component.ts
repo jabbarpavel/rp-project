@@ -10,6 +10,16 @@ import { FormsModule } from '@angular/forms';
     <div class="form-container">
       <form (submit)="onSubmit($event)" class="customer-form">
         <div class="form-group">
+          <label for="firstName">Vorname</label>
+          <input
+            id="firstName"
+            type="text"
+            [(ngModel)]="model.firstName"
+            name="firstName"
+            placeholder="Vorname eingeben"
+          />
+        </div>
+        <div class="form-group">
           <label for="name">Name</label>
           <input
             id="name"
@@ -110,7 +120,7 @@ import { FormsModule } from '@angular/forms';
   `]
 })
 export class CustomerFormComponent {
-  @Input() model = { name: '', email: '' };
+  @Input() model = { firstName: '', name: '', email: '' };
   @Input() loading = false;
   @Input() error = '';
   @Input() submitLabel = 'Speichern';

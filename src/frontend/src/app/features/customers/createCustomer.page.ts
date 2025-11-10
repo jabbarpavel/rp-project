@@ -25,7 +25,7 @@ import { ToastService } from '../../core/services/toast.service'; // neu
   styleUrls: ['./customers.page.scss']
 })
 export class CreateCustomerPage {
-  customer = { name: '', email: '' };
+  customer = { firstName: '', name: '', email: '' };
   error = '';
   loading = false;
 

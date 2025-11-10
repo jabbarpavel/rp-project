@@ -31,6 +31,7 @@ namespace RP.CRM.Api.Controllers
                 .Select(c => new CustomerDto
                 {
                     Id = c.Id,
+                    FirstName = c.FirstName,
                     Name = c.Name,
                     Email = c.Email,
                     TenantId = c.TenantId,
@@ -56,6 +57,7 @@ namespace RP.CRM.Api.Controllers
             return Ok(new CustomerDto
             {
                 Id = customer.Id,
+                FirstName = customer.FirstName,
                 Name = customer.Name,
                 Email = customer.Email,
                 TenantId = customer.TenantId,
@@ -74,6 +76,7 @@ namespace RP.CRM.Api.Controllers
 
             var newCustomer = new Customer
             {
+                FirstName = dto.FirstName.Trim(),
                 Name = dto.Name.Trim(),
                 Email = dto.Email.Trim(),
                 TenantId = _tenantContext.TenantId
@@ -84,6 +87,7 @@ namespace RP.CRM.Api.Controllers
             var response = new CustomerDto
             {
                 Id = created.Id,
+                FirstName = created.FirstName,
                 Name = created.Name,
                 Email = created.Email,
                 TenantId = created.TenantId,
@@ -109,6 +113,7 @@ namespace RP.CRM.Api.Controllers
             if (existing.TenantId != _tenantContext.TenantId)
                 return Forbid();
 
+            existing.FirstName = dto.FirstName.Trim();
             existing.Name = dto.Name.Trim();
             existing.Email = dto.Email.Trim();
 
@@ -119,6 +124,7 @@ namespace RP.CRM.Api.Controllers
             return Ok(new CustomerDto
             {
                 Id = updated.Id,
+                FirstName = updated.FirstName,
                 Name = updated.Name,
                 Email = updated.Email,
                 TenantId = updated.TenantId,

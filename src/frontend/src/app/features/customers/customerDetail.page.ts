@@ -24,6 +24,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
 
       <div *ngIf="!loading && !error && customer" class="detail-card">
         <div class="detail-row"><span>ID:</span> {{ customer.id }}</div>
+        <div class="detail-row"><span>Vorname:</span> {{ customer.firstName }}</div>
         <div class="detail-row"><span>Name:</span> {{ customer.name }}</div>
         <div class="detail-row"><span>E-Mail:</span> {{ customer.email }}</div>
         <div class="detail-row"><span>Erstellt am:</span> {{ customer.createdAt | date: 'short' }}</div>

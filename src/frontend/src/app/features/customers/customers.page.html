@@ -12,7 +12,7 @@
   <div class="search-bar">
     <input
       type="text"
-      placeholder="Suche nach Name oder E-Mail..."
+      placeholder="Suche nach Name, Vorname oder E-Mail..."
       [(ngModel)]="searchTerm"
       (input)="applyFilter()"
       class="search-input"
@@ -26,14 +26,21 @@
     <table class="customer-table">
       <thead>
         <tr>
+          <th></th> <!-- Lupe -->
           <th (click)="sortBy('id')">
             ID
             <span class="sort-icon" *ngIf="sortColumn === 'id'">
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
           </th>
+          <th (click)="sortBy('firstName')">
+            Vorname
+            <span class="sort-icon" *ngIf="sortColumn === 'firstName'">
+              {{ sortDirection === 'asc' ? '▲' : '▼' }}
+            </span>
+          </th>
           <th (click)="sortBy('name')">
-            Name
+            Nachname
             <span class="sort-icon" *ngIf="sortColumn === 'name'">
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
@@ -55,8 +62,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let c of filteredCustomers">
+          <td class="icon-cell" (click)="viewCustomer(c)">🔍</td>
           <td>{{ c.id }}</td>
-          <td class="clickable" (click)="viewCustomer(c)">{{ c.name }}</td>
+          <td>{{ c.firstName }}</td>
+          <td>{{ c.name }}</td>
           <td>{{ c.email }}</td>
           <td>{{ c.createdAt | date: 'short' }}</td>
           <td class="actions">

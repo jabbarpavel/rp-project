@@ -76,6 +76,7 @@ namespace RP.CRM.Infrastructure.Repositories
                 return null;
             }
 
+            existing.FirstName = customer.FirstName;
             existing.Name = customer.Name;
             existing.Email = customer.Email;
 

@@ -29,7 +29,7 @@ namespace RP.CRM.Application.Services
 
         public async Task<Customer> CreateAsync(Customer customer)
         {
-            _logger.LogInformation("Creating customer {Name}", customer.Name);
+            _logger.LogInformation("Creating customer {FirstName} {Name}", customer.FirstName, customer.Name);
             return await _repository.CreateAsync(customer);
         }
 
