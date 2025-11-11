@@ -32,6 +32,20 @@ import { FormsModule } from '@angular/forms';
         </div>
 
         <div class="form-group">
+          <label for="ahv">AHV-Nummer</label>
+          <input
+            id="ahv"
+            type="text"
+            name="ahvNum"
+            maxlength="16"
+            [(ngModel)]="model.ahvNum"
+            (input)="formatAhvNumber()"
+            placeholder="756.xxxx.xxxx.xx"
+            required
+          />
+        </div>
+
+        <div class="form-group">
           <label for="email">E-Mail</label>
           <input
             id="email"
@@ -117,10 +131,16 @@ import { FormsModule } from '@angular/forms';
       margin-top: 1rem;
       font-size: 0.9rem;
     }
+
+    input#ahv {
+      font-family: monospace;
+      letter-spacing: 0.05rem;
+    }
+
   `]
 })
 export class CustomerFormComponent {
-  @Input() model = { firstName: '', name: '', email: '' };
+  @Input() model = { firstName: '', name: '', email: '', ahvNum: '' };
   @Input() loading = false;
   @Input() error = '';
   @Input() submitLabel = 'Speichern';
@@ -133,4 +153,36 @@ export class CustomerFormComponent {
     if (this.loading) return;
     this.submit.emit();
   }
+
+  formatAhvNumber(): void {
+    let digits = this.model.ahvNum.replace(/\D/g, '');
+
+    if (!digits.startsWith('756')) {
+      digits = '756' + digits.replace(/^756/, '');
+    }
+
+    digits = digits.slice(0, 13);
+
+    let formatted = '';
+    if (digits.length > 3) {
+      formatted = digits.substring(0, 3) + '.';
+      if (digits.length > 7) {
+        formatted += digits.substring(3, 7) + '.';
+        if (digits.length > 11) {
+          formatted += digits.substring(7, 11) + '.';
+          formatted += digits.substring(11);
+        } else {
+          formatted += digits.substring(7);
+        }
+      } else {
+        formatted += digits.substring(3);
+      }
+    } else {
+      formatted = digits;
+    }
+
+    this.model.ahvNum = formatted;
+  }
+
 }
+

@@ -12,6 +12,7 @@ interface CustomerDto {
   firstName?: string;
   name: string;
   email: string;
+  ahvNum: string;
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -63,17 +64,32 @@ export class CustomersPage implements OnInit {
     });
   }
 
-  applyFilter(): void {
-    const term = this.searchTerm.toLowerCase().trim();
-    this.filteredCustomers = term
-      ? this.customers.filter(c =>
-          c.name.toLowerCase().includes(term) ||
-          c.email.toLowerCase().includes(term)
-        )
-      : [...this.customers];
+applyFilter(): void {
+  const term = this.searchTerm.toLowerCase().trim();
 
+  if (!term) {
+    this.filteredCustomers = [...this.customers];
     this.applySorting();
+    return;
   }
+
+  this.filteredCustomers = this.customers.filter(c => {
+    const firstName = c.firstName?.toLowerCase() ?? '';
+    const name = c.name?.toLowerCase() ?? '';
+    const email = c.email?.toLowerCase() ?? '';
+    const ahv = c.ahvNum?.toLowerCase() ?? '';
+
+    return (
+      firstName.includes(term) ||
+      name.includes(term) ||
+      email.includes(term) ||
+      ahv.includes(term)
+    );
+  });
+
+  this.applySorting();
+}
+
 
   sortBy(column: keyof CustomerDto): void {
     if (this.sortColumn === column) {

@@ -32,7 +32,9 @@ namespace RP.CRM.Api.Controllers
                 {
                     Id = c.Id,
                     Name = c.Name,
+                    FirstName = c.FirstName,
                     Email = c.Email,
+                    AHVNum = c.AHVNum,
                     TenantId = c.TenantId,
                     IsDeleted = c.IsDeleted,
                     CreatedAt = c.CreatedAt,
@@ -57,7 +59,9 @@ namespace RP.CRM.Api.Controllers
             {
                 Id = customer.Id,
                 Name = customer.Name,
+                FirstName = customer.FirstName,
                 Email = customer.Email,
+                AHVNum = customer.AHVNum,
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
                 CreatedAt = customer.CreatedAt,
@@ -75,7 +79,9 @@ namespace RP.CRM.Api.Controllers
             var newCustomer = new Customer
             {
                 Name = dto.Name.Trim(),
+                FirstName = dto.FirstName.Trim(),
                 Email = dto.Email.Trim(),
+                AHVNum = dto.AHVNum.Trim(),
                 TenantId = _tenantContext.TenantId
             };
 
@@ -85,7 +91,9 @@ namespace RP.CRM.Api.Controllers
             {
                 Id = created.Id,
                 Name = created.Name,
+                FirstName = created.FirstName,
                 Email = created.Email,
+                AHVNum = created.AHVNum,
                 TenantId = created.TenantId,
                 IsDeleted = created.IsDeleted,
                 CreatedAt = created.CreatedAt,
@@ -110,7 +118,9 @@ namespace RP.CRM.Api.Controllers
                 return Forbid();
 
             existing.Name = dto.Name.Trim();
+            existing.FirstName = dto.FirstName.Trim();
             existing.Email = dto.Email.Trim();
+            existing.AHVNum = dto.AHVNum.Trim();
 
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)
@@ -120,7 +130,9 @@ namespace RP.CRM.Api.Controllers
             {
                 Id = updated.Id,
                 Name = updated.Name,
+                FirstName = updated.FirstName,
                 Email = updated.Email,
+                AHVNum = updated.AHVNum,
                 TenantId = updated.TenantId,
                 IsDeleted = updated.IsDeleted,
                 CreatedAt = updated.CreatedAt,

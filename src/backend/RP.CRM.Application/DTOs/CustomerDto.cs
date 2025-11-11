@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace RP.CRM.Application.DTOs
@@ -8,21 +9,32 @@ namespace RP.CRM.Application.DTOs
         public string FirstName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public int TenantId { get; set; }  
-        public bool IsDeleted { get; set; } // hinzugefügt
-        public DateTime CreatedAt { get; set; }   // neu
-        public DateTime? UpdatedAt { get; set; }  // optional
+
+        [Required]
+        [RegularExpression(@"^756\.\d{4}\.\d{4}\.\d{2}$",
+            ErrorMessage = "AHV-Nummer muss dem Format 756.xxxx.xxxx.xx entsprechen.")]
+        public string AHVNum { get; set; } = string.Empty;
+
+        public int TenantId { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 
     public class CreateCustomerDto
     {
         [Required, MinLength(2)]
-        public string FirstName { get; set; } = string.Empty;   // neu
+        public string FirstName { get; set; } = string.Empty;
 
         [Required, MinLength(2)]
         public string Name { get; set; } = string.Empty;
 
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [RegularExpression(@"^756\.\d{4}\.\d{4}\.\d{2}$",
+            ErrorMessage = "AHV-Nummer muss dem Format 756.xxxx.xxxx.xx entsprechen.")]
+        public string AHVNum { get; set; } = string.Empty;
     }
 }

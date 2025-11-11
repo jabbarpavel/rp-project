@@ -27,6 +27,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
         <div class="detail-row"><span>Vorname:</span> {{ customer.firstName }}</div>
         <div class="detail-row"><span>Name:</span> {{ customer.name }}</div>
         <div class="detail-row"><span>E-Mail:</span> {{ customer.email }}</div>
+        <div class="detail-row"><span>AHV-Nummer:</span> {{ customer.ahvNum }}</div>
         <div class="detail-row"><span>Erstellt am:</span> {{ customer.createdAt | date: 'short' }}</div>
         <div class="detail-row"><span>Zuletzt geändert:</span> {{ customer.updatedAt | date: 'short' }}</div>
       </div>

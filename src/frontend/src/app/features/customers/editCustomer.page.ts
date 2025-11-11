@@ -25,7 +25,7 @@ import { ToastService } from '../../core/services/toast.service'; // neu
   styleUrls: ['./customers.page.scss']
 })
 export class EditCustomerPage implements OnInit {
-  customer = { id: 0,firstName: '', name: '', email: '' };
+  customer = { id: 0,firstName: '', name: '', email: '', ahvNum: '' };
   loading = false;
   error = '';
 

@@ -79,6 +79,7 @@ namespace RP.CRM.Infrastructure.Repositories
             existing.FirstName = customer.FirstName;
             existing.Name = customer.Name;
             existing.Email = customer.Email;
+            existing.AHVNum = customer.AHVNum;
 
             await _audit.CaptureEntityChangesAsync(_context, "system");
             await _context.SaveChangesAsync();
