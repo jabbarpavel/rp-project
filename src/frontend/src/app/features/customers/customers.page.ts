@@ -13,6 +13,8 @@ interface CustomerDto {
   name: string;
   email: string;
   ahvNum: string;
+  advisorEmail?: string | null;   // neu
+  advisorId?: number | null; 
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;

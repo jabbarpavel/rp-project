@@ -53,4 +53,15 @@ export class ApiService {
   delete<T>(url: string): Observable<T> {
     return this.http.delete<T>(`${this.apiUrl}${url}`, { headers: this.getHeaders() });
   }
+  // Advisors abrufen (optional mit Suchbegriff)
+  getAdvisors(q?: string) {
+    const query = q && q.trim().length > 0 ? `?q=${encodeURIComponent(q.trim())}` : '';
+    return this.get<Array<{ id: number; email: string; tenantId: number }>>(`/api/user/advisors${query}`);
+  }
+
+  // Advisor für Customer setzen/entfernen
+  updateCustomerAdvisor(customerId: number, advisorId: number | null) {
+    return this.put(`/api/customer/${customerId}/advisor`, { advisorId });
+  }
+
 }

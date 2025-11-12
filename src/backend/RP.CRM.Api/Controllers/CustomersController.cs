@@ -86,7 +86,8 @@ namespace RP.CRM.Api.Controllers
                 FirstName = dto.FirstName.Trim(),
                 Email = dto.Email.Trim(),
                 AHVNum = dto.AHVNum.Trim(),
-                TenantId = _tenantContext.TenantId
+                TenantId = _tenantContext.TenantId,
+                AdvisorId = dto.AdvisorId
             };
 
             var created = await _customerService.CreateAsync(newCustomer);
@@ -125,6 +126,7 @@ namespace RP.CRM.Api.Controllers
             existing.FirstName = dto.FirstName.Trim();
             existing.Email = dto.Email.Trim();
             existing.AHVNum = dto.AHVNum.Trim();
+            existing.AdvisorId = dto.AdvisorId;
 
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)

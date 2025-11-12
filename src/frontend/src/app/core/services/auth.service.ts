@@ -28,10 +28,17 @@ export class AuthService {
   async login(email: string, password: string): Promise<boolean> {
     try {
       const res = await lastValueFrom(
-        this.http.post<{ token: string }>(`${this.baseUrl}/api/user/login`, { email, password })
+        this.http.post<{ token: string; tenantId: number }>(`${this.baseUrl}/api/user/login`, { email, password })
       );
-      if (res && res.token) {
+      if (res?.token) {
         localStorage.setItem(this.tokenKey, res.token);
+        if (typeof res.tenantId === 'number') {
+          localStorage.setItem('tenant_id', String(res.tenantId));
+        } else {
+          // Fallback aus JWT
+          const payload = JSON.parse(atob(res.token.split('.')[1]));
+          if (payload?.tenantId) localStorage.setItem('tenant_id', String(payload.tenantId));
+        }
         return true;
       }
       return false;
@@ -39,6 +46,7 @@ export class AuthService {
       return false;
     }
   }
+
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);

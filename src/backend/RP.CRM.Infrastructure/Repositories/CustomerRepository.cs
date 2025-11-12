@@ -26,6 +26,7 @@ namespace RP.CRM.Infrastructure.Repositories
         {
             var query = _context.Customers
                 .Include(c => c.Tenant)
+                .Include(c => c.Advisor)
                 .Where(c => !c.IsDeleted);
 
             if (_tenantContext.TenantId != 0)

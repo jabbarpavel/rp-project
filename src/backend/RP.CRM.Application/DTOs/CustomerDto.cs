@@ -38,5 +38,7 @@ namespace RP.CRM.Application.DTOs
         [RegularExpression(@"^756\.\d{4}\.\d{4}\.\d{2}$",
             ErrorMessage = "AHV-Nummer muss dem Format 756.xxxx.xxxx.xx entsprechen.")]
         public string AHVNum { get; set; } = string.Empty;
+
+        public int? AdvisorId { get; set; }
     }
 }

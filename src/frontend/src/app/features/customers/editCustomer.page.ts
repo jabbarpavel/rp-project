@@ -25,7 +25,7 @@ import { ToastService } from '../../core/services/toast.service'; // neu
   styleUrls: ['./customers.page.scss']
 })
 export class EditCustomerPage implements OnInit {
-  customer = { id: 0,firstName: '', name: '', email: '', ahvNum: '' };
+  customer = { id: 0,firstName: '', name: '', email: '', ahvNum: '', advisorId: null as number | null  };
   loading = false;
   error = '';
 
@@ -62,16 +62,17 @@ export class EditCustomerPage implements OnInit {
     this.api.put(`/api/customer/${this.customer.id}`, this.customer).subscribe({
       next: () => {
         this.loading = false;
-        this.toast.show('Kunde erfolgreich aktualisiert', 'success'); // neu
+        this.toast.show('Kunde erfolgreich aktualisiert', 'success');
         this.router.navigate(['/customers']);
       },
-      error: (err: any) => {
+      error: () => {
         this.error = 'Fehler beim Aktualisieren.';
-        this.toast.show('Fehler beim Aktualisieren', 'error'); // neu
+        this.toast.show('Fehler beim Aktualisieren', 'error');
         this.loading = false;
       }
     });
   }
+
 
   cancel(): void {
     this.router.navigate(['/customers']);
