@@ -50,5 +50,11 @@ namespace RP.CRM.Application.Services
                 _logger.LogWarning("Customer {Id} not found for deletion", id);
             return deleted;
         }
+    
+        public async Task<bool> AssignAdvisorAsync(int customerId, int? advisorId)
+        {
+            _logger.LogInformation("Assign advisor {AdvisorId} to customer {CustomerId}", advisorId, customerId);
+            return await _repository.AssignAdvisorAsync(customerId, advisorId);
+        }
     }
 }

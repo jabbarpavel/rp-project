@@ -104,5 +104,10 @@ namespace RP.CRM.Application.Services
         {
             return await _repository.GetByEmailAndTenantAsync(email, tenantId);
         }
+        public async Task<IReadOnlyList<User>> GetAdvisorsAsync(string? q)
+        {
+            return await _repository.GetAdvisorsAsync(q);
+        }
+
     }
 }

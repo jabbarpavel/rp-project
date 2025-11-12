@@ -34,17 +34,29 @@ namespace RP.CRM.Infrastructure.Data
                 .WithMany(t => t.Users)
                 .HasForeignKey(u => u.TenantId);
 
-            // Seed Beispiel
+            // NEU: Advisor-Relation (FK optional, Berater kann später fehlen)
+            modelBuilder.Entity<Customer>()
+                .HasOne(c => c.Advisor)
+                .WithMany()                     // kein Back-Collection nötig
+                .HasForeignKey(c => c.AdvisorId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // NEU: Indexe für Tenant/Advisor
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => new { c.TenantId, c.AdvisorId });
+
+            // Seed bleibt
             modelBuilder.Entity<Tenant>().HasData(
-                new Tenant 
-                { 
-                    Id = 1, 
-                    Name = "Finaro", 
-                    Domain = "finaro", 
-                    CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc) 
+                new Tenant
+                {
+                    Id = 1,
+                    Name = "Finaro",
+                    Domain = "finaro",
+                    CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 }
             );
         }
+
 
         public override int SaveChanges()
         {

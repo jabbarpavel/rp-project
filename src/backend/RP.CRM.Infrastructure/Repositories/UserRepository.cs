@@ -44,5 +44,22 @@ namespace RP.CRM.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return user;
         }
+
+        public async Task<IReadOnlyList<User>> GetAdvisorsAsync(string? q)
+        {
+            var query = _context.Users.Where(u => u.TenantId == _tenantContext.TenantId);
+
+            // Optional: nur bestimmte Rollen als Berater
+            // query = query.Where(u => u.Role == "Advisor" || u.Role == "User");
+
+            if (!string.IsNullOrWhiteSpace(q))
+                query = query.Where(u => u.Email.ToLower().Contains(q.ToLower()));
+
+            return await query
+                .OrderBy(u => u.Email)
+                .Take(25)
+                .ToListAsync();
+        }
+
     }
 }

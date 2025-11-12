@@ -36,7 +36,10 @@ namespace RP.CRM.Infrastructure.Repositories
 
         public async Task<Customer?> GetByIdAsync(int id)
         {
-            var query = _context.Customers.Include(c => c.Tenant).AsQueryable();
+            var query = _context.Customers
+                .Include(c => c.Tenant)
+                .Include(c => c.Advisor) // NEU
+                .AsQueryable();
 
             if (_tenantContext.TenantId != 0)
                 query = query.Where(c => c.TenantId == _tenantContext.TenantId);
@@ -105,6 +108,32 @@ namespace RP.CRM.Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Tenant {TenantId}: soft deleted customer {Id}", _tenantContext.TenantId, id);
+            return true;
+        }
+
+        public async Task<bool> AssignAdvisorAsync(int customerId, int? advisorId)
+        {
+            var customer = await _context.Customers
+                .FirstOrDefaultAsync(c => c.Id == customerId && c.TenantId == _tenantContext.TenantId);
+
+            if (customer == null) return false;
+
+            if (advisorId.HasValue)
+            {
+                var advisor = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == advisorId.Value && u.TenantId == _tenantContext.TenantId);
+                if (advisor == null) return false;
+            }
+
+            var old = customer.AdvisorId;
+            customer.AdvisorId = advisorId;
+
+            await _audit.CaptureEntityChangesAsync(_context, "system");
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Tenant {TenantId}: advisor changed for customer {CustomerId} {Old}->{New}",
+                _tenantContext.TenantId, customerId, old, advisorId);
+
             return true;
         }
     }

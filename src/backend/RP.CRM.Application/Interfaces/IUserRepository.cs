@@ -7,5 +7,7 @@ namespace RP.CRM.Application.Interfaces
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByEmailAndTenantAsync(string email, int tenantId); // hinzugefügt
         Task<User> CreateAsync(User user);
+        Task<IReadOnlyList<User>> GetAdvisorsAsync(string? q);
+
     }
 }

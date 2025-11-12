@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using RP.CRM.Application.DTOs;
 using RP.CRM.Application.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RP.CRM.Api.Controllers
 {
@@ -89,5 +90,15 @@ namespace RP.CRM.Api.Controllers
                 TenantName = tenant.Name 
             });
         }
+
+        [HttpGet("advisors")]
+        [Authorize]
+        public async Task<IActionResult> GetAdvisors([FromQuery] string? q)
+        {
+            var list = await _userService.GetAdvisorsAsync(q); // Service durchreichen
+            var result = list.Select(u => new UserDto { Id = u.Id, Email = u.Email, TenantId = u.TenantId });
+            return Ok(result);
+        }
+
     }
 }

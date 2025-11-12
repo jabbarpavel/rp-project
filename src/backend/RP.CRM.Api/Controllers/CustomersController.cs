@@ -35,6 +35,8 @@ namespace RP.CRM.Api.Controllers
                     FirstName = c.FirstName,
                     Email = c.Email,
                     AHVNum = c.AHVNum,
+                    AdvisorId = c.AdvisorId,
+                    AdvisorEmail = c.Advisor != null ? c.Advisor.Email : null,
                     TenantId = c.TenantId,
                     IsDeleted = c.IsDeleted,
                     CreatedAt = c.CreatedAt,
@@ -62,6 +64,8 @@ namespace RP.CRM.Api.Controllers
                 FirstName = customer.FirstName,
                 Email = customer.Email,
                 AHVNum = customer.AHVNum,
+                AdvisorId = customer.AdvisorId,
+                AdvisorEmail = customer.Advisor != null ? customer.Advisor.Email : null,
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
                 CreatedAt = customer.CreatedAt,
@@ -153,6 +157,36 @@ namespace RP.CRM.Api.Controllers
 
             var deleted = await _customerService.DeleteAsync(id);
             return deleted ? NoContent() : NotFound();
+        }
+
+        public class ChangeAdvisorRequest { public int? AdvisorId { get; set; } }
+
+        [HttpPut("{id:int}/advisor")]
+        public async Task<IActionResult> ChangeAdvisor(int id, [FromBody] ChangeAdvisorRequest req)
+        {
+            var existing = await _customerService.GetByIdAsync(id);
+            if (existing is null) return NotFound();
+            if (existing.TenantId != _tenantContext.TenantId) return Forbid();
+
+            var ok = await _customerService.AssignAdvisorAsync(id, req.AdvisorId);
+            if (!ok) return BadRequest("Advisor ungültig oder falscher Tenant.");
+
+            // frisch laden für Response
+            var updated = await _customerService.GetByIdAsync(id);
+            return Ok(new CustomerDto
+            {
+                Id = updated!.Id,
+                FirstName = updated.FirstName,
+                Name = updated.Name,
+                Email = updated.Email,
+                AHVNum = updated.AHVNum,
+                TenantId = updated.TenantId,
+                IsDeleted = updated.IsDeleted,
+                CreatedAt = updated.CreatedAt,
+                UpdatedAt = updated.UpdatedAt,
+                AdvisorId = updated.AdvisorId,
+                AdvisorEmail = updated.Advisor?.Email
+            });
         }
     }
 }
