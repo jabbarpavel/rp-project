@@ -17,15 +17,19 @@ namespace RP.CRM.Application.DTOs
         public string AHVNum { get; set; } = string.Empty;
 
         public int? AdvisorId { get; set; }
-
-        // bestehend
         public string? AdvisorEmail { get; set; }
         public string? AdvisorFirstName { get; set; }
         public string? AdvisorLastName { get; set; }
-
-        // NEU
         public string? AdvisorPhone { get; set; }
         public bool? AdvisorIsActive { get; set; }
+
+        public string? CivilStatus { get; set; }
+        public string? Religion { get; set; }
+        public string? Gender { get; set; }
+        public string? Salutation { get; set; }
+        public DateOnly? BirthDate { get; set; }
+        public string? Profession { get; set; }
+        public string? Language { get; set; }
 
         public int TenantId { get; set; }
         public bool IsDeleted { get; set; }
@@ -51,5 +55,14 @@ namespace RP.CRM.Application.DTOs
         public string AHVNum { get; set; } = string.Empty;
 
         public int? AdvisorId { get; set; }
+
+        public string? CivilStatus { get; set; }
+        public string? Religion { get; set; }
+        public string? Gender { get; set; }
+        public string? Salutation { get; set; }
+        public DateOnly? BirthDate { get; set; }
+        public string? Profession { get; set; }
+        public string? Language { get; set; }        
+
     }
 }

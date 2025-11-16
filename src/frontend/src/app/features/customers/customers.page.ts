@@ -19,6 +19,14 @@ interface CustomerDto {
   advisorFirstName?: string | null;
   advisorLastName?: string | null;
 
+  civilStatus?: string | null;
+  religion?: string | null;
+  gender?: string | null;
+  salutation?: string | null;
+  birthDate?: string | null;
+  profession?: string | null;
+  language?: string | null;
+
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;

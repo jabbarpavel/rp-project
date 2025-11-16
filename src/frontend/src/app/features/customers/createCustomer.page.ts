@@ -27,8 +27,22 @@ import { ToastService } from '../../core/services/toast.service';
   styleUrls: ['./customers.page.scss']
 })
 export class CreateCustomerPage implements OnInit {
-  customer = { firstName: '', name: '', email: '', ahvNum: '', advisorId: null as number | null };
-  advisors: Array<{ id: number; email: string }> = [];
+  customer = {
+    firstName: '',
+    name: '',
+    email: '',
+    ahvNum: '',
+    advisorId: null as number | null,
+
+    civilStatus: null as string | null,
+    religion: null as string | null,
+    gender: null as string | null,
+    salutation: null as string | null,
+    birthDate: null as string | null,
+    profession: '',
+    language: null as string | null
+  };
+
   error = '';
   loading = false;
 
@@ -38,16 +52,7 @@ export class CreateCustomerPage implements OnInit {
     private toast: ToastService
   ) {}
 
-  ngOnInit(): void {
-    this.loadAdvisors();
-  }
-
-  loadAdvisors(): void {
-    this.api.get<Array<{ id: number; email: string }>>('/api/user/advisors').subscribe({
-      next: (res) => this.advisors = res,
-      error: () => this.toast.show('Fehler beim Laden der Berater', 'error')
-    });
-  }
+  ngOnInit(): void {}
 
   createCustomer(): void {
     if (this.loading) return;

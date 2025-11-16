@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { CustomerFormComponent } from './customerForm.component';
-import { ToastService } from '../../core/services/toast.service'; // neu
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-edit-customer',
@@ -25,7 +25,23 @@ import { ToastService } from '../../core/services/toast.service'; // neu
   styleUrls: ['./customers.page.scss']
 })
 export class EditCustomerPage implements OnInit {
-  customer = { id: 0,firstName: '', name: '', email: '', ahvNum: '', advisorId: null as number | null  };
+  customer = {
+    id: 0,
+    firstName: '',
+    name: '',
+    email: '',
+    ahvNum: '',
+    advisorId: null as number | null,
+
+    civilStatus: null as string | null,
+    religion: null as string | null,
+    gender: null as string | null,
+    salutation: null as string | null,
+    birthDate: null as string | null,
+    profession: '',
+    language: null as string | null
+  };
+
   loading = false;
   error = '';
 
@@ -33,7 +49,7 @@ export class EditCustomerPage implements OnInit {
     private route: ActivatedRoute,
     private api: ApiService,
     private router: Router,
-    private toast: ToastService // neu
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -45,12 +61,15 @@ export class EditCustomerPage implements OnInit {
     this.loading = true;
     this.api.get(`/api/customer/${id}`).subscribe({
       next: (res: any) => {
-        this.customer = res;
+        this.customer = {
+          ...this.customer,
+          ...res
+        };
         this.loading = false;
       },
-      error: (err: any) => {
+      error: () => {
         this.error = 'Fehler beim Laden des Kunden.';
-        this.toast.show('Fehler beim Laden des Kunden', 'error'); // neu
+        this.toast.show('Fehler beim Laden des Kunden', 'error');
         this.loading = false;
       }
     });
@@ -72,7 +91,6 @@ export class EditCustomerPage implements OnInit {
       }
     });
   }
-
 
   cancel(): void {
     this.router.navigate(['/customers']);

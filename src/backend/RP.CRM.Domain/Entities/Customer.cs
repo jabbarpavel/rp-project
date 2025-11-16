@@ -1,5 +1,6 @@
 using System;                      // optional, aber üblich
-using RP.CRM.Domain.Entities;      // falls BaseEntity in demselben Namespace bleibt (redundant, aber sicher)
+using RP.CRM.Domain.Entities;
+
 namespace RP.CRM.Domain.Entities
 {
     public class Customer : BaseEntity
@@ -12,10 +13,17 @@ namespace RP.CRM.Domain.Entities
         public int TenantId { get; set; }
         public Tenant? Tenant { get; set; }
 
-        // neu
         public int? AdvisorId { get; set; }
         public User? Advisor { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public string? CivilStatus { get; set; }
+        public string? Religion { get; set; }
+        public string? Gender { get; set; }
+        public string? Salutation { get; set; }
+        public DateOnly? BirthDate { get; set; }
+        public string? Profession { get; set; }
+        public string? Language { get; set; }
     }
 }

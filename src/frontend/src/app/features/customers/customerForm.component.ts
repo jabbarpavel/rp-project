@@ -17,24 +17,171 @@ type AdvisorDto = {
   template: `
     <div class="form-container">
       <form (submit)="onSubmit($event)" class="customer-form">
+        <!-- Basisdaten -->
         <div class="form-group">
           <label for="firstName">Vorname</label>
-          <input id="firstName" type="text" [(ngModel)]="model.firstName" name="firstName" placeholder="Vorname eingeben"/>
+          <input
+            id="firstName"
+            type="text"
+            [(ngModel)]="model.firstName"
+            name="firstName"
+            placeholder="Vorname eingeben"
+          />
         </div>
 
         <div class="form-group">
           <label for="name">Name</label>
-          <input id="name" type="text" [(ngModel)]="model.name" name="name" placeholder="Kundenname eingeben" required/>
+          <input
+            id="name"
+            type="text"
+            [(ngModel)]="model.name"
+            name="name"
+            placeholder="Kundenname eingeben"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="ahv">AHV-Nummer</label>
-          <input id="ahv" type="text" name="ahvNum" maxlength="16" [(ngModel)]="model.ahvNum" (input)="formatAhvNumber()" placeholder="756.xxxx.xxxx.xx" required/>
+          <input
+            id="ahv"
+            type="text"
+            name="ahvNum"
+            maxlength="16"
+            [(ngModel)]="model.ahvNum"
+            (input)="formatAhvNumber()"
+            placeholder="756.xxxx.xxxx.xx"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="email">E-Mail</label>
-          <input id="email" type="email" [(ngModel)]="model.email" name="email" placeholder="E-Mail-Adresse eingeben" required/>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="model.email"
+            name="email"
+            placeholder="E-Mail-Adresse eingeben"
+            required
+          />
+        </div>
+
+        <!-- Zivilstand -->
+        <div class="form-group">
+          <label for="civilStatus">Zivilstand</label>
+          <select
+            id="civilStatus"
+            [(ngModel)]="model.civilStatus"
+            name="civilStatus"
+          >
+            <option [ngValue]="null">Bitte auswählen</option>
+            <option value="ledig">Ledig</option>
+            <option value="verheiratet">Verheiratet</option>
+            <option value="getrennt">Getrennt</option>
+            <option value="geschieden">Geschieden</option>
+            <option value="verwitwet">Verwitwet</option>
+          </select>
+        </div>
+
+        <!-- Konfession -->
+        <div class="form-group">
+          <label for="religion">Konfession</label>
+          <select
+            id="religion"
+            [(ngModel)]="model.religion"
+            name="religion"
+          >
+            <option [ngValue]="null">Bitte auswählen</option>
+            <option value="römisch-katholisch">römisch-katholisch</option>
+            <option value="evangelisch-reformiert">evangelisch-reformiert</option>
+            <option value="christkatholisch">christkatholisch</option>
+            <option value="islamisch">islamisch</option>
+            <option value="jüdisch">jüdisch</option>
+            <option value="keine">keine</option>
+            <option value="andere">andere</option>
+          </select>
+        </div>
+
+        <!-- Geschlecht -->
+        <div class="form-group">
+          <label for="gender">Geschlecht</label>
+          <select
+            id="gender"
+            [(ngModel)]="model.gender"
+            name="gender"
+          >
+            <option [ngValue]="null">Bitte auswählen</option>
+            <option value="männlich">männlich</option>
+            <option value="weiblich">weiblich</option>
+            <option value="unbekannt">unbekannt</option>
+          </select>
+        </div>
+
+        <!-- Anrede (Du / Sie Toggle) -->
+        <div class="form-group">
+          <label>Anrede</label>
+          <div class="toggle-group">
+            <label class="toggle-option">
+              <input
+                type="radio"
+                name="salutation"
+                [value]="'Du'"
+                [(ngModel)]="model.salutation"
+              />
+              Du
+            </label>
+            <label class="toggle-option">
+              <input
+                type="radio"
+                name="salutation"
+                [value]="'Sie'"
+                [(ngModel)]="model.salutation"
+              />
+              Sie
+            </label>
+          </div>
+        </div>
+
+        <!-- Geburtsdatum -->
+        <div class="form-group">
+          <label for="birthDate">Geburtsdatum</label>
+          <input
+            id="birthDate"
+            type="date"
+            [(ngModel)]="model.birthDate"
+            name="birthDate"
+          />
+          <small class="hint">Format: TT.MM.JJJJ (Browserdarstellung kann abweichen)</small>
+        </div>
+
+        <!-- Beruf -->
+        <div class="form-group">
+          <label for="profession">Beruf</label>
+          <input
+            id="profession"
+            type="text"
+            [(ngModel)]="model.profession"
+            name="profession"
+            placeholder="Beruf eingeben"
+          />
+        </div>
+
+        <!-- Sprache -->
+        <div class="form-group">
+          <label for="language">Sprache</label>
+          <select
+            id="language"
+            [(ngModel)]="model.language"
+            name="language"
+          >
+            <option [ngValue]="null">Bitte auswählen</option>
+            <option value="deutsch">Deutsch</option>
+            <option value="französisch">Französisch</option>
+            <option value="italienisch">Italienisch</option>
+            <option value="englisch">Englisch</option>
+            <option value="andere">Andere</option>
+          </select>
         </div>
 
         <!-- Berater: Autocomplete-Dropdown -->
@@ -51,7 +198,7 @@ type AdvisorDto = {
             placeholder="Berater suchen (Name oder E-Mail)…"
             autocomplete="off"
             aria-autocomplete="list"
-            aria-expanded="{{open}}"
+            [attr.aria-expanded]="open"
           />
 
           <ul *ngIf="open && items.length" class="dropdown" role="listbox">
@@ -80,13 +227,13 @@ type AdvisorDto = {
     </div>
   `,
   styles: [`
-    .form-container{background:#fff;padding:2rem;border-radius:12px;max-width:480px;margin:2rem auto;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+    .form-container{background:#fff;padding:2rem;border-radius:12px;max-width:620px;margin:2rem auto;box-shadow:0 2px 10px rgba(0,0,0,.05)}
     .customer-form{display:flex;flex-direction:column;gap:1.2rem}
     .form-group{display:flex;flex-direction:column;position:relative}
     label{font-weight:600;margin-bottom:.4rem;color:#1f2937}
-    input{padding:.7rem;border:1px solid #d1d5db;border-radius:8px;font-size:.95rem;transition:border-color .2s}
-    input:focus{border-color:#3b82f6;outline:none}
-    .button-group{display:flex;justify-content:flex-end;gap:.8rem}
+    input, select{padding:.7rem;border:1px solid #d1d5db;border-radius:8px;font-size:.95rem;transition:border-color .2s;background:#fff}
+    input:focus, select:focus{border-color:#3b82f6;outline:none}
+    .button-group{display:flex;justify-content:flex-end;gap:.8rem;margin-top:.5rem}
     button{padding:.6rem 1.2rem;border:none;border-radius:8px;cursor:pointer;font-weight:600}
     button[type="submit"]{background:#3b82f6;color:#fff}
     button.cancel{background:#e5e7eb;color:#111827}
@@ -97,10 +244,27 @@ type AdvisorDto = {
     .dropdown li.active,.dropdown li:hover{background:#eff6ff}
     .hint{margin-top:.3rem;color:#6b7280;font-size:.8rem}
     input#ahv{font-family:monospace;letter-spacing:.05rem}
+    .toggle-group{display:flex;gap:.5rem}
+    .toggle-option{display:flex;align-items:center;gap:.25rem;padding:.25rem .6rem;border-radius:999px;border:1px solid #d1d5db;cursor:pointer;font-size:.85rem;color:#374151}
+    .toggle-option input{margin:0}
   `]
 })
 export class CustomerFormComponent implements OnInit {
-  @Input() model = { firstName: '', name: '', email: '', ahvNum: '', advisorId: null as number | null };
+  @Input() model = {
+    firstName: '',
+    name: '',
+    email: '',
+    ahvNum: '',
+    advisorId: null as number | null,
+
+    civilStatus: null as string | null,
+    religion: null as string | null,
+    gender: null as string | null,
+    salutation: null as string | null,
+    birthDate: null as string | null,
+    profession: '',
+    language: null as string | null
+  };
   @Input() loading = false;
   @Input() error = '';
   @Input() submitLabel = 'Speichern';
@@ -171,7 +335,6 @@ export class CustomerFormComponent implements OnInit {
     const ln = a.name?.trim() || '';
     const email = a.email;
     const fullName = fn && ln ? `${fn} ${ln}` : fn || ln;
-
     return fullName ? `${fullName} (${email})` : email;
   }
 

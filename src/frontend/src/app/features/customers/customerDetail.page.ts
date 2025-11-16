@@ -19,6 +19,15 @@ interface CustomerDetailDto {
   advisorLastName: string | null;
   advisorPhone: string | null;
   advisorIsActive: boolean | null;
+
+  civilStatus?: string | null;
+  religion?: string | null;
+  gender?: string | null;
+  salutation?: string | null;
+  birthDate?: string | null;
+  profession?: string | null;
+  language?: string | null;
+
   tenantId: number;
   isDeleted: boolean;
   createdAt: string;
@@ -30,72 +39,193 @@ interface CustomerDetailDto {
   standalone: true,
   imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent],
   template: `
-    <div class="page-container">
-      <div class="header-bar">
-        <h2>Kundendetails</h2>
-        <div class="actions">
-          <button class="edit-btn" type="button" (click)="editCustomer()">Bearbeiten</button>
-          <button class="delete-btn" type="button" (click)="deleteCustomer()">Löschen</button>
+    <div class="page">
+      <div class="page-header">
+        <div>
+          <h1>Kundendetails</h1>
+          <p class="subline">
+            {{ getHeaderDisplay(customer) }}
+          </p>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn ghost" type="button" (click)="editCustomer()">Bearbeiten</button>
+          <button class="btn danger" type="button" (click)="deleteCustomer()">Löschen</button>
         </div>
       </div>
 
-      <div *ngIf="loading" class="loading">Lade Kundendaten...</div>
-      <div *ngIf="error" class="error">{{ error }}</div>
+      <div *ngIf="loading" class="state-msg">Lade Kundendaten…</div>
+      <div *ngIf="error" class="state-msg error">{{ error }}</div>
 
-      <div *ngIf="!loading && !error && customer" class="detail-wrap">
+      <div *ngIf="!loading && !error && customer" class="layout">
 
-        <!-- LINKER BLOCK -->
-        <div class="detail-card">
-          <div class="detail-row"><span>ID:</span> {{ customer.id }}</div>
-          <div class="detail-row"><span>Vorname:</span> {{ customer.firstName }}</div>
-          <div class="detail-row"><span>Name:</span> {{ customer.name }}</div>
-          <div class="detail-row"><span>E-Mail:</span> {{ customer.email }}</div>
-          <div class="detail-row"><span>AHV-Nummer:</span> {{ customer.ahvNum }}</div>
-          <div class="detail-row"><span>Erstellt am:</span> {{ customer.createdAt | date: 'short' }}</div>
-          <div class="detail-row"><span>Zuletzt geändert:</span> {{ customer.updatedAt | date: 'short' }}</div>
+        <!-- linke Spalte -->
+        <div class="left-column">
+
+          <!-- Stammdaten -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Stammdaten</h2>
+            </div>
+            <dl class="detail-list">
+
+              <!-- Anrede + Sprache -->
+              <div class="double-row">
+                <div>
+                  <dt>Anrede</dt>
+                  <dd>{{ customer.salutation }}</dd>
+                </div>
+                <div>
+                  <dt>Sprache</dt>
+                  <dd>{{ customer.language }}</dd>
+                </div>
+              </div>
+
+              <!-- Vorname + Nachname -->
+              <div class="double-row">
+                <div>
+                  <dt>Vorname</dt>
+                  <dd>{{ customer.firstName }}</dd>
+                </div>
+                <div>
+                  <dt>Nachname</dt>
+                  <dd>{{ customer.name }}</dd>
+                </div>
+              </div>
+
+              <!-- E-Mail + AHV-Nummer -->
+              <div class="double-row">
+                <div>
+                  <dt>E-Mail</dt>
+                  <dd>
+                    <a *ngIf="customer.email" class="link" href="mailto:{{ customer.email }}">
+                      {{ customer.email }}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>AHV-Nummer</dt>
+                  <dd>{{ customer.ahvNum }}</dd>
+                </div>
+              </div>
+
+              <!-- Erstellt + Zuletzt geändert -->
+              <div class="double-row">
+                <div>
+                  <dt>Erstellt am</dt>
+                  <dd>{{ customer.createdAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+                </div>
+                <div>
+                  <dt>Zuletzt geändert</dt>
+                  <dd>{{ customer.updatedAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+                </div>
+              </div>
+
+            </dl>
+          </section>
+
+          <!-- Persönliche Angaben -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Persönliche Angaben</h2>
+            </div>
+            <dl class="detail-list">
+
+              <!-- Zivilstand + Konfession -->
+              <div class="double-row" *ngIf="customer.civilStatus || customer.religion">
+                <div *ngIf="customer.civilStatus">
+                  <dt>Zivilstand</dt>
+                  <dd>{{ customer.civilStatus }}</dd>
+                </div>
+                <div *ngIf="customer.religion">
+                  <dt>Konfession</dt>
+                  <dd>{{ customer.religion }}</dd>
+                </div>
+              </div>
+
+              <!-- Geschlecht + Geburtsdatum -->
+              <div class="double-row" *ngIf="customer.gender || customer.birthDate">
+                <div *ngIf="customer.gender">
+                  <dt>Geschlecht</dt>
+                  <dd>{{ customer.gender }}</dd>
+                </div>
+                <div *ngIf="customer.birthDate">
+                  <dt>Geburtsdatum</dt>
+                  <dd>{{ customer.birthDate | date: 'dd.MM.yyyy' }}</dd>
+                </div>
+              </div>
+
+              <!-- Beruf + rechte Seite leer -->
+              <div class="double-row" *ngIf="customer.profession">
+                <div>
+                  <dt>Beruf</dt>
+                  <dd>{{ customer.profession }}</dd>
+                </div>
+                <div></div>
+              </div>
+
+            </dl>
+          </section>
+
         </div>
 
-        <!-- RECHTER BLOCK: BERATER -->
-        <div class="advisor-card">
-
-          <div class="advisor-header">
-            <div>
-              <h3>Berater</h3>
-
-              <!-- Inaktiv-Label direkt unter dem Titel -->
-              <div class="inactive-badge" *ngIf="customer.advisorIsActive === false">
-                ! Berater inaktiv
+        <!-- rechte Spalte: Berater (unverändert) -->
+        <aside class="advisor-column">
+          <section class="card advisor-card">
+            <div class="advisor-header">
+              <div class="avatar">
+                <span>{{ getAdvisorInitials(customer) }}</span>
+              </div>
+              <div class="advisor-info">
+                <div class="advisor-title-row">
+                  <h2>Hauptberater</h2>
+                  <span
+                    *ngIf="customer.advisorIsActive === false"
+                    class="badge badge-inactive"
+                  >
+                    Inaktiv
+                  </span>
+                </div>
+                <p class="advisor-name">
+                  {{ getAdvisorName(customer) || 'Kein Berater zugewiesen' }}
+                </p>
               </div>
             </div>
 
-            <div class="advisor-actions">
-              <button class="link-btn" type="button" (click)="openAdvisorDialog()">Wechseln</button>
-              <button class="link-btn danger" type="button" (click)="removeAdvisor()" *ngIf="customer.advisorId">
+            <div class="advisor-body" *ngIf="customer.advisorId; else noAdvisorBlock">
+              <dl class="detail-list compact">
+                <div class="row">
+                  <dt>E-Mail</dt>
+                  <dd>
+                    <a *ngIf="customer.advisorEmail" class="link" href="mailto:{{ customer.advisorEmail }}">
+                      {{ customer.advisorEmail }}
+                    </a>
+                  </dd>
+                </div>
+                <div class="row" *ngIf="customer.advisorPhone">
+                  <dt>Telefon</dt>
+                  <dd>{{ customer.advisorPhone }}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <ng-template #noAdvisorBlock>
+              <p class="advisor-empty">Kein Berater hinterlegt.</p>
+            </ng-template>
+
+            <div class="advisor-actions-footer">
+              <button class="link-btn" type="button" (click)="openAdvisorDialog()">Berater wechseln</button>
+              <button
+                class="link-btn danger"
+                type="button"
+                *ngIf="customer.advisorId"
+                (click)="removeAdvisor()"
+              >
                 Entfernen
               </button>
             </div>
-          </div>
-
-          <div *ngIf="customer.advisorId; else noAdvisor" class="advisor-body">
-
-            <div class="advisor-row" *ngIf="getAdvisorName(customer)">
-              <span>Name:</span> {{ getAdvisorName(customer) }}
-            </div>
-
-            <div class="advisor-row">
-              <span>E-Mail:</span> {{ customer.advisorEmail }}
-            </div>
-
-            <div class="advisor-row" *ngIf="customer.advisorPhone">
-              <span>Telefon:</span> {{ customer.advisorPhone }}
-            </div>
-
-          </div>
-
-          <ng-template #noAdvisor>
-            <div class="advisor-empty">Kein Berater zugewiesen.</div>
-          </ng-template>
-        </div>
+          </section>
+        </aside>
       </div>
 
       <app-advisor-change-dialog
@@ -105,51 +235,291 @@ interface CustomerDetailDto {
       </app-advisor-change-dialog>
     </div>
   `,
-
   styles: [`
-    .page-container { padding: 2rem; background: #f9fafb; min-height: 100vh; }
-
-    .header-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
-
-    .actions { display:flex; gap:.5rem; }
-
-    .edit-btn { background:#fde68a; color:#92400e; border:none; padding:.5rem 1rem; border-radius:8px; font-weight:600; cursor:pointer; }
-    .delete-btn { background:#fca5a5; color:#7f1d1d; border:none; padding:.5rem 1rem; border-radius:8px; font-weight:600; cursor:pointer; }
-
-    .detail-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
-    @media(max-width:900px){ .detail-wrap{ grid-template-columns:1fr; } }
-
-    .detail-card, .advisor-card {
-      background:#fff; border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.04);
-      padding:1.2rem;
+    .page {
+      padding: 1.75rem 2.5rem;
+      background: #f3f4f6;
+      min-height: 100vh;
     }
 
-    .detail-row, .advisor-row {
-      display:flex; justify-content:space-between;
-      padding:.45rem 0;
-      border-bottom:1px solid #f3f4f6;
-      font-size:.95rem;
-    }
-    .detail-row span, .advisor-row span { font-weight:600; color:#374151; }
-
-    .advisor-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.5rem; }
-
-    .inactive-badge {
-      background:#fee2e2;
-      color:#b91c1c;
-      font-weight:700;
-      padding:.15rem .45rem;
-      border-radius:999px;
-      font-size:.8rem;
-      margin-top:.25rem;
-      display:inline-block;
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
     }
 
-    .link-btn { background:none; border:none; color:#2563eb; cursor:pointer; font-weight:600; }
-    .link-btn.danger { color:#b91c1c; }
+    .page-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+    }
 
-    .advisor-empty { color:#6b7280; font-style:italic; padding-top:.5rem; }
+    .subline {
+      margin-top: .15rem;
+      font-size: .85rem;
+      color: #6b7280;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: .5rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: .45rem 1.2rem;
+      font-size: .85rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background-color .15s ease, box-shadow .15s ease, transform .05s ease;
+    }
+
+    .btn.ghost {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn.ghost:hover {
+      background: #d1d5db;
+    }
+
+    .btn.danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn.danger:hover {
+      background: #dc2626;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .state-msg {
+      text-align: center;
+      margin-top: 2rem;
+      color: #4b5563;
+    }
+
+    .state-msg.error {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1.2fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .advisor-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      padding: 1.1rem 1.25rem;
+    }
+
+    .card-header {
+      margin-bottom: .65rem;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .detail-list {
+      margin: 0;
+    }
+
+    .detail-list .row {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      padding: .3rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: .9rem;
+    }
+
+    .detail-list .row:last-child {
+      border-bottom: none;
+    }
+
+    dt {
+      margin: 0;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    dd {
+      margin: 0;
+      color: #111827;
+      word-break: break-word;
+    }
+
+    .detail-list.compact .row {
+      grid-template-columns: 110px minmax(0, 1fr);
+    }
+
+    .link {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .advisor-card {
+      padding: 1.25rem 1.4rem;
+    }
+
+    .advisor-header {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      margin-bottom: .7rem;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #4b5563;
+      font-size: 1.1rem;
+    }
+
+    .advisor-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .advisor-title-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .15rem;
+    }
+
+    .advisor-title-row h2 {
+      margin: 0;
+      font-size: .95rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .advisor-name {
+      margin: 0;
+      font-size: .95rem;
+      color: #111827;
+      font-weight: 500;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .1rem .55rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .badge-inactive {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .advisor-body {
+      margin-top: .4rem;
+    }
+
+    .advisor-empty {
+      margin: .5rem 0 .2rem;
+      font-size: .9rem;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .advisor-actions-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: .75rem;
+      margin-top: .8rem;
+    }
+
+    .link-btn {
+      border: none;
+      background: none;
+      padding: 0;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #2563eb;
+      cursor: pointer;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+
+    .link-btn.danger {
+      color: #b91c1c;
+    }
+
+    /* neue 2-Spalten-Layout-Zeilen */
+    .double-row {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr) 160px minmax(0, 1fr);
+      padding: .3rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: .9rem;
+      column-gap: 1.5rem;
+    }
+
+    .double-row:last-child {
+      border-bottom: none;
+    }
+
+    .double-row dt {
+      margin: 0;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    .double-row dd {
+      margin: 0;
+      color: #111827;
+      word-break: break-word;
+    }
   `]
 })
 export class CustomerDetailPage implements OnInit {
@@ -184,10 +554,26 @@ export class CustomerDetailPage implements OnInit {
     });
   }
 
+  getHeaderDisplay(c: CustomerDetailDto | null): string {
+    if (!c) return '';
+    if (c.gender === 'weiblich') return `Frau ${c.firstName} ${c.name}`;
+    if (c.gender === 'männlich') return `Herr ${c.firstName} ${c.name}`;
+    return `${c.firstName} ${c.name}`;
+  }
+
   getAdvisorName(c: CustomerDetailDto): string {
     const fn = c.advisorFirstName?.trim() || '';
     const ln = c.advisorLastName?.trim() || '';
     return fn && ln ? `${fn} ${ln}` : fn || ln;
+  }
+
+  getAdvisorInitials(c: CustomerDetailDto): string {
+    const fn = (c.advisorFirstName || '').trim();
+    const ln = (c.advisorLastName || '').trim();
+    const first = fn ? fn[0] : '';
+    const last = ln ? ln[0] : '';
+    const combined = (first + last).toUpperCase();
+    return combined || '–';
   }
 
   editCustomer(): void {
@@ -211,7 +597,11 @@ export class CustomerDetailPage implements OnInit {
     if (!this.customer) return;
 
     this.api.put(`/api/customer/${this.customer.id}/advisor`, { advisorId }).subscribe({
-      next: () => { this.toast.show('Berater erfolgreich geändert'); this.closeAdvisorDialog(); this.loadCustomer(); }
+      next: () => {
+        this.toast.show('Berater erfolgreich geändert');
+        this.closeAdvisorDialog();
+        this.loadCustomer();
+      }
     });
   }
 
@@ -220,7 +610,10 @@ export class CustomerDetailPage implements OnInit {
     if (!ok) return;
 
     this.api.put(`/api/customer/${this.id}/advisor`, { advisorId: null }).subscribe({
-      next: () => { this.toast.show('Berater entfernt'); this.loadCustomer(); }
+      next: () => {
+        this.toast.show('Berater entfernt');
+        this.loadCustomer();
+      }
     });
   }
 }
