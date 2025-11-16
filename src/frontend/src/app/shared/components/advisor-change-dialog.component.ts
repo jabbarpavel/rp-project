@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 
+type AdvisorDto = {
+  id: number;
+  email: string;
+  firstName?: string;
+  name?: string;
+};
+
 @Component({
   selector: 'app-advisor-change-dialog',
   standalone: true,
@@ -11,7 +18,7 @@ import { ApiService } from '../../core/services/api.service';
     <div class="overlay">
       <div class="dialog" role="dialog" aria-modal="true">
         <h3>Berater wechseln</h3>
-        <p>Bitte E-Mail des neuen Beraters auswählen:</p>
+        <p>Bitte neuen Berater auswählen:</p>
 
         <div class="field">
           <input
@@ -21,7 +28,7 @@ import { ApiService } from '../../core/services/api.service';
             (input)="onType()"
             (focus)="onFocus()"
             (keydown)="onKey($event)"
-            placeholder="E-Mail des Beraters"
+            placeholder="Berater suchen (Name oder E-Mail)…"
             class="input"
             autocomplete="off"
             aria-autocomplete="list"
@@ -40,13 +47,13 @@ import { ApiService } from '../../core/services/api.service';
               role="option"
               [attr.aria-selected]="i === idx"
             >
-              {{ a.email }}
+              {{ formatAdvisor(a) }}
             </li>
           </ul>
         </div>
 
         <div class="hint" *ngIf="!open && !selected">– Kein Berater ausgewählt –</div>
-        <div class="hint" *ngIf="selected">Aktuell gewählt: {{ selected.email }}</div>
+        <div class="hint" *ngIf="selected">Aktuell gewählt: {{ formatAdvisor(selected) }}</div>
 
         <div *ngIf="loading" class="loading">Suche…</div>
         <div *ngIf="error" class="error">{{ error }}</div>
@@ -82,8 +89,8 @@ export class AdvisorChangeDialogComponent {
   @Output() closed = new EventEmitter<void>();
 
   searchTerm = '';
-  items: Array<{ id: number; email: string }> = [];
-  selected: { id: number; email: string } | null = null;
+  items: AdvisorDto[] = [];
+  selected: AdvisorDto | null = null;
 
   loading = false;
   error = '';
@@ -144,9 +151,18 @@ export class AdvisorChangeDialogComponent {
     });
   }
 
-  pick(a: { id: number; email: string }) {
+  formatAdvisor(a: AdvisorDto): string {
+    const fn = a.firstName?.trim() || '';
+    const ln = a.name?.trim() || '';
+    const email = a.email;
+    const fullName = fn && ln ? `${fn} ${ln}` : fn || ln;
+
+    return fullName ? `${fullName} (${email})` : email;
+  }
+
+  pick(a: AdvisorDto) {
     this.selected = a;
-    this.searchTerm = a.email;
+    this.searchTerm = this.formatAdvisor(a);
     this.open = false;
   }
 

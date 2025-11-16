@@ -1,0 +1,109 @@
+.page {
+  padding: 2rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  max-width: 720px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-weight: 600;
+  color: #374151;
+}
+
+input {
+  padding: .65rem .75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: .95rem;
+  outline: none;
+  background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,.12);
+}
+
+input[disabled] {
+  background: #f9fafb;
+  color: #6b7280;
+}
+
+/* Telefon Prefix */
+.phone-input {
+  position: relative;
+  width: 100%;
+}
+
+.prefix {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4b5563;
+  pointer-events: none;
+  font-size: .95rem;
+}
+
+.phone-input input {
+  width: 100%;
+  padding: .65rem .75rem;
+  padding-left: 58px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: .95rem;
+  box-sizing: border-box;
+}
+
+.phone-input input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,.12);
+}
+
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: .75rem;
+}
+
+button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .6rem 1rem;
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: .6;
+}
+
+.linklike {
+  background: transparent;
+  color: #2563eb;
+}

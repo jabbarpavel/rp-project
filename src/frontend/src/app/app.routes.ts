@@ -45,12 +45,17 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/customers/customerDetail.page').then(m => m.CustomerDetailPage)
       },
-      // -------------------------------------------------
+      // -------------Settings------------------------------------
       {
         path: 'settings',
         loadComponent: () =>
-          import('./features/settings/settings.page').then(m => m.SettingsPage)
-      }
+          import('./features/settings/settings.page').then(m => m.SettingsOverviewPage),
+      },
+      {
+        path: 'settings/profile',
+        loadComponent: () =>
+          import('./features/settings/profile.page').then(m => m.ProfilePage),
+      },
     ]
   },
   {

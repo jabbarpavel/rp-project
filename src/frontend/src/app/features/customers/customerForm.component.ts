@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 
+type AdvisorDto = {
+  id: number;
+  email: string;
+  firstName?: string;
+  name?: string;
+};
+
 @Component({
   selector: 'app-customer-form',
   standalone: true,
@@ -30,8 +37,8 @@ import { ApiService } from '../../core/services/api.service';
           <input id="email" type="email" [(ngModel)]="model.email" name="email" placeholder="E-Mail-Adresse eingeben" required/>
         </div>
 
-        <!-- Berater: Autocomplete-Dropdown (öffnet erst bei Eingabe) -->
-        <div class="form-group advisor" >
+        <!-- Berater: Autocomplete-Dropdown -->
+        <div class="form-group advisor">
           <label for="advisor">Berater</label>
           <input
             id="advisor"
@@ -41,7 +48,7 @@ import { ApiService } from '../../core/services/api.service';
             (focus)="onFocus()"
             (keydown)="onKey($event)"
             name="advisorSearch"
-            placeholder="Berater suchen (ab 2 Zeichen)…"
+            placeholder="Berater suchen (Name oder E-Mail)…"
             autocomplete="off"
             aria-autocomplete="list"
             aria-expanded="{{open}}"
@@ -55,12 +62,12 @@ import { ApiService } from '../../core/services/api.service';
               role="option"
               [attr.aria-selected]="i === idx"
             >
-              {{ a.email }}
+              {{ formatAdvisor(a) }}
             </li>
           </ul>
 
           <small class="hint" *ngIf="!model.advisorId && !advisorSearch">– Kein Berater –</small>
-          <small class="hint" *ngIf="model.advisorId && !advisorSearch">Aktuell: {{ selectedAdvisorEmail }}</small>
+          <small class="hint" *ngIf="model.advisorId && !advisorSearch">Aktuell: {{ selectedAdvisorLabel }}</small>
         </div>
 
         <div class="button-group">
@@ -101,8 +108,8 @@ export class CustomerFormComponent implements OnInit {
   @Output() cancel = new EventEmitter<void>();
 
   advisorSearch = '';
-  items: Array<{ id: number; email: string }> = [];
-  selectedAdvisorEmail = '';
+  items: AdvisorDto[] = [];
+  selectedAdvisorLabel = '';
 
   open = false;
   idx = -1;
@@ -111,7 +118,7 @@ export class CustomerFormComponent implements OnInit {
   constructor(private api: ApiService, private el: ElementRef) {}
 
   ngOnInit(): void {
-    if (this.model.advisorId) this.resolveAdvisorEmail(this.model.advisorId);
+    if (this.model.advisorId) this.resolveAdvisorLabel(this.model.advisorId);
   }
 
   @HostListener('document:click', ['$event'])
@@ -159,19 +166,28 @@ export class CustomerFormComponent implements OnInit {
     }
   }
 
-  pick(a: { id: number; email: string }) {
+  formatAdvisor(a: AdvisorDto): string {
+    const fn = a.firstName?.trim() || '';
+    const ln = a.name?.trim() || '';
+    const email = a.email;
+    const fullName = fn && ln ? `${fn} ${ln}` : fn || ln;
+
+    return fullName ? `${fullName} (${email})` : email;
+  }
+
+  pick(a: AdvisorDto) {
     this.model.advisorId = a.id;
-    this.selectedAdvisorEmail = a.email;
+    this.selectedAdvisorLabel = this.formatAdvisor(a);
     this.advisorSearch = '';
     this.items = [];
     this.open = false;
   }
 
-  resolveAdvisorEmail(id: number) {
+  resolveAdvisorLabel(id: number) {
     this.api.getAdvisors().subscribe({
       next: list => {
-        const found = (list || []).find(x => x.id === id);
-        this.selectedAdvisorEmail = found ? found.email : '';
+        const found = (list || []).find((x: AdvisorDto) => x.id === id);
+        this.selectedAdvisorLabel = found ? this.formatAdvisor(found) : '';
       }
     });
   }

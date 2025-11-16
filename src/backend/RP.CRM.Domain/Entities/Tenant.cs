@@ -5,7 +5,6 @@ namespace RP.CRM.Domain.Entities
 {
     public class Tenant : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
         // neue Spalte für Subdomain-Zuordnung

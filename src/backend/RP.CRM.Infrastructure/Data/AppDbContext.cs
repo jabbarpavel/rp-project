@@ -19,33 +19,52 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<ChangeLog> ChangeLogs => Set<ChangeLog>();
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // ====== Tenant-Kunde-Beziehung ======
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.Tenant)
                 .WithMany(t => t.Customers)
                 .HasForeignKey(c => c.TenantId);
 
+            // ====== Tenant-User-Beziehung ======
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Tenant)
                 .WithMany(t => t.Users)
                 .HasForeignKey(u => u.TenantId);
 
-            // NEU: Advisor-Relation (FK optional, Berater kann später fehlen)
+            // ====== Advisor-Beziehung ======
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.Advisor)
-                .WithMany()                     // kein Back-Collection nötig
+                .WithMany()
                 .HasForeignKey(c => c.AdvisorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // NEU: Indexe für Tenant/Advisor
             modelBuilder.Entity<Customer>()
                 .HasIndex(c => new { c.TenantId, c.AdvisorId });
 
-            // Seed bleibt
+            // ====== User-Konfiguration (neue Felder) ======
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(u => u.FirstName)
+                    .HasMaxLength(100)
+                    .IsRequired(false);
+
+                entity.Property(u => u.Name)
+                    .HasMaxLength(100)
+                    .IsRequired(false);
+
+                entity.Property(u => u.Phone)
+                    .HasMaxLength(50)
+                    .IsRequired(false);
+
+                entity.Property(u => u.IsActive)
+                    .HasDefaultValue(true);
+            });
+
+            // ====== Seed-Daten ======
             modelBuilder.Entity<Tenant>().HasData(
                 new Tenant
                 {
@@ -56,7 +75,6 @@ namespace RP.CRM.Infrastructure.Data
                 }
             );
         }
-
 
         public override int SaveChanges()
         {

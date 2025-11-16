@@ -11,9 +11,9 @@ namespace RP.CRM.Infrastructure.Data
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseNpgsql("Host=localhost;Database=rp_crm;Username=postgres;Password=admin123");
 
-            // entkoppelter TenantContext, keine Repositories mehr hier
+            // TenantContext für Migrationszwecke (fester Tenant reicht)
             var tenantContext = new TenantContext();
-            tenantContext.SetTenant(1); // für Migrationen reicht ein fixer Tenant
+            tenantContext.SetTenant(1);
 
             return new AppDbContext(optionsBuilder.Options, tenantContext);
         }

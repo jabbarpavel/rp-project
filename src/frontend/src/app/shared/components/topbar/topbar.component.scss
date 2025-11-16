@@ -4,8 +4,16 @@
   align-items: center;
 }
 
-.topbar__email {
+.topbar__user {
   font-weight: 500;
+  color: #f8fafc; /* gleiche Farbe wie Tenant Logo */
+  cursor: default;
+}
+
+.topbar__user.incomplete {
+  color: #fbbf24; /* Warnfarbe */
+  cursor: pointer; /* klickbar */
+  text-decoration: underline;
 }
 
 .topbar__btn {

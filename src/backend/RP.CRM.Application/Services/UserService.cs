@@ -42,8 +42,14 @@ namespace RP.CRM.Application.Services
             var user = new User
             {
                 Email = email,
-                TenantId = tenantId
+                TenantId = tenantId,
+                FirstName = string.Empty,
+                Name = string.Empty,
+                Phone = string.Empty,
+                IsActive = true,
+                Role = "Admin"
             };
+
 
             user.PasswordHash = _passwordHasher.HashPassword(user, password);
             var created = await _repository.CreateAsync(user);
@@ -104,10 +110,39 @@ namespace RP.CRM.Application.Services
         {
             return await _repository.GetByEmailAndTenantAsync(email, tenantId);
         }
+
         public async Task<IReadOnlyList<User>> GetAdvisorsAsync(string? q)
         {
             return await _repository.GetAdvisorsAsync(q);
         }
 
+        // 🔹 NEU: Benutzer nach ID abrufen
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
+
+
+        // 🔹 NEU: Benutzer aktualisieren (für Vorname, Name, Telefon, Aktiv-Status)
+        public async Task<User?> UpdateUserAsync(int id, string? firstName, string? name, string? phone, bool? isActive)
+        {
+            var user = await _repository.GetByIdAsync(id);
+            if (user == null)
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+                user.FirstName = firstName.Trim();
+
+            if (!string.IsNullOrWhiteSpace(name))
+                user.Name = name.Trim();
+
+            if (!string.IsNullOrWhiteSpace(phone))
+                user.Phone = phone.Trim();
+
+            if (isActive.HasValue)
+                user.IsActive = isActive.Value;
+
+            return await _repository.UpdateAsync(user);
+        }
     }
 }

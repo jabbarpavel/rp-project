@@ -1,10 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using RP.CRM.Infrastructure.Context;
-using RP.CRM.Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-
+using RP.CRM.Application.Interfaces;
+using RP.CRM.Infrastructure.Context;
 
 namespace RP.CRM.Infrastructure.Middleware
 {
@@ -20,46 +19,59 @@ namespace RP.CRM.Infrastructure.Middleware
         public async Task InvokeAsync(HttpContext context, TenantContext tenantContext)
         {
             var tenantRepository = context.RequestServices.GetRequiredService<ITenantRepository>();
-            var path = context.Request.Path.Value?.ToLower() ?? string.Empty;
+
+            var path = (context.Request.Path.Value ?? string.Empty).ToLower();
+            var host = context.Request.Host.Host.ToLower();
+
             int tenantId = 0;
 
-            // Login / Register → Tenant aus Subdomain ermitteln
+            // =====================================================
+            // 1) Login / Register / Tenant-Liste:
+            //    Tenant aus voller Host-Domain ermitteln
+            //    z.B. "finaro.localhost" → Domain-Spalte: "finaro.localhost"
+            // =====================================================
             if (path.Contains("/api/user/login") ||
                 path.Contains("/api/user/register") ||
                 path.Contains("/api/tenant"))
             {
-                var host = context.Request.Host.Host.ToLower();
-                var subdomain = host.Contains('.') ? host.Split('.')[0] : host;
-
-                var tenant = await tenantRepository.GetByDomainAsync(subdomain);
+                var tenant = await tenantRepository.GetByDomainAsync(host);
                 if (tenant != null)
+                {
                     tenantId = tenant.Id;
+                }
             }
+            // =====================================================
+            // 2) Alle anderen Requests:
+            //    zuerst TenantID-Header, dann JWT-Claim
+            // =====================================================
             else
             {
-                // Header prüfen
                 var header = context.Request.Headers["TenantID"].FirstOrDefault();
                 if (int.TryParse(header, out var parsed))
+                {
                     tenantId = parsed;
-
-                // JWT prüfen
+                }
                 else
                 {
                     var claim = context.User?.Claims.FirstOrDefault(c => c.Type == "tenantId");
                     if (claim != null && int.TryParse(claim.Value, out var fromToken))
+                    {
                         tenantId = fromToken;
+                    }
                 }
             }
 
-            if (tenantId > 0)
-                tenantContext.SetTenant(tenantId);
-            else
+            // =====================================================
+            // 3) Validierung
+            // =====================================================
+            if (tenantId <= 0)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsync("TenantID missing or invalid.");
                 return;
             }
 
+            tenantContext.SetTenant(tenantId);
             await _next(context);
         }
     }

@@ -1,0 +1,57 @@
+<div class="page">
+  <h2>Mein Profil</h2>
+
+  <div *ngIf="loading" class="info">Lade Benutzerdaten…</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <form *ngIf="!loading && !error" (ngSubmit)="save()" class="card">
+    <div class="grid">
+
+      <div class="field">
+        <label>Mandant</label>
+        <input type="text" [(ngModel)]="user.tenantName" name="tenantName" disabled />
+      </div>
+
+      <div class="field">
+        <label>E-Mail</label>
+        <input type="email" [(ngModel)]="user.email" name="email" disabled />
+      </div>
+
+      <div class="field">
+        <label>Vorname</label>
+        <input type="text" [(ngModel)]="user.firstName" name="firstName" />
+      </div>
+
+      <div class="field">
+        <label>Nachname</label>
+        <input type="text" [(ngModel)]="user.name" name="name" />
+      </div>
+
+      <!-- EIN Feld für Telefon -->
+    <div class="field">
+    <label>Telefon</label>
+
+    <div class="phone-input">
+        <span class="prefix" *ngIf="!isFullNumber">+41</span>
+
+        <input
+        type="text"
+        [ngModel]="phoneUI"
+        (ngModelChange)="onPhoneChange($event)"
+        name="phone"
+        placeholder="77 123 45 67"
+        (keydown)="restrictPhone($event)"
+        />
+    </div>
+    </div>
+
+
+
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="saving">Speichern</button>
+      <button type="button" class="linklike" (click)="goBack()">Zurück</button>
+    </div>
+  </form>
+</div>

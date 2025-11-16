@@ -13,8 +13,12 @@ interface CustomerDto {
   name: string;
   email: string;
   ahvNum: string;
-  advisorEmail?: string | null;   // neu
-  advisorId?: number | null; 
+
+  advisorId?: number | null;
+  advisorEmail?: string | null;
+  advisorFirstName?: string | null;
+  advisorLastName?: string | null;
+
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -66,32 +70,38 @@ export class CustomersPage implements OnInit {
     });
   }
 
-applyFilter(): void {
-  const term = this.searchTerm.toLowerCase().trim();
+  applyFilter(): void {
+    const term = this.searchTerm.toLowerCase().trim();
 
-  if (!term) {
-    this.filteredCustomers = [...this.customers];
+    if (!term) {
+      this.filteredCustomers = [...this.customers];
+      this.applySorting();
+      return;
+    }
+
+    this.filteredCustomers = this.customers.filter(c => {
+      const firstName = c.firstName?.toLowerCase() ?? '';
+      const lastName = c.name?.toLowerCase() ?? '';
+      const email = c.email?.toLowerCase() ?? '';
+      const ahv = c.ahvNum?.toLowerCase() ?? '';
+
+      const advFirst = c.advisorFirstName?.toLowerCase() ?? '';
+      const advLast = c.advisorLastName?.toLowerCase() ?? '';
+      const advEmail = c.advisorEmail?.toLowerCase() ?? '';
+
+      return (
+        firstName.includes(term) ||
+        lastName.includes(term) ||
+        email.includes(term) ||
+        ahv.includes(term) ||
+        advFirst.includes(term) ||
+        advLast.includes(term) ||
+        advEmail.includes(term)
+      );
+    });
+
     this.applySorting();
-    return;
   }
-
-  this.filteredCustomers = this.customers.filter(c => {
-    const firstName = c.firstName?.toLowerCase() ?? '';
-    const name = c.name?.toLowerCase() ?? '';
-    const email = c.email?.toLowerCase() ?? '';
-    const ahv = c.ahvNum?.toLowerCase() ?? '';
-
-    return (
-      firstName.includes(term) ||
-      name.includes(term) ||
-      email.includes(term) ||
-      ahv.includes(term)
-    );
-  });
-
-  this.applySorting();
-}
-
 
   sortBy(column: keyof CustomerDto): void {
     if (this.sortColumn === column) {
@@ -107,6 +117,7 @@ applyFilter(): void {
     if (!this.sortColumn) return;
 
     const dir = this.sortDirection === 'asc' ? 1 : -1;
+
     this.filteredCustomers.sort((a: any, b: any) => {
       const valA = a[this.sortColumn];
       const valB = b[this.sortColumn];
@@ -162,5 +173,15 @@ applyFilter(): void {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+  }
+
+  getAdvisorDisplay(c: CustomerDto): string {
+    const fn = c.advisorFirstName?.trim() || '';
+    const ln = c.advisorLastName?.trim() || '';
+    const email = c.advisorEmail?.trim() || '';
+
+    if (fn && ln) return `${fn} ${ln}`;
+    if (email) return email;
+    return '–';
   }
 }

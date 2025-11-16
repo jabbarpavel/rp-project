@@ -4,7 +4,6 @@ namespace RP.CRM.Domain.Entities
 {
     public class ChangeLog : BaseEntity
     {
-        public int Id { get; set; }
 
         public string EntityName { get; set; } = string.Empty;   // z.B. "Customer"
         public int EntityId { get; set; }                        // betroffener Datensatz

@@ -1,4 +1,11 @@
 <div class="topbar">
-  <span class="topbar__email">{{ userEmail }}</span>
+  <span 
+    class="topbar__user"
+    [ngClass]="{ incomplete: isIncomplete }"
+    (click)="isIncomplete && goToProfile()"
+  >
+    {{ displayName }}
+  </span>
+
   <button class="topbar__btn" (click)="logout()">Logout</button>
 </div>

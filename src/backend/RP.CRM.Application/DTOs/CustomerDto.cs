@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RP.CRM.Application.DTOs
 {
+
     public class CustomerDto
     {
         public int Id { get; set; }
@@ -14,14 +15,24 @@ namespace RP.CRM.Application.DTOs
         [RegularExpression(@"^756\.\d{4}\.\d{4}\.\d{2}$",
             ErrorMessage = "AHV-Nummer muss dem Format 756.xxxx.xxxx.xx entsprechen.")]
         public string AHVNum { get; set; } = string.Empty;
-        public int? AdvisorId { get; set; }          // neu
-        public string? AdvisorEmail { get; set; }    // neu (vorerst nur Email vorhanden)
+
+        public int? AdvisorId { get; set; }
+
+        // bestehend
+        public string? AdvisorEmail { get; set; }
+        public string? AdvisorFirstName { get; set; }
+        public string? AdvisorLastName { get; set; }
+
+        // NEU
+        public string? AdvisorPhone { get; set; }
+        public bool? AdvisorIsActive { get; set; }
 
         public int TenantId { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
+
 
     public class CreateCustomerDto
     {
