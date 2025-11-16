@@ -41,15 +41,6 @@ namespace RP.CRM.Api.Controllers
                     AdvisorLastName = c.Advisor != null ? c.Advisor.Name : null,
                     AdvisorPhone = c.Advisor != null ? c.Advisor.Phone : null,          
                     AdvisorIsActive = c.Advisor != null ? c.Advisor.IsActive : null, 
-
-                    CivilStatus = c.CivilStatus,
-                    Religion = c.Religion,
-                    Gender = c.Gender,
-                    Salutation = c.Salutation,
-                    BirthDate = c.BirthDate,
-                    Profession = c.Profession,
-                    Language = c.Language,
-
                     TenantId = c.TenantId,
                     IsDeleted = c.IsDeleted,
                     CreatedAt = c.CreatedAt,
@@ -82,15 +73,6 @@ namespace RP.CRM.Api.Controllers
                 AdvisorLastName = customer.Advisor != null ? customer.Advisor.Name : null,
                 AdvisorPhone = customer.Advisor != null ? customer.Advisor.Phone : null,        
                 AdvisorIsActive = customer.Advisor != null ? customer.Advisor.IsActive : null,  
-
-                CivilStatus = customer.CivilStatus,
-                Religion = customer.Religion,
-                Gender = customer.Gender,
-                Salutation = customer.Salutation,
-                BirthDate = customer.BirthDate,
-                Profession = customer.Profession,
-                Language = customer.Language,
-
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
                 CreatedAt = customer.CreatedAt,
@@ -111,16 +93,7 @@ namespace RP.CRM.Api.Controllers
                 Email = dto.Email.Trim(),
                 AHVNum = dto.AHVNum.Trim(),
                 TenantId = _tenantContext.TenantId,
-                AdvisorId = dto.AdvisorId,
-
-                CivilStatus = dto.CivilStatus,
-                Religion = dto.Religion,
-                Gender = dto.Gender,
-                Salutation = dto.Salutation,
-                BirthDate = dto.BirthDate,
-                Profession = dto.Profession,
-                Language = dto.Language
-
+                AdvisorId = dto.AdvisorId
             };
 
             var created = await _customerService.CreateAsync(newCustomer);
@@ -138,16 +111,6 @@ namespace RP.CRM.Api.Controllers
                 AdvisorLastName = created.Advisor?.Name,
                 AdvisorPhone = created.Advisor?.Phone,                 
                 AdvisorIsActive = created.Advisor?.IsActive, 
-
-                CivilStatus = created.CivilStatus,
-                Religion = created.Religion,
-                Gender = created.Gender,
-                Salutation = created.Salutation,
-                BirthDate = created.BirthDate,
-                Profession = created.Profession,
-                Language = created.Language,
-
-
                 TenantId = created.TenantId,
                 IsDeleted = created.IsDeleted,
                 CreatedAt = created.CreatedAt,
@@ -176,15 +139,6 @@ namespace RP.CRM.Api.Controllers
             existing.AHVNum = dto.AHVNum.Trim();
             existing.AdvisorId = dto.AdvisorId;
 
-            existing.CivilStatus = dto.CivilStatus;
-            existing.Religion = dto.Religion;
-            existing.Gender = dto.Gender;
-            existing.Salutation = dto.Salutation;
-            existing.BirthDate = dto.BirthDate;
-            existing.Profession = dto.Profession;
-            existing.Language = dto.Language;
-
-
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)
                 return NotFound();
@@ -202,15 +156,6 @@ namespace RP.CRM.Api.Controllers
                 AdvisorLastName = updated.Advisor?.Name,
                 AdvisorPhone = updated.Advisor?.Phone,                 
                 AdvisorIsActive = updated.Advisor?.IsActive, 
-                
-                CivilStatus = updated.CivilStatus,
-                Religion = updated.Religion,
-                Gender = updated.Gender,
-                Salutation = updated.Salutation,
-                BirthDate = updated.BirthDate,
-                Profession = updated.Profession,
-                Language = updated.Language,
-
                 TenantId = updated.TenantId,
                 IsDeleted = updated.IsDeleted,
                 CreatedAt = updated.CreatedAt,
@@ -245,15 +190,6 @@ namespace RP.CRM.Api.Controllers
                 AdvisorLastName = updated.Advisor?.Name,
                 AdvisorPhone = updated.Advisor?.Phone,                 
                 AdvisorIsActive = updated.Advisor?.IsActive,
-
-                CivilStatus = updated.CivilStatus,
-                Religion = updated.Religion,
-                Gender = updated.Gender,
-                Salutation = updated.Salutation,
-                BirthDate = updated.BirthDate,
-                Profession = updated.Profession,
-                Language = updated.Language,
-
                 TenantId = updated.TenantId,
                 IsDeleted = updated.IsDeleted,
                 CreatedAt = updated.CreatedAt,
