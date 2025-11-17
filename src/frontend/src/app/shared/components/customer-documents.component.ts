@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DocumentService, DocumentDto } from '../../core/services/document.service';
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
+import { PermissionService } from '../../core/services/permission.service';
 
 @Component({
   selector: 'app-customer-documents',
@@ -56,7 +57,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
                 <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
             </button>
-            <button class="icon-btn danger" (click)="deleteDocument(doc)" title="Löschen">
+            <button class="icon-btn danger" (click)="deleteDocument(doc)" title="Löschen" *ngIf="canDelete">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="3 6 5 6 21 6"/>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -221,14 +222,17 @@ export class CustomerDocumentsComponent implements OnInit {
   loading = false;
   uploading = false;
   error = '';
+  canDelete = false;
 
   constructor(
     private documentService: DocumentService,
     private toast: ToastService,
-    private confirm: ConfirmDialogService
+    private confirm: ConfirmDialogService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
+    this.canDelete = this.permissionService.canDeleteDocuments();
     if (this.customerId) {
       this.loadDocuments();
     }

@@ -76,7 +76,14 @@ namespace RP.CRM.Api.Controllers
                 AdvisorFirstName = customer.Advisor != null ? customer.Advisor.FirstName : null,
                 AdvisorLastName = customer.Advisor != null ? customer.Advisor.Name : null,
                 AdvisorPhone = customer.Advisor != null ? customer.Advisor.Phone : null,        
-                AdvisorIsActive = customer.Advisor != null ? customer.Advisor.IsActive : null,  
+                AdvisorIsActive = customer.Advisor != null ? customer.Advisor.IsActive : null,
+                CivilStatus = customer.CivilStatus,
+                Religion = customer.Religion,
+                Gender = customer.Gender,
+                Salutation = customer.Salutation,
+                BirthDate = customer.BirthDate,
+                Profession = customer.Profession,
+                Language = customer.Language,
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
                 CreatedAt = customer.CreatedAt,
@@ -144,6 +151,15 @@ namespace RP.CRM.Api.Controllers
             existing.Email = dto.Email.Trim();
             existing.AHVNum = dto.AHVNum.Trim();
             existing.AdvisorId = dto.AdvisorId;
+            
+            // Update personal information fields
+            existing.CivilStatus = dto.CivilStatus;
+            existing.Religion = dto.Religion;
+            existing.Gender = dto.Gender;
+            existing.Salutation = dto.Salutation;
+            existing.BirthDate = dto.BirthDate;
+            existing.Profession = dto.Profession;
+            existing.Language = dto.Language;
 
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)
@@ -161,7 +177,14 @@ namespace RP.CRM.Api.Controllers
                 AdvisorFirstName = updated.Advisor?.FirstName,
                 AdvisorLastName = updated.Advisor?.Name,
                 AdvisorPhone = updated.Advisor?.Phone,                 
-                AdvisorIsActive = updated.Advisor?.IsActive, 
+                AdvisorIsActive = updated.Advisor?.IsActive,
+                CivilStatus = updated.CivilStatus,
+                Religion = updated.Religion,
+                Gender = updated.Gender,
+                Salutation = updated.Salutation,
+                BirthDate = updated.BirthDate,
+                Profession = updated.Profession,
+                Language = updated.Language,
                 TenantId = updated.TenantId,
                 IsDeleted = updated.IsDeleted,
                 CreatedAt = updated.CreatedAt,

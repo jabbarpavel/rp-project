@@ -92,6 +92,7 @@ namespace RP.CRM.Application.Services
                 new Claim("tenantId", user.TenantId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("role", user.Role ?? "user"),
+                new Claim("permissions", user.Permissions.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

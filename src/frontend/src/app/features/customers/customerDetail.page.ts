@@ -7,6 +7,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
 import { AdvisorChangeDialogComponent } from '../../shared/components/advisor-change-dialog.component';
 import { CustomerDocumentsComponent } from '../../shared/components/customer-documents.component';
+import { PermissionService } from '../../core/services/permission.service';
 
 interface CustomerDetailDto {
   id: number;
@@ -51,7 +52,7 @@ interface CustomerDetailDto {
 
         <div class="header-actions">
           <button class="btn ghost" type="button" (click)="editCustomer()">Bearbeiten</button>
-          <button class="btn danger" type="button" (click)="deleteCustomer()">Löschen</button>
+          <button class="btn danger" type="button" (click)="deleteCustomer()" *ngIf="canDelete">Löschen</button>
         </div>
       </div>
 
@@ -133,34 +134,34 @@ interface CustomerDetailDto {
             <dl class="detail-list">
 
               <!-- Zivilstand + Konfession -->
-              <div class="double-row" *ngIf="customer.civilStatus || customer.religion">
-                <div *ngIf="customer.civilStatus">
+              <div class="double-row">
+                <div>
                   <dt>Zivilstand</dt>
-                  <dd>{{ customer.civilStatus }}</dd>
+                  <dd>{{ customer.civilStatus || '–' }}</dd>
                 </div>
-                <div *ngIf="customer.religion">
+                <div>
                   <dt>Konfession</dt>
-                  <dd>{{ customer.religion }}</dd>
+                  <dd>{{ customer.religion || '–' }}</dd>
                 </div>
               </div>
 
               <!-- Geschlecht + Geburtsdatum -->
-              <div class="double-row" *ngIf="customer.gender || customer.birthDate">
-                <div *ngIf="customer.gender">
+              <div class="double-row">
+                <div>
                   <dt>Geschlecht</dt>
-                  <dd>{{ customer.gender }}</dd>
+                  <dd>{{ customer.gender || '–' }}</dd>
                 </div>
-                <div *ngIf="customer.birthDate">
+                <div>
                   <dt>Geburtsdatum</dt>
-                  <dd>{{ customer.birthDate | date: 'dd.MM.yyyy' }}</dd>
+                  <dd>{{ customer.birthDate ? (customer.birthDate | date: 'dd.MM.yyyy') : '–' }}</dd>
                 </div>
               </div>
 
               <!-- Beruf + rechte Seite leer -->
-              <div class="double-row" *ngIf="customer.profession">
+              <div class="double-row">
                 <div>
                   <dt>Beruf</dt>
-                  <dd>{{ customer.profession }}</dd>
+                  <dd>{{ customer.profession || '–' }}</dd>
                 </div>
                 <div></div>
               </div>
@@ -532,16 +533,19 @@ export class CustomerDetailPage implements OnInit {
   loading = false;
   error = '';
   showAdvisorDialog = false;
+  canDelete = false;
 
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
     private router: Router,
     private toast: ToastService,
-    private confirm: ConfirmDialogService
+    private confirm: ConfirmDialogService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
+    this.canDelete = this.permissionService.canDeleteCustomers();
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     if (this.id) this.loadCustomer();
   }
