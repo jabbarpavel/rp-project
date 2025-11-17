@@ -56,6 +56,7 @@ namespace RP.CRM.Infrastructure.Repositories
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users
+                .Include(u => u.Tenant)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
+import { PermissionService } from '../../core/services/permission.service';
 
 interface CustomerDto {
   id: number;
@@ -47,16 +48,19 @@ export class CustomersPage implements OnInit {
   error = '';
   sortColumn: keyof CustomerDto | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  canDelete = false;
   private sub?: Subscription;
 
   constructor(
     private api: ApiService,
     private router: Router,
     private toast: ToastService,
-    private confirm: ConfirmDialogService
+    private confirm: ConfirmDialogService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
+    this.canDelete = this.permissionService.canDeleteCustomers();
     this.loadCustomers();
   }
 

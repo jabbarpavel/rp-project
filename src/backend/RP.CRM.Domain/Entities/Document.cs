@@ -9,6 +9,7 @@ namespace RP.CRM.Domain.Entities
         public string FilePath { get; set; } = string.Empty;
         public string ContentType { get; set; } = string.Empty;
         public long FileSize { get; set; }
+        public string? Category { get; set; } // Police, ID/Pass, Sonstige
         
         public int CustomerId { get; set; }
         public int UploadedByUserId { get; set; }

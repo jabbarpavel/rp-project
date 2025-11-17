@@ -48,6 +48,7 @@ namespace RP.CRM.Api.Controllers
                 FileName = d.FileName,
                 ContentType = d.ContentType,
                 FileSize = d.FileSize,
+                Category = d.Category,
                 CustomerId = d.CustomerId,
                 UploadedByUserId = d.UploadedByUserId,
                 UploadedByUserName = d.UploadedBy != null ? $"{d.UploadedBy.FirstName} {d.UploadedBy.Name}".Trim() : null,
@@ -60,7 +61,7 @@ namespace RP.CRM.Api.Controllers
 
         [HttpPost]
         [RequirePermission(Permission.UploadDocuments)]
-        public async Task<IActionResult> Upload([FromForm] int customerId, [FromForm] IFormFile file)
+        public async Task<IActionResult> Upload([FromForm] int customerId, [FromForm] IFormFile file, [FromForm] string? category)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file provided");
@@ -96,6 +97,7 @@ namespace RP.CRM.Api.Controllers
                 FilePath = filePath,
                 ContentType = file.ContentType,
                 FileSize = file.Length,
+                Category = category,
                 CustomerId = customerId,
                 UploadedByUserId = userId,
                 TenantId = _tenantContext.TenantId
@@ -109,6 +111,7 @@ namespace RP.CRM.Api.Controllers
                 FileName = created.FileName,
                 ContentType = created.ContentType,
                 FileSize = created.FileSize,
+                Category = created.Category,
                 CustomerId = created.CustomerId,
                 UploadedByUserId = created.UploadedByUserId,
                 CreatedAt = created.CreatedAt
