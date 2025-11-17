@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RP.CRM.Infrastructure.Context;
 using RP.CRM.Domain.Entities;
+using RP.CRM.Domain.Enums;
 
 namespace RP.CRM.Infrastructure.Data
 {
@@ -18,6 +19,7 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<Tenant> Tenants => Set<Tenant>();
         public DbSet<User> Users => Set<User>();
         public DbSet<ChangeLog> ChangeLogs => Set<ChangeLog>();
+        public DbSet<Document> Documents => Set<Document>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +64,30 @@ namespace RP.CRM.Infrastructure.Data
 
                 entity.Property(u => u.IsActive)
                     .HasDefaultValue(true);
+
+                entity.Property(u => u.Permissions)
+                    .HasDefaultValue((int)Permission.User);
+            });
+
+            // ====== Document-Konfiguration ======
+            modelBuilder.Entity<Document>(entity =>
+            {
+                entity.HasOne(d => d.Customer)
+                    .WithMany()
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.UploadedBy)
+                    .WithMany()
+                    .HasForeignKey(d => d.UploadedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Tenant)
+                    .WithMany()
+                    .HasForeignKey(d => d.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(d => new { d.TenantId, d.CustomerId });
             });
 
             // ====== Seed-Daten ======
@@ -99,6 +125,12 @@ namespace RP.CRM.Infrastructure.Data
             }
 
             foreach (var entry in ChangeTracker.Entries<User>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<Document>())
             {
                 if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
                     entry.Entity.TenantId = _tenantContext.TenantId;

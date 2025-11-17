@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using RP.CRM.Application.DTOs;
 using RP.CRM.Application.Interfaces;
 using RP.CRM.Domain.Entities;
+using RP.CRM.Domain.Enums;
+using RP.CRM.Infrastructure.Authorization;
 using RP.CRM.Infrastructure.Context;
 
 namespace RP.CRM.Api.Controllers
@@ -22,6 +24,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpGet]
+        [RequirePermission(Permission.ViewCustomers)]
         public async Task<IActionResult> GetAll()
         {
             var customers = await _customerService.GetAllAsync();
@@ -51,6 +54,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [RequirePermission(Permission.ViewCustomers)]
         public async Task<IActionResult> GetById(int id)
         {
             var customer = await _customerService.GetByIdAsync(id);
@@ -81,6 +85,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpPost]
+        [RequirePermission(Permission.CreateCustomers)]
         public async Task<IActionResult> Create([FromBody] CreateCustomerDto dto)
         {
             if (!ModelState.IsValid)
@@ -121,6 +126,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [RequirePermission(Permission.EditCustomers)]
         public async Task<IActionResult> Update(int id, [FromBody] CreateCustomerDto dto)
         {
             if (!ModelState.IsValid)
@@ -166,6 +172,7 @@ namespace RP.CRM.Api.Controllers
         public class ChangeAdvisorRequest { public int? AdvisorId { get; set; } }
 
         [HttpPut("{id:int}/advisor")]
+        [RequirePermission(Permission.EditCustomers)]
         public async Task<IActionResult> ChangeAdvisor(int id, [FromBody] ChangeAdvisorRequest req)
         {
             var existing = await _customerService.GetByIdAsync(id);
@@ -198,6 +205,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [RequirePermission(Permission.DeleteCustomers)]
         public async Task<IActionResult> Delete(int id)
         {
             var customer = await _customerService.GetByIdAsync(id);
