@@ -53,6 +53,30 @@ export class ApiService {
   delete<T>(url: string): Observable<T> {
     return this.http.delete<T>(`${this.apiUrl}${url}`, { headers: this.getHeaders() });
   }
+
+  // Upload file with FormData
+  upload<T>(url: string, formData: FormData): Observable<T> {
+    const token = localStorage.getItem('jwt_token');
+    const tenantId = localStorage.getItem('tenant_id');
+    let headers = new HttpHeaders();
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    if (tenantId) headers = headers.set('TenantID', tenantId);
+    return this.http.post<T>(`${this.apiUrl}${url}`, formData, { headers });
+  }
+
+  // Download file as blob
+  downloadFile(url: string): Observable<Blob> {
+    const token = localStorage.getItem('jwt_token');
+    const tenantId = localStorage.getItem('tenant_id');
+    let headers = new HttpHeaders();
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    if (tenantId) headers = headers.set('TenantID', tenantId);
+    return this.http.get(`${this.apiUrl}${url}`, { 
+      headers, 
+      responseType: 'blob' 
+    });
+  }
+
   // Advisors abrufen (optional mit Suchbegriff)
   getAdvisors(q?: string) {
     const query = q && q.trim().length > 0 ? `?q=${encodeURIComponent(q.trim())}` : '';
