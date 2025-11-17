@@ -7,6 +7,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
 import { AdvisorChangeDialogComponent } from '../../shared/components/advisor-change-dialog.component';
 import { CustomerDocumentsComponent } from '../../shared/components/customer-documents.component';
+import { CustomerTasksComponent } from '../../shared/components/customer-tasks.component';
 import { PermissionService } from '../../core/services/permission.service';
 
 interface CustomerDetailDto {
@@ -39,7 +40,7 @@ interface CustomerDetailDto {
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent],
+  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent],
   template: `
     <div class="page">
       <div class="page-header">
@@ -230,6 +231,9 @@ interface CustomerDetailDto {
 
           <!-- Documents Section -->
           <app-customer-documents [customerId]="customer.id"></app-customer-documents>
+
+          <!-- Tasks Section -->
+          <app-customer-tasks [customerId]="customer.id"></app-customer-tasks>
         </aside>
       </div>
 
