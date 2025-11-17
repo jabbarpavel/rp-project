@@ -73,6 +73,9 @@ builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 
+builder.Services.AddScoped<ICustomerTaskRepository, CustomerTaskRepository>();
+builder.Services.AddScoped<ICustomerTaskService, CustomerTaskService>();
+
 
 builder.Services.AddControllers();
 

@@ -7,6 +7,7 @@ export interface DocumentDto {
   fileName: string;
   contentType: string;
   fileSize: number;
+  category?: string;
   customerId: number;
   uploadedByUserId: number;
   uploadedByUserName?: string;
@@ -24,10 +25,13 @@ export class DocumentService {
     return this.api.get<DocumentDto[]>(`/api/documents/customer/${customerId}`);
   }
 
-  upload(customerId: number, file: File): Observable<DocumentDto> {
+  upload(customerId: number, file: File, category?: string): Observable<DocumentDto> {
     const formData = new FormData();
     formData.append('customerId', customerId.toString());
     formData.append('file', file);
+    if (category) {
+      formData.append('category', category);
+    }
     return this.api.upload<DocumentDto>('/api/documents', formData);
   }
 

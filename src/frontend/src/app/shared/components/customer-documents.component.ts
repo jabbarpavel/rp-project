@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DocumentService, DocumentDto } from '../../core/services/document.service';
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
@@ -8,20 +9,39 @@ import { PermissionService } from '../../core/services/permission.service';
 @Component({
   selector: 'app-customer-documents',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <section class="card documents-card">
       <div class="card-header">
         <h2>Dokumente</h2>
-        <label class="upload-btn" [class.disabled]="uploading">
-          <input 
-            type="file" 
-            (change)="onFileSelected($event)" 
-            [disabled]="uploading"
-            hidden
-          />
-          <span>{{ uploading ? 'Wird hochgeladen...' : '+ Hochladen' }}</span>
-        </label>
+        <button class="upload-btn" (click)="showUploadDialog = true" [disabled]="uploading">
+          {{ uploading ? 'Wird hochgeladen...' : '+ Hochladen' }}
+        </button>
+      </div>
+
+      <!-- Upload Dialog -->
+      <div class="modal" *ngIf="showUploadDialog" (click)="showUploadDialog = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <h3>Dokument hochladen</h3>
+          <div class="form-group">
+            <label>Kategorie</label>
+            <select [(ngModel)]="selectedCategory" class="form-control">
+              <option value="Police">Police</option>
+              <option value="ID/Pass">ID/Pass</option>
+              <option value="Sonstige">Sonstige</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Datei auswählen</label>
+            <input type="file" (change)="onFileSelected($event)" class="form-control" />
+          </div>
+          <div class="modal-actions">
+            <button class="btn secondary" (click)="cancelUpload()">Abbrechen</button>
+            <button class="btn primary" (click)="confirmUpload()" [disabled]="!selectedFile || uploading">
+              {{ uploading ? 'Hochladen...' : 'Hochladen' }}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div *ngIf="loading" class="state-msg">Lade Dokumente...</div>
@@ -213,6 +233,95 @@ import { PermissionService } from '../../core/services/permission.service';
       background: #fee2e2;
       color: #dc2626;
     }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-content h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: Arial, sans-serif;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn.primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn.primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn.secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn.secondary:hover {
+      background: #e5e7eb;
+    }
   `]
 })
 export class CustomerDocumentsComponent implements OnInit {
@@ -223,6 +332,9 @@ export class CustomerDocumentsComponent implements OnInit {
   uploading = false;
   error = '';
   canDelete = false;
+  showUploadDialog = false;
+  selectedCategory = 'Sonstige';
+  selectedFile: File | null = null;
 
   constructor(
     private documentService: DocumentService,
@@ -257,26 +369,38 @@ export class CustomerDocumentsComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
+    this.selectedFile = input.files[0];
     
     // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    if (this.selectedFile.size > 10 * 1024 * 1024) {
       this.toast.show('Datei ist zu groß (max. 10 MB)', 'error');
+      this.selectedFile = null;
       return;
     }
+  }
+
+  cancelUpload(): void {
+    this.showUploadDialog = false;
+    this.selectedFile = null;
+    this.selectedCategory = 'Sonstige';
+  }
+
+  confirmUpload(): void {
+    if (!this.selectedFile) return;
 
     this.uploading = true;
-    this.documentService.upload(this.customerId, file).subscribe({
+    this.documentService.upload(this.customerId, this.selectedFile, this.selectedCategory).subscribe({
       next: () => {
         this.toast.show('Dokument erfolgreich hochgeladen', 'success');
         this.uploading = false;
+        this.showUploadDialog = false;
+        this.selectedFile = null;
+        this.selectedCategory = 'Sonstige';
         this.loadDocuments();
-        input.value = ''; // Reset input
       },
       error: () => {
         this.toast.show('Fehler beim Hochladen des Dokuments', 'error');
         this.uploading = false;
-        input.value = ''; // Reset input
       }
     });
   }
