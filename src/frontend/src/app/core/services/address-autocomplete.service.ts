@@ -64,9 +64,9 @@ export class AddressAutocompleteService {
           const city = street.locality?.name || street.city || '';
           const streetName = street.name || '';
           
-          // Skip if essential data is missing
-          if (!streetName || !postalCode || !city) {
-            console.warn('Incomplete address data:', street);
+          // Skip only if street name is completely missing
+          if (!streetName) {
+            console.warn('Missing street name:', street);
             continue;
           }
           
@@ -76,14 +76,23 @@ export class AddressAutocompleteService {
           if (!uniqueEntries.has(uniqueKey)) {
             uniqueEntries.add(uniqueKey);
             
+            // Build display text only with available data
+            let displayText = streetName;
+            if (houseNumber) {
+              displayText += ` ${houseNumber}`;
+            }
+            if (postalCode || city) {
+              displayText += ',';
+              if (postalCode) displayText += ` ${postalCode}`;
+              if (city) displayText += ` ${city}`;
+            }
+            
             const suggestion: AddressSuggestion = {
               street: streetName,
               houseNumber: houseNumber || '',
               postalCode: postalCode,
               city: city,
-              displayText: houseNumber 
-                ? `${streetName} ${houseNumber}, ${postalCode} ${city}`
-                : `${streetName}, ${postalCode} ${city}`
+              displayText: displayText
             };
             
             suggestions.push(suggestion);
