@@ -82,7 +82,7 @@ export class EditCustomerPage implements OnInit {
       next: () => {
         this.loading = false;
         this.toast.show('Kunde erfolgreich aktualisiert', 'success');
-        this.router.navigate(['/customers']);
+        this.router.navigate(['/customers', this.customer.id]);
       },
       error: () => {
         this.error = 'Fehler beim Aktualisieren.';

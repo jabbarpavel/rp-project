@@ -110,7 +110,16 @@ namespace RP.CRM.Api.Controllers
                 Email = dto.Email.Trim(),
                 AHVNum = dto.AHVNum.Trim(),
                 TenantId = _tenantContext.TenantId,
-                AdvisorId = dto.AdvisorId
+                AdvisorId = dto.AdvisorId,
+                
+                // Personal information fields
+                CivilStatus = dto.CivilStatus,
+                Religion = dto.Religion,
+                Gender = dto.Gender,
+                Salutation = dto.Salutation,
+                BirthDate = dto.BirthDate,
+                Profession = dto.Profession,
+                Language = dto.Language
             };
 
             var created = await _customerService.CreateAsync(newCustomer);
