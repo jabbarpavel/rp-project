@@ -18,8 +18,8 @@ interface OpenPLZLocality {
 
 interface OpenPLZStreet {
   name: string;
-  locality?: OpenPLZLocality; // Make optional as API might return different structure
-  postalCode?: string; // Some API versions have this at top level
+  locality?: OpenPLZLocality | string; // Can be object OR string
+  postalCode?: string; // Postal code at top level
   city?: string; // Some API versions have this at top level
 }
 
@@ -65,8 +65,24 @@ export class AddressAutocompleteService {
 
         for (const street of streets.slice(0, 10)) { // Limit to 10 results
           // Handle different API response structures
-          const postalCode = street.locality?.postalCode || street.postalCode || '';
-          const city = street.locality?.name || street.city || '';
+          // locality can be a string (city name) or an object {name, postalCode}
+          let postalCode = '';
+          let city = '';
+          
+          if (typeof street.locality === 'string') {
+            // locality is directly the city name
+            city = street.locality;
+            postalCode = street.postalCode || '';
+          } else if (street.locality && typeof street.locality === 'object') {
+            // locality is an object with name and postalCode
+            city = street.locality.name || '';
+            postalCode = street.locality.postalCode || street.postalCode || '';
+          } else {
+            // No locality, try top-level fields
+            postalCode = street.postalCode || '';
+            city = street.city || '';
+          }
+          
           const streetName = street.name || '';
           
           console.log(`Processing: street="${streetName}", postalCode="${postalCode}", city="${city}"`);
