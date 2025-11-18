@@ -1,15 +1,12 @@
 # Database Migration Fix Guide
 
 ## Problem
-When running the backend and frontend, you encounter this PostgreSQL error:
-```
-Spalte c.Canton existiert nicht (Column c.Canton does not exist)
-```
+When running the backend and frontend, you may encounter PostgreSQL errors related to missing tables or columns.
 
 ## Root Cause
-The database migrations haven't been applied to your local PostgreSQL database. The `Canton` column (along with `Street`, `PostalCode`, and `Locality`) was added in migration `20251118164012_AddAddressFieldsToCustomer`, but this migration hasn't been executed on your database yet.
+The initial migration `InitWithChangeLog` had a bug where it was trying to add a column to the `Customers` table without first creating the table. This prevented migrations from being applied to a fresh database.
 
-Additionally, the initial migration `InitWithChangeLog` had a bug where it was trying to add a column to the `Customers` table without first creating the table. This has been fixed.
+**Note**: If you're working on branch `copilot/update-customer-management-ui-again`, that branch includes additional migrations for address fields (Canton, Street, PostalCode, Locality). Those migrations are not yet on this branch.
 
 ## Solution
 
@@ -24,7 +21,8 @@ dotnet ef database update
 
 This will apply all pending migrations, including:
 - Creating all base tables (Tenants, Users, Customers, ChangeLogs, etc.)
-- Adding all additional columns including Canton, Street, PostalCode, and Locality
+- Adding additional columns like FirstName, AHVNum, AdvisorId, IsPrimaryContact
+- Creating Documents, CustomerTasks, and CustomerRelationships tables
 - Setting up all relationships and indexes
 
 ### Step 2: Verify the Migration
@@ -33,18 +31,20 @@ After the migration completes successfully, you should see output like:
 ```
 Applying migration '20251109195934_InitWithChangeLog'.
 Applying migration '20251111130248_AddCustomerFirstName'.
+Applying migration '20251111134552_AddCustomerAHVNum'.
+Applying migration '20251112194634_AddCustomerAdvisor'.
 ...
-Applying migration '20251118164012_AddAddressFieldsToCustomer'.
+Applying migration '20251118111957_AddIsPrimaryContactToCustomer'.
 Done.
 ```
 
-You can verify the Canton column exists by connecting to PostgreSQL:
+You can verify the tables exist by connecting to PostgreSQL:
 ```bash
 psql -U postgres -d rp_crm
 \d "Customers"
 ```
 
-You should see Canton, Street, PostalCode, and Locality columns in the table.
+You should see columns like Id, Name, Email, FirstName, AHVNum, AdvisorId, IsPrimaryContact, etc.
 
 ### Step 3: Start the Backend
 
@@ -56,7 +56,7 @@ dotnet run
 dotnet watch run
 ```
 
-The backend should start without the "Spalte c.Canton existiert nicht" error.
+The backend should start without database-related errors.
 
 ## What Was Fixed
 
@@ -73,11 +73,10 @@ This ensures that migrations can be applied to a fresh database without errors.
 
 The fix has been applied to branch: `copilot/update-customer-management-ui-another-one`
 
-If you're working on `copilot/update-customer-management-ui-again`, you'll need to either:
-1. Cherry-pick the fix commit to that branch, or
-2. Apply the same fix manually
-
-The address fields (Canton, Street, PostalCode, Locality) are only present on the `copilot/update-customer-management-ui-again` branch.
+**Note for `copilot/update-customer-management-ui-again` branch**: 
+- That branch includes additional address fields (Canton, Street, PostalCode, Locality)
+- The same InitWithChangeLog fix should be applied there as well
+- After applying this fix, the address field migrations will also work correctly
 
 ## If You Still Have Issues
 
@@ -117,7 +116,15 @@ If you continue to see the error:
 The issue has been resolved by:
 1. ✅ Fixing the InitWithChangeLog migration to properly create base tables
 2. ✅ Verifying all migrations can be applied successfully
-3. ✅ Confirming the Canton and address fields exist in the database schema
+3. ✅ Confirming the database schema is created correctly
 4. ✅ Building the backend successfully
 
 You just need to run `dotnet ef database update` in your local environment to apply these migrations to your database.
+
+## For copilot/update-customer-management-ui-again Branch
+
+If you're specifically working on the `copilot/update-customer-management-ui-again` branch which includes address fields:
+1. Cherry-pick this migration fix to that branch
+2. Run `dotnet ef database update` 
+3. All migrations including the address fields will be applied correctly
+4. The "Spalte c.Canton existiert nicht" error will be resolved
