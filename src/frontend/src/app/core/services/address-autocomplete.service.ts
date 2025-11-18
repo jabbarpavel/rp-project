@@ -82,9 +82,10 @@ export class AddressAutocompleteService {
               displayText += ` ${houseNumber}`;
             }
             if (postalCode || city) {
-              displayText += ',';
-              if (postalCode) displayText += ` ${postalCode}`;
-              if (city) displayText += ` ${city}`;
+              displayText += ', ';
+              if (postalCode) displayText += postalCode;
+              if (postalCode && city) displayText += ' ';
+              if (city) displayText += city;
             }
             
             const suggestion: AddressSuggestion = {
