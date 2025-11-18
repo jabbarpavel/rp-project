@@ -31,6 +31,12 @@ namespace RP.CRM.Application.DTOs
         public string? Profession { get; set; }
         public string? Language { get; set; }
 
+        // Address fields
+        public string? Street { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Locality { get; set; }
+        public string? Canton { get; set; }
+
         public bool IsPrimaryContact { get; set; }
 
         public int TenantId { get; set; }
@@ -65,6 +71,12 @@ namespace RP.CRM.Application.DTOs
         public DateOnly? BirthDate { get; set; }
         public string? Profession { get; set; }
         public string? Language { get; set; }
+        
+        // Address fields
+        public string? Street { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Locality { get; set; }
+        public string? Canton { get; set; }
         
         public bool IsPrimaryContact { get; set; } = true; // Default true
 

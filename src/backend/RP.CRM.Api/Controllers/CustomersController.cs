@@ -89,6 +89,10 @@ namespace RP.CRM.Api.Controllers
                 BirthDate = customer.BirthDate,
                 Profession = customer.Profession,
                 Language = customer.Language,
+                Street = customer.Street,
+                PostalCode = customer.PostalCode,
+                Locality = customer.Locality,
+                Canton = customer.Canton,
                 IsPrimaryContact = customer.IsPrimaryContact,
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
@@ -121,6 +125,13 @@ namespace RP.CRM.Api.Controllers
                 BirthDate = dto.BirthDate,
                 Profession = dto.Profession,
                 Language = dto.Language,
+                
+                // Address fields
+                Street = dto.Street,
+                PostalCode = dto.PostalCode,
+                Locality = dto.Locality,
+                Canton = dto.Canton,
+                
                 IsPrimaryContact = dto.IsPrimaryContact // Default true from DTO
             };
 
@@ -139,6 +150,10 @@ namespace RP.CRM.Api.Controllers
                 AdvisorLastName = created.Advisor?.Name,
                 AdvisorPhone = created.Advisor?.Phone,                 
                 AdvisorIsActive = created.Advisor?.IsActive,
+                Street = created.Street,
+                PostalCode = created.PostalCode,
+                Locality = created.Locality,
+                Canton = created.Canton,
                 IsPrimaryContact = created.IsPrimaryContact,
                 TenantId = created.TenantId,
                 IsDeleted = created.IsDeleted,
@@ -177,6 +192,14 @@ namespace RP.CRM.Api.Controllers
             existing.BirthDate = dto.BirthDate;
             existing.Profession = dto.Profession;
             existing.Language = dto.Language;
+            
+            // Update address fields
+            existing.Street = dto.Street;
+            existing.PostalCode = dto.PostalCode;
+            existing.Locality = dto.Locality;
+            existing.Canton = dto.Canton;
+            
+            existing.IsPrimaryContact = dto.IsPrimaryContact;
 
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)
@@ -202,6 +225,11 @@ namespace RP.CRM.Api.Controllers
                 BirthDate = updated.BirthDate,
                 Profession = updated.Profession,
                 Language = updated.Language,
+                Street = updated.Street,
+                PostalCode = updated.PostalCode,
+                Locality = updated.Locality,
+                Canton = updated.Canton,
+                IsPrimaryContact = updated.IsPrimaryContact,
                 TenantId = updated.TenantId,
                 IsDeleted = updated.IsDeleted,
                 CreatedAt = updated.CreatedAt,
