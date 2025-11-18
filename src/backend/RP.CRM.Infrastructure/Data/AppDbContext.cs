@@ -21,6 +21,7 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<ChangeLog> ChangeLogs => Set<ChangeLog>();
         public DbSet<Document> Documents => Set<Document>();
         public DbSet<CustomerTask> CustomerTasks => Set<CustomerTask>();
+        public DbSet<CustomerRelationship> CustomerRelationships => Set<CustomerRelationship>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,6 +114,29 @@ namespace RP.CRM.Infrastructure.Data
                 entity.HasIndex(t => new { t.TenantId, t.CustomerId });
             });
 
+            // ====== CustomerRelationship-Konfiguration ======
+            modelBuilder.Entity<CustomerRelationship>(entity =>
+            {
+                entity.HasOne(r => r.Customer)
+                    .WithMany()
+                    .HasForeignKey(r => r.CustomerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(r => r.RelatedCustomer)
+                    .WithMany()
+                    .HasForeignKey(r => r.RelatedCustomerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(r => r.Tenant)
+                    .WithMany()
+                    .HasForeignKey(r => r.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(r => new { r.TenantId, r.CustomerId });
+                entity.HasIndex(r => new { r.TenantId, r.RelatedCustomerId });
+                entity.HasIndex(r => new { r.CustomerId, r.RelatedCustomerId });
+            });
+
             // ====== Seed-Daten ======
             modelBuilder.Entity<Tenant>().HasData(
                 new Tenant
@@ -160,6 +184,12 @@ namespace RP.CRM.Infrastructure.Data
             }
 
             foreach (var entry in ChangeTracker.Entries<CustomerTask>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<CustomerRelationship>())
             {
                 if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
                     entry.Entity.TenantId = _tenantContext.TenantId;

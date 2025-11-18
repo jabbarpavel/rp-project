@@ -76,6 +76,9 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<ICustomerTaskRepository, CustomerTaskRepository>();
 builder.Services.AddScoped<ICustomerTaskService, CustomerTaskService>();
 
+builder.Services.AddScoped<ICustomerRelationshipRepository, CustomerRelationshipRepository>();
+builder.Services.AddScoped<ICustomerRelationshipService, CustomerRelationshipService>();
+
 
 builder.Services.AddControllers();
 

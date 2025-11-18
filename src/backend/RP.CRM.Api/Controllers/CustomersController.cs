@@ -15,11 +15,16 @@ namespace RP.CRM.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly ICustomerRelationshipService _relationshipService;
         private readonly TenantContext _tenantContext;
 
-        public CustomerController(ICustomerService customerService, TenantContext tenantContext)
+        public CustomerController(
+            ICustomerService customerService, 
+            ICustomerRelationshipService relationshipService,
+            TenantContext tenantContext)
         {
             _customerService = customerService;
+            _relationshipService = relationshipService;
             _tenantContext = tenantContext;
         }
 
@@ -239,6 +244,56 @@ namespace RP.CRM.Api.Controllers
                 return Forbid();
 
             var deleted = await _customerService.DeleteAsync(id);
+            return deleted ? NoContent() : NotFound();
+        }
+
+        // ====== Relationship Endpoints ======
+
+        [HttpGet("{id:int}/relationships")]
+        [RequirePermission(Permission.ViewCustomers)]
+        public async Task<IActionResult> GetRelationships(int id)
+        {
+            var customer = await _customerService.GetByIdAsync(id);
+            if (customer == null)
+                return NotFound();
+
+            if (customer.TenantId != _tenantContext.TenantId)
+                return Forbid();
+
+            var relationships = await _relationshipService.GetByCustomerIdAsync(id);
+            return Ok(relationships);
+        }
+
+        [HttpPost("{id:int}/relationships")]
+        [RequirePermission(Permission.EditCustomers)]
+        public async Task<IActionResult> CreateRelationship(int id, [FromBody] CreateCustomerRelationshipDto dto)
+        {
+            var customer = await _customerService.GetByIdAsync(id);
+            if (customer == null)
+                return NotFound();
+
+            if (customer.TenantId != _tenantContext.TenantId)
+                return Forbid();
+
+            var relatedCustomer = await _customerService.GetByIdAsync(dto.RelatedCustomerId);
+            if (relatedCustomer == null)
+                return BadRequest("Related customer not found");
+
+            if (relatedCustomer.TenantId != _tenantContext.TenantId)
+                return BadRequest("Related customer must be in the same tenant");
+
+            var created = await _relationshipService.CreateAsync(id, dto);
+            if (created == null)
+                return BadRequest("Relationship already exists or could not be created");
+
+            return CreatedAtAction(nameof(GetRelationships), new { id }, created);
+        }
+
+        [HttpDelete("relationships/{relationshipId:int}")]
+        [RequirePermission(Permission.EditCustomers)]
+        public async Task<IActionResult> DeleteRelationship(int relationshipId)
+        {
+            var deleted = await _relationshipService.DeleteAsync(relationshipId);
             return deleted ? NoContent() : NotFound();
         }
     }
