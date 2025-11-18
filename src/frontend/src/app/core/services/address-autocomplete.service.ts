@@ -54,6 +54,11 @@ export class AddressAutocompleteService {
       `${this.BASE_URL}/ch/Streets?name=${encodeURIComponent(streetQuery)}`
     ).pipe(
       map(streets => {
+        // Log first result to debug
+        if (streets.length > 0) {
+          console.log('First API result:', JSON.stringify(streets[0], null, 2));
+        }
+        
         // Transform to address suggestions
         const suggestions: AddressSuggestion[] = [];
         const uniqueEntries = new Set<string>();
@@ -63,6 +68,8 @@ export class AddressAutocompleteService {
           const postalCode = street.locality?.postalCode || street.postalCode || '';
           const city = street.locality?.name || street.city || '';
           const streetName = street.name || '';
+          
+          console.log(`Processing: street="${streetName}", postalCode="${postalCode}", city="${city}"`);
           
           // Skip only if street name is completely missing
           if (!streetName) {
