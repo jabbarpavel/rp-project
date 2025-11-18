@@ -24,121 +24,114 @@ interface CustomerSearchResult {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <section class="card relationships-card">
-      <div class="card-header">
-        <h2>Beziehungen</h2>
-        <button class="add-btn" (click)="showCreateDialog = true">
-          + Beziehung hinzufügen
-        </button>
-      </div>
+    <div class="card-header">
+      <h2>Beziehungen</h2>
+    </div>
+    
+    <div *ngIf="loading" class="state-msg">Lade Beziehungen...</div>
+    <div *ngIf="error" class="state-msg error">{{ error }}</div>
 
-      <!-- Create Relationship Dialog -->
-      <div class="modal" *ngIf="showCreateDialog" (click)="showCreateDialog = false">
-        <div class="modal-content" (click)="$event.stopPropagation()">
-          <h3>Neue Beziehung hinzufügen</h3>
-          
-          <div class="form-group">
-            <label>Kunde suchen *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="searchTerm" 
-              (input)="searchCustomers()"
-              class="form-control" 
-              placeholder="Name oder E-Mail eingeben..."
-            />
-            <div class="search-results" *ngIf="searchResults.length > 0">
-              <div 
-                *ngFor="let customer of searchResults" 
-                class="search-result-item"
-                (click)="selectCustomer(customer)"
-              >
-                {{ customer.firstName }} {{ customer.name }} ({{ customer.email }})
-              </div>
-            </div>
-            <div class="selected-customer" *ngIf="selectedCustomer">
-              Ausgewählt: {{ selectedCustomer.firstName }} {{ selectedCustomer.name }}
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Beziehungstyp *</label>
-            <select [(ngModel)]="newRelationship.relationshipType" class="form-control">
-              <option value="">Bitte wählen</option>
-              <option [value]="RelationshipTypes.Spouse">{{ RelationshipTypes.Spouse }}</option>
-              <option [value]="RelationshipTypes.Parent">{{ RelationshipTypes.Parent }}</option>
-              <option [value]="RelationshipTypes.Child">{{ RelationshipTypes.Child }}</option>
-              <option [value]="RelationshipTypes.Sibling">{{ RelationshipTypes.Sibling }}</option>
-              <option [value]="RelationshipTypes.SameHousehold">{{ RelationshipTypes.SameHousehold }}</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input 
-                type="checkbox" 
-                [(ngModel)]="newRelationship.isPrimaryContact"
-              />
-              Als Hauptansprechperson markieren
-            </label>
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn secondary" (click)="cancelCreate()">Abbrechen</button>
-            <button 
-              class="btn primary" 
-              (click)="confirmCreate()" 
-              [disabled]="!selectedCustomer || !newRelationship.relationshipType || creating"
+    <!-- Create Relationship Dialog -->
+    <div class="modal" *ngIf="showCreateDialog" (click)="showCreateDialog = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Neue Beziehung hinzufügen</h3>
+        
+        <div class="form-group">
+          <label>Kunde suchen *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm" 
+            (input)="searchCustomers()"
+            class="form-control" 
+            placeholder="Name oder E-Mail eingeben..."
+          />
+          <div class="search-results" *ngIf="searchResults.length > 0">
+            <div 
+              *ngFor="let customer of searchResults" 
+              class="search-result-item"
+              (click)="selectCustomer(customer)"
             >
-              {{ creating ? 'Erstellen...' : 'Hinzufügen' }}
-            </button>
+              {{ customer.firstName }} {{ customer.name }} ({{ customer.email }})
+            </div>
+          </div>
+          <div class="selected-customer" *ngIf="selectedCustomer">
+            Ausgewählt: {{ selectedCustomer.firstName }} {{ selectedCustomer.name }}
           </div>
         </div>
+
+        <div class="form-group">
+          <label>Beziehungstyp *</label>
+          <select [(ngModel)]="newRelationship.relationshipType" class="form-control">
+            <option value="">Bitte wählen</option>
+            <option [value]="RelationshipTypes.Spouse">{{ RelationshipTypes.Spouse }}</option>
+            <option [value]="RelationshipTypes.Parent">{{ RelationshipTypes.Parent }}</option>
+            <option [value]="RelationshipTypes.Child">{{ RelationshipTypes.Child }}</option>
+            <option [value]="RelationshipTypes.Sibling">{{ RelationshipTypes.Sibling }}</option>
+            <option [value]="RelationshipTypes.SameHousehold">{{ RelationshipTypes.SameHousehold }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="newRelationship.isPrimaryContact"
+            />
+            Als Hauptansprechperson markieren
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn secondary" (click)="cancelCreate()">Abbrechen</button>
+          <button 
+            class="btn primary" 
+            (click)="confirmCreate()" 
+            [disabled]="!selectedCustomer || !newRelationship.relationshipType || creating"
+          >
+            {{ creating ? 'Erstellen...' : 'Hinzufügen' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <dl class="detail-list" *ngIf="!loading && !error">
+      <!-- Show add button at the top -->
+      <div class="add-relationship-row">
+        <button class="link-btn" (click)="showCreateDialog = true">+ Beziehung hinzufügen</button>
       </div>
 
-      <div *ngIf="loading" class="state-msg">Lade Beziehungen...</div>
-      <div *ngIf="error" class="state-msg error">{{ error }}</div>
-
-      <div *ngIf="!loading && !error && relationships.length === 0" class="empty-state">
-        <p>Keine Beziehungen vorhanden.</p>
+      <!-- Empty state -->
+      <div *ngIf="relationships.length === 0" class="empty-row">
+        <span class="empty-text">Keine Beziehungen vorhanden</span>
       </div>
 
-      <div *ngIf="!loading && !error && relationships.length > 0" class="relationships-list">
-        <!-- Group by relationship type -->
-        <div *ngFor="let group of groupedRelationships" class="relationship-group">
-          <h3 class="group-title">{{ group.type }}</h3>
-          <div *ngFor="let rel of group.relationships" class="relationship-item">
-            <div class="relationship-info">
+      <!-- Show relationships grouped by type -->
+      <ng-container *ngFor="let group of groupedRelationships">
+        <div class="relationship-type-row">
+          <dt class="relationship-type-label">{{ group.type }}</dt>
+          <dd class="relationship-list">
+            <div *ngFor="let rel of group.relationships; let last = last" class="relationship-entry">
               <span 
-                class="customer-name" 
+                class="customer-link" 
                 (click)="navigateToCustomer(rel.relatedCustomerId)"
                 title="Zu diesem Kunden navigieren"
               >
                 {{ rel.relatedCustomerFirstName }} {{ rel.relatedCustomerLastName }}
               </span>
-              <span *ngIf="rel.isPrimaryContact" class="badge primary-badge">Hauptansprechperson</span>
+              <span *ngIf="rel.isPrimaryContact" class="primary-badge">★ Hauptansprechperson</span>
+              <button class="delete-btn-inline" (click)="deleteRelationship(rel)" title="Entfernen">
+                ✕
+              </button>
+              <span *ngIf="!last" class="separator">•</span>
             </div>
-            <button class="delete-btn-small" (click)="deleteRelationship(rel)" title="Entfernen">
-              ✕
-            </button>
-          </div>
+          </dd>
         </div>
-      </div>
-    </section>
+      </ng-container>
+    </dl>
   `,
   styles: [`
-    .relationships-card {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
-      padding: 1.1rem 1.25rem;
-      margin-top: 1rem;
-    }
-
     .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: .9rem;
+      margin-bottom: .65rem;
     }
 
     .card-header h2 {
@@ -148,22 +141,128 @@ interface CustomerSearchResult {
       color: #111827;
     }
 
-    .add-btn {
-      display: inline-flex;
-      align-items: center;
-      padding: .4rem 1rem;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: .85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background .15s ease;
+    .detail-list {
+      margin: 0;
     }
 
-    .add-btn:hover {
-      background: #1d4ed8;
+    .add-relationship-row {
+      padding: .5rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .link-btn {
+      border: none;
+      background: none;
+      padding: 0;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #2563eb;
+      cursor: pointer;
+      transition: color .15s ease;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+      color: #1d4ed8;
+    }
+
+    .empty-row {
+      padding: 1.5rem 0;
+      text-align: center;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .empty-text {
+      color: #9ca3af;
+      font-size: .9rem;
+      font-style: italic;
+    }
+
+    .relationship-type-row {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      padding: .5rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: .9rem;
+      align-items: start;
+    }
+
+    .relationship-type-row:last-child {
+      border-bottom: none;
+    }
+
+    .relationship-type-label {
+      margin: 0;
+      font-weight: 600;
+      color: #4b5563;
+      padding-top: .1rem;
+    }
+
+    .relationship-list {
+      margin: 0;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .relationship-entry {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .customer-link {
+      color: #2563eb;
+      cursor: pointer;
+      transition: color .15s ease;
+      font-weight: 500;
+    }
+
+    .customer-link:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    .primary-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+      gap: .2rem;
+    }
+
+    .delete-btn-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      border-radius: 3px;
+      font-size: .85rem;
+      transition: all .15s ease;
+    }
+
+    .delete-btn-inline:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .separator {
+      color: #d1d5db;
+      margin: 0 .3rem;
     }
 
     .state-msg {
@@ -174,100 +273,6 @@ interface CustomerSearchResult {
     }
 
     .state-msg.error {
-      color: #dc2626;
-    }
-
-    .empty-state {
-      padding: 2rem;
-      text-align: center;
-      color: #9ca3af;
-    }
-
-    .empty-state p {
-      margin: 0;
-      font-size: .9rem;
-    }
-
-    .relationships-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .relationship-group {
-      border-left: 3px solid #e5e7eb;
-      padding-left: 1rem;
-    }
-
-    .group-title {
-      margin: 0 0 .5rem 0;
-      font-size: .9rem;
-      font-weight: 600;
-      color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: .03em;
-    }
-
-    .relationship-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: .6rem .8rem;
-      background: #f9fafb;
-      border-radius: 6px;
-      margin-bottom: .4rem;
-    }
-
-    .relationship-info {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-    }
-
-    .customer-name {
-      font-size: .9rem;
-      font-weight: 500;
-      color: #2563eb;
-      cursor: pointer;
-      transition: color .15s ease;
-    }
-
-    .customer-name:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .15rem .5rem;
-      border-radius: 999px;
-      font-size: .7rem;
-      font-weight: 600;
-    }
-
-    .primary-badge {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .delete-btn-small {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      color: #6b7280;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 1rem;
-      transition: all .15s ease;
-    }
-
-    .delete-btn-small:hover {
-      background: #fee2e2;
       color: #dc2626;
     }
 

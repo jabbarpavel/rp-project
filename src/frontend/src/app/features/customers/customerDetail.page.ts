@@ -556,8 +556,12 @@ export class CustomerDetailPage implements OnInit {
 
   ngOnInit(): void {
     this.canDelete = this.permissionService.canDeleteCustomers();
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
-    if (this.id) this.loadCustomer();
+    
+    // Subscribe to route parameter changes to reload customer data
+    this.route.paramMap.subscribe(params => {
+      this.id = Number(params.get('id'));
+      if (this.id) this.loadCustomer();
+    });
   }
 
   loadCustomer(): void {
