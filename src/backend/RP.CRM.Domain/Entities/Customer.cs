@@ -26,5 +26,11 @@ namespace RP.CRM.Domain.Entities
         public DateOnly? BirthDate { get; set; }
         public string? Profession { get; set; }
         public string? Language { get; set; }
+        
+        // Address fields
+        public string? Street { get; set; }
+        public string? HouseNumber { get; set; }
+        public string? PostalCode { get; set; }
+        public string? City { get; set; }
     }
 }

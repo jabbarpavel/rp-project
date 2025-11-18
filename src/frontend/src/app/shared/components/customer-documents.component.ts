@@ -120,17 +120,18 @@ import { PermissionService } from '../../core/services/permission.service';
       color: white;
       border-radius: 6px;
       font-size: .85rem;
-      font-weight: 600;
+      font-weight: 500;
+      border: none;
       cursor: pointer;
-      transition: background-color .15s ease;
+      transition: background .15s ease;
     }
 
-    .upload-btn:hover:not(.disabled) {
+    .upload-btn:hover:not(:disabled) {
       background: #1d4ed8;
     }
 
-    .upload-btn.disabled {
-      background: #9ca3af;
+    .upload-btn:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
