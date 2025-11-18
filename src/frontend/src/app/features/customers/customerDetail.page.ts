@@ -77,6 +77,21 @@ interface CustomerDetailDto {
             </div>
             <dl class="detail-list">
 
+              <!-- Hauptansprechperson Checkbox -->
+              <div class="double-row">
+                <div class="primary-contact-checkbox">
+                  <label>
+                    <input 
+                      type="checkbox" 
+                      [checked]="customer.isPrimaryContact"
+                      (change)="togglePrimaryContact()"
+                    />
+                    <span>Hauptansprechperson</span>
+                  </label>
+                </div>
+                <div></div>
+              </div>
+
               <!-- Anrede + Sprache -->
               <div class="double-row">
                 <div>
@@ -163,26 +178,13 @@ interface CustomerDetailDto {
                 </div>
               </div>
 
-              <!-- Beruf + Hauptansprechperson Toggle -->
+              <!-- Beruf + rechte Seite leer -->
               <div class="double-row">
                 <div>
                   <dt>Beruf</dt>
                   <dd>{{ customer.profession || '–' }}</dd>
                 </div>
-                <div class="primary-contact-toggle">
-                  <dt>Hauptansprechperson (Eigenschaft)</dt>
-                  <dd>
-                    <label class="toggle-switch">
-                      <input 
-                        type="checkbox" 
-                        [checked]="customer.isPrimaryContact"
-                        (change)="togglePrimaryContact()"
-                      />
-                      <span class="toggle-slider"></span>
-                    </label>
-                    <span class="toggle-label">{{ customer.isPrimaryContact ? 'Ja' : 'Nein' }}</span>
-                  </dd>
-                </div>
+                <div></div>
               </div>
 
             </dl>
@@ -564,61 +566,28 @@ interface CustomerDetailDto {
       word-break: break-word;
     }
 
-    .primary-contact-toggle dd {
+    .primary-contact-checkbox {
+      padding: 0.75rem 0;
+    }
+
+    .primary-contact-checkbox label {
       display: flex;
       align-items: center;
-      gap: .75rem;
-    }
-
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 44px;
-      height: 24px;
-    }
-
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .toggle-slider {
-      position: absolute;
+      gap: 0.5rem;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .3s;
-      border-radius: 24px;
-    }
-
-    .toggle-slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-
-    input:checked + .toggle-slider {
-      background-color: #2563eb;
-    }
-
-    input:checked + .toggle-slider:before {
-      transform: translateX(20px);
-    }
-
-    .toggle-label {
-      font-size: .9rem;
-      color: #111827;
       font-weight: 500;
+      color: #111827;
+    }
+
+    .primary-contact-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #2563eb;
+    }
+
+    .primary-contact-checkbox span {
+      font-size: 0.95rem;
     }
   `]
 })
