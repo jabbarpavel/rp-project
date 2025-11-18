@@ -118,7 +118,7 @@ interface CustomerSearchResult {
               >
                 {{ rel.relatedCustomerFirstName }} {{ rel.relatedCustomerLastName }}
               </span>
-              <span *ngIf="rel.isPrimaryContact" class="primary-badge">★ Hauptansprechperson</span>
+              <span *ngIf="rel.isPrimaryContact" class="primary-badge">Hauptansprechperson</span>
               <button class="delete-btn-inline" (click)="deleteRelationship(rel)" title="Entfernen">
                 ✕
               </button>

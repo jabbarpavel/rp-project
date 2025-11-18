@@ -10,6 +10,7 @@ import { CustomerDocumentsComponent } from '../../shared/components/customer-doc
 import { CustomerTasksComponent } from '../../shared/components/customer-tasks.component';
 import { CustomerRelationshipsComponent } from '../../shared/components/customer-relationships.component';
 import { PermissionService } from '../../core/services/permission.service';
+import { CustomerRelationshipService } from '../../core/services/customer-relationship.service';
 
 interface CustomerDetailDto {
   id: number;
@@ -49,6 +50,7 @@ interface CustomerDetailDto {
           <h1>Kundendetails</h1>
           <p class="subline">
             {{ getHeaderDisplay(customer) }}
+            <span *ngIf="isPrimaryContact" class="primary-contact-badge">Hauptansprechperson</span>
           </p>
         </div>
 
@@ -275,6 +277,21 @@ interface CustomerDetailDto {
       margin-top: .15rem;
       font-size: .85rem;
       color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .primary-contact-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+      margin-left: .5rem;
     }
 
     .header-actions {
@@ -544,6 +561,7 @@ export class CustomerDetailPage implements OnInit {
   error = '';
   showAdvisorDialog = false;
   canDelete = false;
+  isPrimaryContact = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -551,7 +569,8 @@ export class CustomerDetailPage implements OnInit {
     private router: Router,
     private toast: ToastService,
     private confirm: ConfirmDialogService,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private relationshipService: CustomerRelationshipService
   ) {}
 
   ngOnInit(): void {
@@ -567,11 +586,27 @@ export class CustomerDetailPage implements OnInit {
   loadCustomer(): void {
     this.loading = true;
     this.api.get<CustomerDetailDto>(`/api/customer/${this.id}`).subscribe({
-      next: res => { this.customer = res; this.loading = false; },
+      next: res => { 
+        this.customer = res; 
+        this.loading = false;
+        this.checkIfPrimaryContact();
+      },
       error: () => {
         this.error = 'Kunde konnte nicht geladen werden.';
         this.toast.show('Fehler beim Laden des Kunden', 'error');
         this.loading = false;
+      }
+    });
+  }
+
+  checkIfPrimaryContact(): void {
+    this.relationshipService.getByCustomerId(this.id).subscribe({
+      next: (relationships) => {
+        // Check if this customer is marked as primary contact in any relationship
+        this.isPrimaryContact = relationships.some(rel => rel.isPrimaryContact);
+      },
+      error: () => {
+        this.isPrimaryContact = false;
       }
     });
   }
