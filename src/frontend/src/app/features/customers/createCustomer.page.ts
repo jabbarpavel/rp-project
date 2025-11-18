@@ -61,11 +61,16 @@ export class CreateCustomerPage implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.api.post('/api/customer', this.customer).subscribe({
-      next: () => {
+    this.api.post<any>('/api/customer', this.customer).subscribe({
+      next: (response) => {
         this.loading = false;
         this.toast.show('Kunde erfolgreich erstellt', 'success');
-        this.router.navigate(['/customers']);
+        // Navigate to customer detail page to add relationships
+        if (response && response.id) {
+          this.router.navigate(['/customers', response.id]);
+        } else {
+          this.router.navigate(['/customers']);
+        }
       },
       error: (err: any) => {
         this.error =

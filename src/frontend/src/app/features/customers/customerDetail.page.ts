@@ -50,8 +50,8 @@ interface CustomerDetailDto {
           <h1>Kundendetails</h1>
           <p class="subline">
             {{ getHeaderDisplay(customer) }}
-            <span *ngIf="isPrimaryContact" class="primary-contact-badge">Hauptansprechperson</span>
           </p>
+          <span *ngIf="isPrimaryContact" class="primary-contact-badge">Hauptansprechperson</span>
         </div>
 
         <div class="header-actions">
@@ -277,21 +277,17 @@ interface CustomerDetailDto {
       margin-top: .15rem;
       font-size: .85rem;
       color: #6b7280;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
     }
 
     .primary-contact-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .2rem .6rem;
+      display: inline-block;
+      padding: .25rem .7rem;
       border-radius: 999px;
       font-size: .75rem;
       font-weight: 600;
       background: #dbeafe;
       color: #1e40af;
-      margin-left: .5rem;
+      margin-top: .4rem;
     }
 
     .header-actions {
@@ -600,10 +596,9 @@ export class CustomerDetailPage implements OnInit {
   }
 
   checkIfPrimaryContact(): void {
-    this.relationshipService.getByCustomerId(this.id).subscribe({
-      next: (relationships) => {
-        // Check if this customer is marked as primary contact in any relationship
-        this.isPrimaryContact = relationships.some(rel => rel.isPrimaryContact);
+    this.relationshipService.isPrimaryContact(this.id).subscribe({
+      next: (result) => {
+        this.isPrimaryContact = result.isPrimaryContact;
       },
       error: () => {
         this.isPrimaryContact = false;

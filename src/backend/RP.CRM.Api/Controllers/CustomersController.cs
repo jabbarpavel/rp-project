@@ -296,5 +296,20 @@ namespace RP.CRM.Api.Controllers
             var deleted = await _relationshipService.DeleteAsync(relationshipId);
             return deleted ? NoContent() : NotFound();
         }
+
+        [HttpGet("{id:int}/is-primary-contact")]
+        [RequirePermission(Permission.ViewCustomers)]
+        public async Task<IActionResult> IsPrimaryContact(int id)
+        {
+            var customer = await _customerService.GetByIdAsync(id);
+            if (customer == null)
+                return NotFound();
+
+            if (customer.TenantId != _tenantContext.TenantId)
+                return Forbid();
+
+            var isPrimary = await _relationshipService.IsPrimaryContactAsync(id);
+            return Ok(new { isPrimaryContact = isPrimary });
+        }
     }
 }

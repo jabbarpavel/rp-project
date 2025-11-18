@@ -46,4 +46,8 @@ export class CustomerRelationshipService {
   delete(relationshipId: number): Observable<void> {
     return this.api.delete<void>(`/api/customer/relationships/${relationshipId}`);
   }
+
+  isPrimaryContact(customerId: number): Observable<{ isPrimaryContact: boolean }> {
+    return this.api.get<{ isPrimaryContact: boolean }>(`/api/customer/${customerId}/is-primary-contact`);
+  }
 }

@@ -9,5 +9,6 @@ namespace RP.CRM.Application.Interfaces
         Task<CustomerRelationship> CreateAsync(CustomerRelationship relationship);
         Task<bool> DeleteAsync(int id);
         Task<bool> RelationshipExistsAsync(int customerId, int relatedCustomerId, string relationshipType);
+        Task<bool> IsPrimaryContactAsync(int customerId);
     }
 }

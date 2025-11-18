@@ -135,5 +135,10 @@ namespace RP.CRM.Application.Services
                 _ => relationshipType
             };
         }
+
+        public async Task<bool> IsPrimaryContactAsync(int customerId)
+        {
+            return await _repository.IsPrimaryContactAsync(customerId);
+        }
     }
 }

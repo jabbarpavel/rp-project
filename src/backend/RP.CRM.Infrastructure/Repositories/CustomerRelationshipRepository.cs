@@ -16,13 +16,16 @@ namespace RP.CRM.Infrastructure.Repositories
 
         public async Task<IEnumerable<CustomerRelationship>> GetByCustomerIdAsync(int customerId)
         {
-            return await _context.CustomerRelationships
+            // Get relationships where this customer is the primary customer
+            var directRelationships = await _context.CustomerRelationships
                 .Include(r => r.Customer)
                 .Include(r => r.RelatedCustomer)
                 .Where(r => r.CustomerId == customerId)
                 .OrderBy(r => r.RelationshipType)
                 .ThenBy(r => r.RelatedCustomer!.FirstName)
                 .ToListAsync();
+
+            return directRelationships;
         }
 
         public async Task<CustomerRelationship?> GetByIdAsync(int id)
@@ -57,6 +60,14 @@ namespace RP.CRM.Infrastructure.Repositories
                 .AnyAsync(r => r.CustomerId == customerId 
                     && r.RelatedCustomerId == relatedCustomerId 
                     && r.RelationshipType == relationshipType);
+        }
+
+        public async Task<bool> IsPrimaryContactAsync(int customerId)
+        {
+            // Check if this customer is marked as primary contact in any relationship
+            // This checks relationships where this customer is the relatedCustomer with isPrimaryContact=true
+            return await _context.CustomerRelationships
+                .AnyAsync(r => r.RelatedCustomerId == customerId && r.IsPrimaryContact);
         }
     }
 }
