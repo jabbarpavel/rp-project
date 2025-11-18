@@ -40,7 +40,12 @@ export class EditCustomerPage implements OnInit {
     birthDate: null as string | null,
     profession: '',
     language: null as string | null,
-    isPrimaryContact: true
+    isPrimaryContact: true,
+
+    street: null as string | null,
+    houseNumber: null as string | null,
+    postalCode: null as string | null,
+    city: null as string | null
   };
 
   loading = false;

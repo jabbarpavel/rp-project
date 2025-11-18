@@ -35,6 +35,11 @@ interface CustomerDetailDto {
   
   isPrimaryContact: boolean;
 
+  street?: string | null;
+  houseNumber?: string | null;
+  postalCode?: string | null;
+  city?: string | null;
+
   tenantId: number;
   isDeleted: boolean;
   createdAt: string;
@@ -144,6 +149,38 @@ interface CustomerDetailDto {
                 </div>
               </div>
 
+            </dl>
+          </section>
+
+          <!-- Adresse -->
+          <section class="card" *ngIf="customer.street || customer.postalCode || customer.city">
+            <div class="card-header">
+              <h2>Adresse</h2>
+            </div>
+            <dl class="detail-list">
+              <!-- Strasse + Hausnummer -->
+              <div class="double-row">
+                <div>
+                  <dt>Strasse</dt>
+                  <dd>{{ customer.street || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Hausnummer</dt>
+                  <dd>{{ customer.houseNumber || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- PLZ + Ort -->
+              <div class="double-row">
+                <div>
+                  <dt>PLZ</dt>
+                  <dd>{{ customer.postalCode || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Ort</dt>
+                  <dd>{{ customer.city || '–' }}</dd>
+                </div>
+              </div>
             </dl>
           </section>
 

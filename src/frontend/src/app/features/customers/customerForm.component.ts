@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, ElementRef, HostListene
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { AddressAutocompleteService, AddressSuggestion } from '../../core/services/address-autocomplete.service';
 
 type AdvisorDto = {
   id: number;
@@ -184,9 +185,69 @@ type AdvisorDto = {
           </select>
         </div>
 
+        <!-- Address Autocomplete -->
+        <div class="form-section-title">Adresse</div>
+
+        <div class="form-group address-autocomplete">
+          <label for="addressSearch">Strasse & Hausnummer</label>
+          <input
+            id="addressSearch"
+            type="text"
+            [(ngModel)]="addressSearch"
+            (input)="onAddressType()"
+            (focus)="onAddressFocus()"
+            (keydown)="onAddressKey($event)"
+            name="addressSearch"
+            placeholder="z.B. Langstrasse 4"
+            autocomplete="off"
+            aria-autocomplete="list"
+            [attr.aria-expanded]="addressOpen"
+          />
+
+          <ul *ngIf="addressOpen && addressSuggestions.length" class="dropdown" role="listbox">
+            <li
+              *ngFor="let suggestion of addressSuggestions; let i = index"
+              (click)="pickAddress(suggestion)"
+              [class.active]="i === addressIdx"
+              role="option"
+              [attr.aria-selected]="i === addressIdx"
+            >
+              {{ suggestion.displayText }}
+            </li>
+          </ul>
+          <small class="hint">Beginnen Sie zu tippen für Vorschläge</small>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label for="postalCode">PLZ</label>
+            <input
+              id="postalCode"
+              type="text"
+              [(ngModel)]="model.postalCode"
+              name="postalCode"
+              placeholder="z.B. 8004"
+              maxlength="4"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="city">Ort</label>
+            <input
+              id="city"
+              type="text"
+              [(ngModel)]="model.city"
+              name="city"
+              placeholder="z.B. Zürich"
+            />
+          </div>
+        </div>
+
         <!-- Berater: Autocomplete-Dropdown -->
+        <div class="form-section-title">Berater</div>
+        
         <div class="form-group advisor">
-          <label for="advisor">Berater</label>
+          <label for="advisor">Berater zuweisen</label>
           <input
             id="advisor"
             type="text"
@@ -230,6 +291,8 @@ type AdvisorDto = {
     .form-container{background:#fff;padding:2rem;border-radius:12px;max-width:620px;margin:2rem auto;box-shadow:0 2px 10px rgba(0,0,0,.05)}
     .customer-form{display:flex;flex-direction:column;gap:1.2rem}
     .form-group{display:flex;flex-direction:column;position:relative}
+    .form-group-row{display:grid;grid-template-columns:1fr 2fr;gap:1rem}
+    .form-section-title{font-weight:700;font-size:1.1rem;color:#1f2937;margin-top:1.5rem;margin-bottom:.5rem;padding-bottom:.5rem;border-bottom:2px solid #e5e7eb}
     label{font-weight:600;margin-bottom:.4rem;color:#1f2937}
     input, select{padding:.7rem;border:1px solid #d1d5db;border-radius:8px;font-size:.95rem;transition:border-color .2s;background:#fff}
     input:focus, select:focus{border-color:#3b82f6;outline:none}
@@ -239,7 +302,8 @@ type AdvisorDto = {
     button.cancel{background:#e5e7eb;color:#111827}
     .error{color:#dc2626;text-align:center;margin-top:1rem;font-size:.9rem}
     .advisor{position:relative}
-    .dropdown{position:absolute;left:0;right:0;top:100%;margin:.25rem 0 0;padding:0;list-style:none;background:#fff;border:1px solid #e5e7eb;border-radius:8px;max-height:220px;overflow:auto;z-index:10}
+    .address-autocomplete{position:relative}
+    .dropdown{position:absolute;left:0;right:0;top:100%;margin:.25rem 0 0;padding:0;list-style:none;background:#fff;border:1px solid #e5e7eb;border-radius:8px;max-height:220px;overflow:auto;z-index:10;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
     .dropdown li{padding:.5rem .75rem;cursor:pointer}
     .dropdown li.active,.dropdown li:hover{background:#eff6ff}
     .hint{margin-top:.3rem;color:#6b7280;font-size:.8rem}
@@ -263,7 +327,12 @@ export class CustomerFormComponent implements OnInit {
     salutation: null as string | null,
     birthDate: null as string | null,
     profession: '',
-    language: null as string | null
+    language: null as string | null,
+
+    street: null as string | null,
+    houseNumber: null as string | null,
+    postalCode: null as string | null,
+    city: null as string | null
   };
   @Input() loading = false;
   @Input() error = '';
@@ -279,19 +348,41 @@ export class CustomerFormComponent implements OnInit {
   idx = -1;
   private timer: any;
 
-  constructor(private api: ApiService, private el: ElementRef) {}
+  // Address autocomplete
+  addressSearch = '';
+  addressSuggestions: AddressSuggestion[] = [];
+  addressOpen = false;
+  addressIdx = -1;
+  private addressTimer: any;
+
+  constructor(
+    private api: ApiService, 
+    private el: ElementRef,
+    private addressService: AddressAutocompleteService
+  ) {}
 
   ngOnInit(): void {
     if (this.model.advisorId) this.resolveAdvisorLabel(this.model.advisorId);
+    
+    // Initialize address search if address exists
+    if (this.model.street && this.model.houseNumber) {
+      this.addressSearch = `${this.model.street} ${this.model.houseNumber}`.trim();
+    }
   }
 
   @HostListener('document:click', ['$event'])
   onDocClick(ev: MouseEvent) {
-    if (!this.el.nativeElement.contains(ev.target)) this.open = false;
+    if (!this.el.nativeElement.contains(ev.target)) {
+      this.open = false;
+      this.addressOpen = false;
+    }
   }
 
   @HostListener('document:keydown.escape')
-  onEsc() { this.open = false; }
+  onEsc() { 
+    this.open = false;
+    this.addressOpen = false;
+  }
 
   onFocus() {
     if (this.items.length) this.open = true;
@@ -375,5 +466,68 @@ export class CustomerFormComponent implements OnInit {
       } else { f += d.substring(3); }
     } else f = d;
     this.model.ahvNum = f;
+  }
+
+  // Address autocomplete methods
+  onAddressFocus() {
+    if (this.addressSuggestions.length) this.addressOpen = true;
+  }
+
+  onAddressType() {
+    this.addressIdx = -1;
+    const term = this.addressSearch.trim();
+    
+    if (term.length < 3) {
+      this.addressSuggestions = [];
+      this.addressOpen = false;
+      return;
+    }
+
+    clearTimeout(this.addressTimer);
+    this.addressTimer = setTimeout(() => {
+      this.addressService.searchAddresses(term).subscribe({
+        next: suggestions => {
+          this.addressSuggestions = suggestions || [];
+          this.addressOpen = this.addressSuggestions.length > 0;
+        },
+        error: () => {
+          this.addressSuggestions = [];
+          this.addressOpen = false;
+        }
+      });
+    }, 300);
+  }
+
+  onAddressKey(e: KeyboardEvent) {
+    if (!this.addressOpen && this.addressSuggestions.length) this.addressOpen = true;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!this.addressSuggestions.length) return;
+      this.addressIdx = (this.addressIdx + 1) % this.addressSuggestions.length;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!this.addressSuggestions.length) return;
+      this.addressIdx = (this.addressIdx + this.addressSuggestions.length - 1) % this.addressSuggestions.length;
+    } else if (e.key === 'Enter') {
+      if (this.addressOpen && this.addressIdx >= 0 && this.addressSuggestions[this.addressIdx]) {
+        e.preventDefault();
+        this.pickAddress(this.addressSuggestions[this.addressIdx]);
+      }
+    }
+  }
+
+  pickAddress(suggestion: AddressSuggestion) {
+    this.model.street = suggestion.street;
+    this.model.houseNumber = suggestion.houseNumber;
+    this.model.postalCode = suggestion.postalCode;
+    this.model.city = suggestion.city;
+    
+    this.addressSearch = suggestion.houseNumber 
+      ? `${suggestion.street} ${suggestion.houseNumber}`
+      : suggestion.street;
+    
+    this.addressSuggestions = [];
+    this.addressOpen = false;
   }
 }
