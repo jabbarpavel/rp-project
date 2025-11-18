@@ -18,7 +18,9 @@ interface OpenPLZLocality {
 
 interface OpenPLZStreet {
   name: string;
-  locality: OpenPLZLocality;
+  locality?: OpenPLZLocality; // Make optional as API might return different structure
+  postalCode?: string; // Some API versions have this at top level
+  city?: string; // Some API versions have this at top level
 }
 
 @Injectable({
@@ -57,9 +59,16 @@ export class AddressAutocompleteService {
         const uniqueEntries = new Set<string>();
 
         for (const street of streets.slice(0, 10)) { // Limit to 10 results
-          const postalCode = street.locality.postalCode;
-          const city = street.locality.name;
-          const streetName = street.name;
+          // Handle different API response structures
+          const postalCode = street.locality?.postalCode || street.postalCode || '';
+          const city = street.locality?.name || street.city || '';
+          const streetName = street.name || '';
+          
+          // Skip if essential data is missing
+          if (!streetName || !postalCode || !city) {
+            console.warn('Incomplete address data:', street);
+            continue;
+          }
           
           // Create unique key to avoid duplicates
           const uniqueKey = `${streetName}-${postalCode}-${city}`;
