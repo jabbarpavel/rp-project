@@ -5,6 +5,7 @@ import { TaskService, CustomerTaskDto, CreateCustomerTaskDto } from '../../core/
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-customer-tasks',
@@ -33,6 +34,13 @@ import { AuthService } from '../../core/services/auth.service';
             />
           </div>
           <div class="form-group">
+            <label>Zugewiesen an *</label>
+            <select [(ngModel)]="newTask.assignedToUserId" class="form-control">
+              <option [value]="0" disabled>Benutzer auswählen</option>
+              <option *ngFor="let user of users" [value]="user.id">{{ user.email }}</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Status</label>
             <select [(ngModel)]="newTask.status" class="form-control">
               <option value="offen">Offen</option>
@@ -49,7 +57,7 @@ import { AuthService } from '../../core/services/auth.service';
           </div>
           <div class="modal-actions">
             <button class="btn secondary" (click)="cancelCreate()">Abbrechen</button>
-            <button class="btn primary" (click)="confirmCreate()" [disabled]="!newTask.title || creating">
+            <button class="btn primary" (click)="confirmCreate()" [disabled]="!newTask.title || !newTask.assignedToUserId || creating">
               {{ creating ? 'Erstellen...' : 'Erstellen' }}
             </button>
           </div>
@@ -391,6 +399,7 @@ export class CustomerTasksComponent implements OnInit {
   @Input() customerId!: number;
 
   tasks: CustomerTaskDto[] = [];
+  users: Array<{ id: number; email: string }> = [];
   loading = false;
   creating = false;
   updating = false;
@@ -417,12 +426,14 @@ export class CustomerTasksComponent implements OnInit {
     private taskService: TaskService,
     private toast: ToastService,
     private confirm: ConfirmDialogService,
-    private auth: AuthService
+    private auth: AuthService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
     if (this.customerId) {
       this.loadTasks();
+      this.loadUsers();
     }
   }
 
@@ -445,22 +456,36 @@ export class CustomerTasksComponent implements OnInit {
     });
   }
 
+  loadUsers(): void {
+    this.api.getAdvisors().subscribe({
+      next: (users) => {
+        this.users = users;
+        // Set current user as default
+        const userId = this.auth.getUserId();
+        if (userId) {
+          this.newTask.assignedToUserId = userId;
+        }
+      },
+      error: () => {
+        this.toast.show('Fehler beim Laden der Benutzer', 'error');
+      }
+    });
+  }
+
   cancelCreate(): void {
     this.showCreateDialog = false;
+    const currentUserId = this.auth.getUserId();
     this.newTask = {
       title: '',
       status: 'offen',
       dueDateStr: '',
       customerId: 0,
-      assignedToUserId: 0
+      assignedToUserId: currentUserId || 0
     };
   }
 
   confirmCreate(): void {
-    if (!this.newTask.title) return;
-
-    const userId = this.auth.getUserId();
-    if (!userId) return;
+    if (!this.newTask.title || !this.newTask.assignedToUserId) return;
 
     this.creating = true;
     const task: CreateCustomerTaskDto = {
@@ -468,7 +493,7 @@ export class CustomerTasksComponent implements OnInit {
       status: this.newTask.status,
       dueDate: this.newTask.dueDateStr ? new Date(this.newTask.dueDateStr).toISOString() : undefined,
       customerId: this.customerId,
-      assignedToUserId: userId
+      assignedToUserId: this.newTask.assignedToUserId
     };
 
     this.taskService.create(task).subscribe({
@@ -476,12 +501,13 @@ export class CustomerTasksComponent implements OnInit {
         this.toast.show('Aufgabe erfolgreich erstellt', 'success');
         this.creating = false;
         this.showCreateDialog = false;
+        const currentUserId = this.auth.getUserId();
         this.newTask = {
           title: '',
           status: 'offen',
           dueDateStr: '',
           customerId: 0,
-          assignedToUserId: 0
+          assignedToUserId: currentUserId || 0
         };
         this.loadTasks();
       },

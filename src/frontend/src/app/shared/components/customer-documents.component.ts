@@ -67,6 +67,8 @@ import { PermissionService } from '../../core/services/permission.service';
               <span>{{ formatDate(doc.createdAt) }}</span>
               <span *ngIf="doc.uploadedByUserName">•</span>
               <span *ngIf="doc.uploadedByUserName">{{ doc.uploadedByUserName }}</span>
+              <span *ngIf="doc.category">•</span>
+              <span *ngIf="doc.category">{{ doc.category }}</span>
             </div>
           </div>
           <div class="document-actions">

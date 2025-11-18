@@ -83,8 +83,8 @@
           <td>{{ getAdvisorDisplay(c) }}</td>
           <td>{{ c.createdAt | date: 'short' }}</td>
           <td class="actions">
-            <button class="edit-btn" type="button" (click)="editCustomer(c)">Bearbeiten</button>
-            <button class="delete-btn" type="button" (click)="deleteCustomer(c.id)" *ngIf="canDelete">Löschen</button>
+            <button class="btn ghost" type="button" (click)="editCustomer(c)">Bearbeiten</button>
+            <button class="btn danger" type="button" (click)="deleteCustomer(c.id)" *ngIf="canDelete">Löschen</button>
           </td>
         </tr>
       </tbody>
