@@ -17,6 +17,18 @@ type AdvisorDto = {
   template: `
     <div class="form-container">
       <form (submit)="onSubmit($event)" class="customer-form">
+        <!-- Hauptansprechperson Checkbox -->
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="model.isPrimaryContact"
+              name="isPrimaryContact"
+            />
+            <span>Hauptansprechperson</span>
+          </label>
+        </div>
+
         <!-- Basisdaten -->
         <div class="form-group">
           <label for="firstName">Vorname</label>
@@ -247,6 +259,9 @@ type AdvisorDto = {
     .toggle-group{display:flex;gap:.5rem}
     .toggle-option{display:flex;align-items:center;gap:.25rem;padding:.25rem .6rem;border-radius:999px;border:1px solid #d1d5db;cursor:pointer;font-size:.85rem;color:#374151}
     .toggle-option input{margin:0}
+    .checkbox-group{padding-bottom:.5rem;border-bottom:1px solid #e5e7eb;margin-bottom:.5rem}
+    .checkbox-label{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-weight:500}
+    .checkbox-label input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
   `]
 })
 export class CustomerFormComponent implements OnInit {
@@ -263,7 +278,8 @@ export class CustomerFormComponent implements OnInit {
     salutation: null as string | null,
     birthDate: null as string | null,
     profession: '',
-    language: null as string | null
+    language: null as string | null,
+    isPrimaryContact: true
   };
   @Input() loading = false;
   @Input() error = '';
