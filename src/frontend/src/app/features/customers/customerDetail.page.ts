@@ -8,6 +8,7 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog.service
 import { AdvisorChangeDialogComponent } from '../../shared/components/advisor-change-dialog.component';
 import { CustomerDocumentsComponent } from '../../shared/components/customer-documents.component';
 import { CustomerTasksComponent } from '../../shared/components/customer-tasks.component';
+import { CustomerRelationshipsComponent } from '../../shared/components/customer-relationships.component';
 import { PermissionService } from '../../core/services/permission.service';
 
 interface CustomerDetailDto {
@@ -40,7 +41,7 @@ interface CustomerDetailDto {
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent],
+  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent, CustomerRelationshipsComponent],
   template: `
     <div class="page">
       <div class="page-header">
@@ -168,6 +169,11 @@ interface CustomerDetailDto {
               </div>
 
             </dl>
+          </section>
+
+          <!-- Relationships Section -->
+          <section class="card">
+            <app-customer-relationships [customerId]="customer.id"></app-customer-relationships>
           </section>
 
         </div>
