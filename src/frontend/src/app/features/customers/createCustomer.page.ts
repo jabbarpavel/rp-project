@@ -40,7 +40,8 @@ export class CreateCustomerPage implements OnInit {
     salutation: null as string | null,
     birthDate: null as string | null,
     profession: '',
-    language: null as string | null
+    language: null as string | null,
+    isPrimaryContact: true // Default true for new customers
   };
 
   error = '';

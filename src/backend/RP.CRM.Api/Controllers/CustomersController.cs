@@ -89,6 +89,7 @@ namespace RP.CRM.Api.Controllers
                 BirthDate = customer.BirthDate,
                 Profession = customer.Profession,
                 Language = customer.Language,
+                IsPrimaryContact = customer.IsPrimaryContact,
                 TenantId = customer.TenantId,
                 IsDeleted = customer.IsDeleted,
                 CreatedAt = customer.CreatedAt,
@@ -119,7 +120,8 @@ namespace RP.CRM.Api.Controllers
                 Salutation = dto.Salutation,
                 BirthDate = dto.BirthDate,
                 Profession = dto.Profession,
-                Language = dto.Language
+                Language = dto.Language,
+                IsPrimaryContact = dto.IsPrimaryContact // Default true from DTO
             };
 
             var created = await _customerService.CreateAsync(newCustomer);
@@ -136,7 +138,8 @@ namespace RP.CRM.Api.Controllers
                 AdvisorFirstName = created.Advisor?.FirstName,
                 AdvisorLastName = created.Advisor?.Name,
                 AdvisorPhone = created.Advisor?.Phone,                 
-                AdvisorIsActive = created.Advisor?.IsActive, 
+                AdvisorIsActive = created.Advisor?.IsActive,
+                IsPrimaryContact = created.IsPrimaryContact,
                 TenantId = created.TenantId,
                 IsDeleted = created.IsDeleted,
                 CreatedAt = created.CreatedAt,
@@ -304,6 +307,23 @@ namespace RP.CRM.Api.Controllers
         {
             var deleted = await _relationshipService.DeleteAsync(relationshipId);
             return deleted ? NoContent() : NotFound();
+        }
+
+        [HttpPut("{id:int}/primary-contact")]
+        [RequirePermission(Permission.EditCustomers)]
+        public async Task<IActionResult> UpdatePrimaryContact(int id, [FromBody] bool isPrimaryContact)
+        {
+            var customer = await _customerService.GetByIdAsync(id);
+            if (customer == null)
+                return NotFound();
+
+            if (customer.TenantId != _tenantContext.TenantId)
+                return Forbid();
+
+            customer.IsPrimaryContact = isPrimaryContact;
+            var updated = await _customerService.UpdateAsync(id, customer);
+            
+            return Ok(new { isPrimaryContact = updated.IsPrimaryContact });
         }
 
         [HttpGet("{id:int}/is-primary-contact")]

@@ -31,6 +31,8 @@ namespace RP.CRM.Application.DTOs
         public string? Profession { get; set; }
         public string? Language { get; set; }
 
+        public bool IsPrimaryContact { get; set; }
+
         public int TenantId { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -62,7 +64,9 @@ namespace RP.CRM.Application.DTOs
         public string? Salutation { get; set; }
         public DateOnly? BirthDate { get; set; }
         public string? Profession { get; set; }
-        public string? Language { get; set; }        
+        public string? Language { get; set; }
+        
+        public bool IsPrimaryContact { get; set; } = true; // Default true
 
     }
 }

@@ -39,7 +39,8 @@ export class EditCustomerPage implements OnInit {
     salutation: null as string | null,
     birthDate: null as string | null,
     profession: '',
-    language: null as string | null
+    language: null as string | null,
+    isPrimaryContact: true
   };
 
   loading = false;

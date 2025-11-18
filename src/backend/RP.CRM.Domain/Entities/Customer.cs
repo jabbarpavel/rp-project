@@ -17,6 +17,7 @@ namespace RP.CRM.Domain.Entities
         public User? Advisor { get; set; }
 
         public bool IsDeleted { get; set; }
+        public bool IsPrimaryContact { get; set; } = true; // Default true for standalone customers
 
         public string? CivilStatus { get; set; }
         public string? Religion { get; set; }

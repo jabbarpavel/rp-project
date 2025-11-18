@@ -138,7 +138,15 @@ namespace RP.CRM.Application.Services
 
         public async Task<bool> IsPrimaryContactAsync(int customerId)
         {
-            return await _repository.IsPrimaryContactAsync(customerId);
+            // Check if marked as primary contact in any relationship
+            var isRelationshipPrimary = await _repository.IsPrimaryContactAsync(customerId);
+            
+            // Also check the customer's own IsPrimaryContact flag
+            var customer = await _customerRepository.GetByIdAsync(customerId);
+            var isCustomerPrimary = customer?.IsPrimaryContact ?? false;
+            
+            // Return true if either condition is met
+            return isRelationshipPrimary || isCustomerPrimary;
         }
     }
 }

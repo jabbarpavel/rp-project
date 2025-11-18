@@ -32,6 +32,8 @@ interface CustomerDetailDto {
   birthDate?: string | null;
   profession?: string | null;
   language?: string | null;
+  
+  isPrimaryContact: boolean;
 
   tenantId: number;
   isDeleted: boolean;
@@ -161,13 +163,26 @@ interface CustomerDetailDto {
                 </div>
               </div>
 
-              <!-- Beruf + rechte Seite leer -->
+              <!-- Beruf + Hauptansprechperson Toggle -->
               <div class="double-row">
                 <div>
                   <dt>Beruf</dt>
                   <dd>{{ customer.profession || '–' }}</dd>
                 </div>
-                <div></div>
+                <div class="primary-contact-toggle">
+                  <dt>Hauptansprechperson (Eigenschaft)</dt>
+                  <dd>
+                    <label class="toggle-switch">
+                      <input 
+                        type="checkbox" 
+                        [checked]="customer.isPrimaryContact"
+                        (change)="togglePrimaryContact()"
+                      />
+                      <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">{{ customer.isPrimaryContact ? 'Ja' : 'Nein' }}</span>
+                  </dd>
+                </div>
               </div>
 
             </dl>
@@ -548,6 +563,63 @@ interface CustomerDetailDto {
       color: #111827;
       word-break: break-word;
     }
+
+    .primary-contact-toggle dd {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background-color: #2563eb;
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    .toggle-label {
+      font-size: .9rem;
+      color: #111827;
+      font-weight: 500;
+    }
   `]
 })
 export class CustomerDetailPage implements OnInit {
@@ -602,6 +674,28 @@ export class CustomerDetailPage implements OnInit {
       },
       error: () => {
         this.isPrimaryContact = false;
+      }
+    });
+  }
+
+  togglePrimaryContact(): void {
+    if (!this.customer) return;
+    
+    const newValue = !this.customer.isPrimaryContact;
+    
+    this.api.put(`/api/customer/${this.customer.id}/primary-contact`, newValue).subscribe({
+      next: () => {
+        if (this.customer) {
+          this.customer.isPrimaryContact = newValue;
+          this.checkIfPrimaryContact(); // Update badge in header
+          this.toast.show(
+            newValue ? 'Als Hauptansprechperson markiert' : 'Hauptansprechperson-Status entfernt',
+            'success'
+          );
+        }
+      },
+      error: () => {
+        this.toast.show('Fehler beim Aktualisieren', 'error');
       }
     });
   }
