@@ -196,6 +196,86 @@ type AdvisorDto = {
           </select>
         </div>
 
+        <!-- Address Section Separator -->
+        <div class="section-separator">
+          <h3>Adresse</h3>
+        </div>
+
+        <!-- Strasse -->
+        <div class="form-group">
+          <label for="street">Strasse</label>
+          <input
+            id="street"
+            type="text"
+            [(ngModel)]="model.street"
+            name="street"
+            placeholder="Strasse und Hausnummer"
+          />
+        </div>
+
+        <!-- PLZ -->
+        <div class="form-group">
+          <label for="postalCode">PLZ</label>
+          <input
+            id="postalCode"
+            type="text"
+            [(ngModel)]="model.postalCode"
+            name="postalCode"
+            placeholder="Postleitzahl"
+            maxlength="4"
+          />
+        </div>
+
+        <!-- Ort -->
+        <div class="form-group">
+          <label for="locality">Ort</label>
+          <input
+            id="locality"
+            type="text"
+            [(ngModel)]="model.locality"
+            name="locality"
+            placeholder="Ortschaft"
+          />
+        </div>
+
+        <!-- Kanton -->
+        <div class="form-group">
+          <label for="canton">Kanton</label>
+          <select
+            id="canton"
+            [(ngModel)]="model.canton"
+            name="canton"
+          >
+            <option [ngValue]="null">Bitte auswählen</option>
+            <option value="AG">Aargau (AG)</option>
+            <option value="AI">Appenzell Innerrhoden (AI)</option>
+            <option value="AR">Appenzell Ausserrhoden (AR)</option>
+            <option value="BE">Bern (BE)</option>
+            <option value="BL">Basel-Landschaft (BL)</option>
+            <option value="BS">Basel-Stadt (BS)</option>
+            <option value="FR">Freiburg (FR)</option>
+            <option value="GE">Genf (GE)</option>
+            <option value="GL">Glarus (GL)</option>
+            <option value="GR">Graubünden (GR)</option>
+            <option value="JU">Jura (JU)</option>
+            <option value="LU">Luzern (LU)</option>
+            <option value="NE">Neuenburg (NE)</option>
+            <option value="NW">Nidwalden (NW)</option>
+            <option value="OW">Obwalden (OW)</option>
+            <option value="SG">St. Gallen (SG)</option>
+            <option value="SH">Schaffhausen (SH)</option>
+            <option value="SO">Solothurn (SO)</option>
+            <option value="SZ">Schwyz (SZ)</option>
+            <option value="TG">Thurgau (TG)</option>
+            <option value="TI">Tessin (TI)</option>
+            <option value="UR">Uri (UR)</option>
+            <option value="VD">Waadt (VD)</option>
+            <option value="VS">Wallis (VS)</option>
+            <option value="ZG">Zug (ZG)</option>
+            <option value="ZH">Zürich (ZH)</option>
+          </select>
+        </div>
+
         <!-- Berater: Autocomplete-Dropdown -->
         <div class="form-group advisor">
           <label for="advisor">Berater</label>
@@ -262,6 +342,8 @@ type AdvisorDto = {
     .checkbox-group{padding-bottom:.5rem;border-bottom:1px solid #e5e7eb;margin-bottom:.5rem}
     .checkbox-label{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-weight:500}
     .checkbox-label input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
+    .section-separator{margin:1.5rem 0 1rem;padding-top:1rem;border-top:2px solid #e5e7eb}
+    .section-separator h3{font-size:1rem;font-weight:600;color:#374151;margin:0}
   `]
 })
 export class CustomerFormComponent implements OnInit {
@@ -279,6 +361,13 @@ export class CustomerFormComponent implements OnInit {
     birthDate: null as string | null,
     profession: '',
     language: null as string | null,
+    
+    // Address fields
+    street: '',
+    postalCode: '',
+    locality: '',
+    canton: null as string | null,
+    
     isPrimaryContact: true
   };
   @Input() loading = false;

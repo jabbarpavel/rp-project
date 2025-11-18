@@ -41,6 +41,13 @@ export class CreateCustomerPage implements OnInit {
     birthDate: null as string | null,
     profession: '',
     language: null as string | null,
+    
+    // Address fields
+    street: '',
+    postalCode: '',
+    locality: '',
+    canton: null as string | null,
+    
     isPrimaryContact: true // Default true for new customers
   };
 

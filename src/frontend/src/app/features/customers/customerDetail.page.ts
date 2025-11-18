@@ -33,6 +33,12 @@ interface CustomerDetailDto {
   profession?: string | null;
   language?: string | null;
   
+  // Address fields
+  street?: string | null;
+  postalCode?: string | null;
+  locality?: string | null;
+  canton?: string | null;
+  
   isPrimaryContact: boolean;
 
   tenantId: number;
@@ -185,6 +191,35 @@ interface CustomerDetailDto {
                   <dd>{{ customer.profession || '–' }}</dd>
                 </div>
                 <div></div>
+              </div>
+
+              <!-- Address Section -->
+              <div class="address-section">
+                <h3>Adresse</h3>
+              </div>
+
+              <!-- Strasse + PLZ -->
+              <div class="double-row">
+                <div>
+                  <dt>Strasse</dt>
+                  <dd>{{ customer.street || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>PLZ</dt>
+                  <dd>{{ customer.postalCode || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Ort + Kanton -->
+              <div class="double-row">
+                <div>
+                  <dt>Ort</dt>
+                  <dd>{{ customer.locality || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Kanton</dt>
+                  <dd>{{ customer.canton || '–' }}</dd>
+                </div>
               </div>
 
             </dl>
@@ -588,6 +623,19 @@ interface CustomerDetailDto {
 
     .primary-contact-checkbox span {
       font-size: 0.95rem;
+    }
+
+    .address-section {
+      margin: 1.5rem 0 0.75rem;
+      padding-top: 1rem;
+      border-top: 2px solid #e5e7eb;
+    }
+
+    .address-section h3 {
+      font-size: .95rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 0.5rem;
     }
   `]
 })

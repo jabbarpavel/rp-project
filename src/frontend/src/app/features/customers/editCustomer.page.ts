@@ -40,6 +40,13 @@ export class EditCustomerPage implements OnInit {
     birthDate: null as string | null,
     profession: '',
     language: null as string | null,
+    
+    // Address fields
+    street: '',
+    postalCode: '',
+    locality: '',
+    canton: null as string | null,
+    
     isPrimaryContact: true
   };
 
