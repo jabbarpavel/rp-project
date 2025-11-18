@@ -459,8 +459,8 @@ export class CustomerTasksComponent implements OnInit {
   confirmCreate(): void {
     if (!this.newTask.title) return;
 
-    const currentUser = this.auth.getCurrentUser();
-    if (!currentUser) return;
+    const userId = this.auth.getUserId();
+    if (!userId) return;
 
     this.creating = true;
     const task: CreateCustomerTaskDto = {
@@ -468,7 +468,7 @@ export class CustomerTasksComponent implements OnInit {
       status: this.newTask.status,
       dueDate: this.newTask.dueDateStr ? new Date(this.newTask.dueDateStr).toISOString() : undefined,
       customerId: this.customerId,
-      assignedToUserId: currentUser.id
+      assignedToUserId: userId
     };
 
     this.taskService.create(task).subscribe({
@@ -536,23 +536,27 @@ export class CustomerTasksComponent implements OnInit {
     });
   }
 
-  deleteTask(task: CustomerTaskDto): void {
-    this.confirm.show(
-      'Aufgabe löschen?',
+  async deleteTask(task: CustomerTaskDto): Promise<void> {
+    const ok = await this.confirm.open(
       `Möchten Sie die Aufgabe "${task.title}" wirklich löschen?`,
-      () => {
-        this.taskService.delete(task.id).subscribe({
-          next: () => {
-            this.toast.show('Aufgabe erfolgreich gelöscht', 'success');
-            this.loadTasks();
-          },
-          error: () => {
-            this.toast.show('Fehler beim Löschen der Aufgabe', 'error');
-          }
-        });
-      }
+      'Löschen',
+      'Abbrechen'
     );
+    
+    if (!ok) return;
+    
+    this.taskService.delete(task.id).subscribe({
+      next: () => {
+        this.toast.show('Aufgabe erfolgreich gelöscht', 'success');
+        this.loadTasks();
+      },
+      error: () => {
+        this.toast.show('Fehler beim Löschen der Aufgabe', 'error');
+      }
+    });
   }
+
+
 
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);

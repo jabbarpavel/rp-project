@@ -77,6 +77,17 @@ export class AuthService {
     }
   }
 
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.userId ?? null;
+    } catch {
+      return null;
+    }
+  }
+
   isAuthenticated(): boolean {
     const token = this.getToken();
     return token != null && !this.isTokenExpired(token);
