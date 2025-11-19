@@ -304,6 +304,35 @@ UPDATE "Users" SET "Permissions" = 4095 WHERE "Email" = 'deine@email.com';
 UPDATE "Users" SET "Permissions" = 55 WHERE "Email" = 'deine@email.com';
 ```
 
+### Neuen Benutzer erstellen (Lokal):
+
+**Via Register API:**
+
+```bash
+# Stelle sicher, dass Backend läuft (localhost:5015)
+curl -X POST http://localhost:5015/api/User/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "TestPassword123!",
+    "tenantId": 1
+  }'
+```
+
+**Tenant ID ermitteln:**
+```sql
+-- In psql
+SELECT "Id", "Name" FROM "Tenants";
+```
+
+**Benutzer überprüfen:**
+```sql
+-- Alle lokalen Benutzer anzeigen
+SELECT "Id", "Email", "TenantId", "Permissions", "IsActive" FROM "Users";
+```
+
+**Hinweis**: Für Production siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - Schritt 7.2.
+
 ---
 
 ## 🛠️ Troubleshooting

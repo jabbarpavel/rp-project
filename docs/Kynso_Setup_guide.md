@@ -693,6 +693,101 @@ UPDATE "Users" SET "Permissions" = 55 WHERE "Email" = 'user@example.com';
 SELECT "Email", "Permissions" FROM "Users";
 ```
 
+#### Neuen Benutzer erstellen:
+
+**Option 1: Über die API (Empfohlen)**
+
+Die beste Methode ist die Verwendung der Register-API, da sie automatisch das Passwort hasht:
+
+```bash
+# Mit curl auf dem Server
+curl -X POST http://localhost:5000/api/User/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "neuer.user@example.com",
+    "password": "SicheresPasswort123!",
+    "tenantId": 1
+  }'
+```
+
+**Option 2: Direkt in der Datenbank (nur für Notfälle)**
+
+⚠️ **Wichtig**: Passwörter müssen gehasht werden! Verwende die API für normale User-Erstellung.
+
+```sql
+-- Erst Tenant ID herausfinden
+SELECT "Id", "Name" FROM "Tenants";
+
+-- Neuen User erstellen (Passwort muss separat gehashed werden!)
+-- Für Production: Verwende immer die API statt direkte DB-Inserts
+INSERT INTO "Users" ("Email", "PasswordHash", "TenantId", "FirstName", "Name", "Phone", "IsActive", "Role", "Permissions", "CreatedAt", "UpdatedAt")
+VALUES (
+  'admin@example.com',
+  -- PasswordHash von der API holen oder mit .NET PasswordHasher erstellen
+  'AQAAAAIAAYagAAAAEJ...', -- Platzhalter - Verwende die API!
+  1, -- TenantId (1 = finaro, 2 = demo)
+  'Admin',
+  'User',
+  '+41 79 123 45 67',
+  true,
+  'Admin',
+  4095, -- Admin Rechte
+  NOW(),
+  NOW()
+);
+```
+
+**Tenant IDs:**
+```sql
+-- Verfügbare Tenants anzeigen
+SELECT "Id", "Name", "Domain" FROM "Tenants";
+
+-- Typischerweise:
+-- 1 = finaro
+-- 2 = demo
+```
+
+**Standard Permission Werte:**
+```sql
+-- Admin (alle Rechte): 4095
+-- Standard User: 55
+-- Nur Lesen: 21
+```
+
+**Beispiel: User für Finaro Tenant erstellen:**
+```bash
+# Via API auf dem Server
+curl -X POST http://localhost:5000/api/User/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "max.muster@finaro.ch",
+    "password": "MeinSicheresPasswort2024!",
+    "tenantId": 1
+  }'
+
+# Erfolgreich wenn Response:
+# {
+#   "id": 3,
+#   "email": "max.muster@finaro.ch",
+#   "tenantId": 1,
+#   ...
+# }
+```
+
+**Benutzer verifizieren:**
+```sql
+-- Alle Benutzer eines Tenants anzeigen
+SELECT "Id", "Email", "FirstName", "Name", "TenantId", "IsActive", "Permissions" 
+FROM "Users" 
+WHERE "TenantId" = 1;
+
+-- Letzten erstellten Benutzer anzeigen
+SELECT "Id", "Email", "TenantId", "CreatedAt" 
+FROM "Users" 
+ORDER BY "CreatedAt" DESC 
+LIMIT 5;
+```
+
 #### Datenbank Konsole verlassen:
 ```sql
 -- PostgreSQL Konsole beenden
