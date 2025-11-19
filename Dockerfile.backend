@@ -1,0 +1,41 @@
+# Verwende official .NET SDK für Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Kopiere alle Backend Projekte
+COPY src/backend/ ./backend/
+
+# Restore Dependencies
+WORKDIR /src/backend/RP.CRM.Api
+RUN dotnet restore
+
+# Build und Publish
+RUN dotnet publish -c Release -o /app/publish
+
+# Runtime Image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+# Kopiere published files
+COPY --from=build /app/publish .
+
+# Uploads Verzeichnis erstellen
+RUN mkdir -p /app/uploads && chmod 755 /app/uploads
+
+# Non-root user erstellen für Sicherheit
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Port exposieren
+EXPOSE 5000
+
+# Environment Variables (können überschrieben werden)
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:5000/api/health || exit 1
+
+# Entrypoint
+ENTRYPOINT ["dotnet", "RP.CRM.Api.dll"]

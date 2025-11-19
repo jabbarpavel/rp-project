@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: rp-crm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rp_crm_production
+      POSTGRES_USER: rp_crm_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rp_crm_user -d rp_crm_production"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rp-crm-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: rp-crm-backend
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=rp_crm_production;Username=rp_crm_user;Password=${DB_PASSWORD:-changeme123}
+      - Jwt__Key=${JWT_SECRET:-your-super-secret-jwt-key-min-32-chars-long-12345678}
+    volumes:
+      - backend_uploads:/app/uploads
+      - ./src/backend/RP.CRM.Api/tenants.json:/app/tenants.json:ro
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - rp-crm-network
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: rp-crm-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rp-crm-network
+
+  # Nginx Reverse Proxy (Optional - für Production mit SSL)
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: rp-crm-nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "8080:80"
+    volumes:
+      - ./docker/nginx-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - rp-crm-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+networks:
+  rp-crm-network:
+    driver: bridge

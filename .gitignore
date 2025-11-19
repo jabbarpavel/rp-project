@@ -18,3 +18,34 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Environment and Secrets
+.env
+.env.local
+.env.production
+.env.*.local
+appsettings.Production.json
+
+# Docker
+docker-compose.override.yml
+
+# Uploads (production data)
+uploads/
+**/uploads/**
+
+# Backups
+backups/
+*.sql
+*.sql.gz
+*.tar.gz
+
+# SSL Certificates
+docker/ssl/
+*.pem
+*.key
+*.crt
+
+# Temporary files
+tmp/
+temp/
+*.tmp
