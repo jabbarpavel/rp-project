@@ -11,6 +11,91 @@ if (-not (Test-Path "global.json")) {
     exit 1
 }
 
+# Funktion zum Finden von PostgreSQL psql
+function Find-PostgreSQLPath {
+    Write-Host "🔍 Suche PostgreSQL Installation..." -ForegroundColor Cyan
+    
+    # Prüfe ob psql bereits im PATH ist
+    $psqlCmd = Get-Command psql -ErrorAction SilentlyContinue
+    if ($psqlCmd) {
+        Write-Host "  ✅ psql gefunden in PATH" -ForegroundColor Green
+        return $psqlCmd.Source
+    }
+    
+    # Suche in typischen PostgreSQL Installationspfaden
+    $possiblePaths = @(
+        "C:\Program Files\PostgreSQL\*\bin\psql.exe",
+        "C:\Program Files (x86)\PostgreSQL\*\bin\psql.exe",
+        "$env:ProgramFiles\PostgreSQL\*\bin\psql.exe",
+        "${env:ProgramFiles(x86)}\PostgreSQL\*\bin\psql.exe"
+    )
+    
+    foreach ($path in $possiblePaths) {
+        $found = Get-ChildItem -Path $path -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($found) {
+            Write-Host "  ✅ psql gefunden: $($found.DirectoryName)" -ForegroundColor Green
+            $env:PATH = "$($found.DirectoryName);$env:PATH"
+            return $found.FullName
+        }
+    }
+    
+    Write-Host "  ⚠️  PostgreSQL (psql) nicht gefunden!" -ForegroundColor Yellow
+    Write-Host "  📝 Bitte installiere PostgreSQL oder füge den bin Ordner zum PATH hinzu." -ForegroundColor Yellow
+    Write-Host "  💡 Beispiel: C:\Program Files\PostgreSQL\16\bin" -ForegroundColor Gray
+    return $null
+}
+
+# Funktion zum Prüfen und Installieren von dotnet-ef
+function Ensure-DotNetEF {
+    Write-Host "🔍 Prüfe dotnet-ef Tool..." -ForegroundColor Cyan
+    
+    $efVersion = dotnet tool list -g | Select-String "dotnet-ef"
+    if ($efVersion) {
+        Write-Host "  ✅ dotnet-ef ist bereits installiert" -ForegroundColor Green
+        return $true
+    }
+    
+    Write-Host "  📦 Installiere dotnet-ef Tool..." -ForegroundColor Yellow
+    dotnet tool install --global dotnet-ef --version 8.0.11
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  ✅ dotnet-ef erfolgreich installiert!" -ForegroundColor Green
+        return $true
+    } else {
+        Write-Host "  ❌ Fehler bei der Installation von dotnet-ef" -ForegroundColor Red
+        return $false
+    }
+}
+
+Write-Host ""
+Write-Host "🔧 Prüfe Voraussetzungen..." -ForegroundColor Cyan
+
+# Prüfe .NET Version
+$dotnetVersion = dotnet --version
+Write-Host "  .NET SDK Version: $dotnetVersion" -ForegroundColor Gray
+if (-not $dotnetVersion.StartsWith("8.")) {
+    Write-Host "  ⚠️  Warnung: Projekt benötigt .NET 8.0 SDK (global.json)" -ForegroundColor Yellow
+}
+
+# Prüfe und installiere dotnet-ef
+if (-not (Ensure-DotNetEF)) {
+    Write-Host "❌ Kann nicht fortfahren ohne dotnet-ef Tool" -ForegroundColor Red
+    exit 1
+}
+
+# Finde PostgreSQL
+$psqlPath = Find-PostgreSQLPath
+$skipDatabase = $false
+if (-not $psqlPath) {
+    $skipDb = Read-Host "Möchtest du ohne Datenbank-Setup fortfahren? (j/n)"
+    if ($skipDb -eq "j" -or $skipDb -eq "J") {
+        $skipDatabase = $true
+        Write-Host "  ⏭️  Überspringe Datenbank-Setup" -ForegroundColor Yellow
+    } else {
+        Write-Host "❌ Setup abgebrochen. Bitte installiere PostgreSQL zuerst." -ForegroundColor Red
+        exit 1
+    }
+}
+
 Write-Host "📋 Dieses Script wird:" -ForegroundColor Yellow
 Write-Host "  1. DEV und TEST Branches erstellen" -ForegroundColor Yellow
 Write-Host "  2. PostgreSQL Datenbanken erstellen (kynso_dev, kynso_test)" -ForegroundColor Yellow
@@ -55,41 +140,58 @@ if ($LASTEXITCODE -ne 0) {
 git checkout $currentBranch
 
 Write-Host ""
-Write-Host "🗄️  Erstelle PostgreSQL Datenbanken..." -ForegroundColor Cyan
+if (-not $skipDatabase) {
+    Write-Host "🗄️  Erstelle PostgreSQL Datenbanken..." -ForegroundColor Cyan
 
-# Frage nach PostgreSQL-Passwort
-$pgPassword = Read-Host "Bitte gib das PostgreSQL Passwort für user 'postgres' ein"
+    # Frage nach PostgreSQL-Passwort
+    $pgPassword = Read-Host "Bitte gib das PostgreSQL Passwort für user 'postgres' ein"
 
-# Erstelle kynso_dev Datenbank
-Write-Host "  Erstelle kynso_dev..." -ForegroundColor Gray
-$env:PGPASSWORD = $pgPassword
-$result = psql -U postgres -c "SELECT 1 FROM pg_database WHERE datname='kynso_dev'" 2>&1
-if ($result -match "0 rows") {
-    psql -U postgres -c "CREATE DATABASE kynso_dev;"
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "  ✅ kynso_dev Datenbank erstellt!" -ForegroundColor Green
-    } else {
-        Write-Host "  ❌ Fehler beim Erstellen von kynso_dev" -ForegroundColor Red
+    # Erstelle kynso_dev Datenbank
+    Write-Host "  Erstelle kynso_dev..." -ForegroundColor Gray
+    $env:PGPASSWORD = $pgPassword
+    try {
+        $result = psql -U postgres -c "SELECT 1 FROM pg_database WHERE datname='kynso_dev'" 2>&1
+        if ($result -match "0 rows") {
+            psql -U postgres -c "CREATE DATABASE kynso_dev;"
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  ✅ kynso_dev Datenbank erstellt!" -ForegroundColor Green
+            } else {
+                Write-Host "  ❌ Fehler beim Erstellen von kynso_dev" -ForegroundColor Red
+            }
+        } else {
+            Write-Host "  ℹ️  kynso_dev existiert bereits" -ForegroundColor Gray
+        }
+    } catch {
+        Write-Host "  ❌ Fehler beim Zugriff auf PostgreSQL: $_" -ForegroundColor Red
     }
-} else {
-    Write-Host "  ℹ️  kynso_dev existiert bereits" -ForegroundColor Gray
-}
 
-# Erstelle kynso_test Datenbank
-Write-Host "  Erstelle kynso_test..." -ForegroundColor Gray
-$result = psql -U postgres -c "SELECT 1 FROM pg_database WHERE datname='kynso_test'" 2>&1
-if ($result -match "0 rows") {
-    psql -U postgres -c "CREATE DATABASE kynso_test;"
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "  ✅ kynso_test Datenbank erstellt!" -ForegroundColor Green
-    } else {
-        Write-Host "  ❌ Fehler beim Erstellen von kynso_test" -ForegroundColor Red
+    # Erstelle kynso_test Datenbank
+    Write-Host "  Erstelle kynso_test..." -ForegroundColor Gray
+    try {
+        $result = psql -U postgres -c "SELECT 1 FROM pg_database WHERE datname='kynso_test'" 2>&1
+        if ($result -match "0 rows") {
+            psql -U postgres -c "CREATE DATABASE kynso_test;"
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  ✅ kynso_test Datenbank erstellt!" -ForegroundColor Green
+            } else {
+                Write-Host "  ❌ Fehler beim Erstellen von kynso_test" -ForegroundColor Red
+            }
+        } else {
+            Write-Host "  ℹ️  kynso_test existiert bereits" -ForegroundColor Gray
+        }
+    } catch {
+        Write-Host "  ❌ Fehler beim Zugriff auf PostgreSQL: $_" -ForegroundColor Red
     }
-} else {
-    Write-Host "  ℹ️  kynso_test existiert bereits" -ForegroundColor Gray
-}
 
-$env:PGPASSWORD = ""
+    $env:PGPASSWORD = ""
+} else {
+    Write-Host "⏭️  Datenbank-Setup übersprungen" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "💡 Manuelle Datenbank-Erstellung:" -ForegroundColor Cyan
+    Write-Host "   1. Öffne pgAdmin oder psql" -ForegroundColor Gray
+    Write-Host "   2. Erstelle Datenbanken: kynso_dev, kynso_test" -ForegroundColor Gray
+    Write-Host "   3. Führe Migrationen aus (siehe unten)" -ForegroundColor Gray
+}
 
 Write-Host ""
 Write-Host "🔧 Wende Datenbank-Migrationen an..." -ForegroundColor Cyan

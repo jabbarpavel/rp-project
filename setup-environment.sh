@@ -12,6 +12,70 @@ if [ ! -f "global.json" ]; then
     exit 1
 fi
 
+# Funktion zum Prüfen und Installieren von dotnet-ef
+ensure_dotnet_ef() {
+    echo "🔍 Prüfe dotnet-ef Tool..."
+    
+    if dotnet tool list -g | grep -q "dotnet-ef"; then
+        echo "  ✅ dotnet-ef ist bereits installiert"
+        return 0
+    fi
+    
+    echo "  📦 Installiere dotnet-ef Tool..."
+    dotnet tool install --global dotnet-ef --version 8.0.11
+    if [ $? -eq 0 ]; then
+        echo "  ✅ dotnet-ef erfolgreich installiert!"
+        return 0
+    else
+        echo "  ❌ Fehler bei der Installation von dotnet-ef"
+        return 1
+    fi
+}
+
+# Funktion zum Prüfen von PostgreSQL
+check_postgresql() {
+    echo "🔍 Prüfe PostgreSQL Installation..."
+    
+    if command -v psql &> /dev/null; then
+        echo "  ✅ psql gefunden"
+        return 0
+    else
+        echo "  ⚠️  PostgreSQL (psql) nicht gefunden!"
+        echo "  📝 Bitte installiere PostgreSQL oder füge es zum PATH hinzu."
+        return 1
+    fi
+}
+
+echo ""
+echo "🔧 Prüfe Voraussetzungen..."
+
+# Prüfe .NET Version
+DOTNET_VERSION=$(dotnet --version)
+echo "  .NET SDK Version: $DOTNET_VERSION"
+if [[ ! $DOTNET_VERSION =~ ^8\. ]]; then
+    echo "  ⚠️  Warnung: Projekt benötigt .NET 8.0 SDK (global.json)"
+fi
+
+# Prüfe und installiere dotnet-ef
+if ! ensure_dotnet_ef; then
+    echo "❌ Kann nicht fortfahren ohne dotnet-ef Tool"
+    exit 1
+fi
+
+# Prüfe PostgreSQL
+SKIP_DATABASE=false
+if ! check_postgresql; then
+    read -p "Möchtest du ohne Datenbank-Setup fortfahren? (j/n) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[JjYy]$ ]]; then
+        SKIP_DATABASE=true
+        echo "  ⏭️  Überspringe Datenbank-Setup"
+    else
+        echo "❌ Setup abgebrochen. Bitte installiere PostgreSQL zuerst."
+        exit 1
+    fi
+fi
+
 echo "📋 Dieses Script wird:"
 echo "  1. DEV und TEST Branches erstellen"
 echo "  2. PostgreSQL Datenbanken erstellen (kynso_dev, kynso_test)"
@@ -55,41 +119,50 @@ fi
 git checkout $CURRENT_BRANCH
 
 echo ""
-echo "🗄️  Erstelle PostgreSQL Datenbanken..."
+if [ "$SKIP_DATABASE" = false ]; then
+    echo "🗄️  Erstelle PostgreSQL Datenbanken..."
 
-# Frage nach PostgreSQL-Passwort
-read -sp "Bitte gib das PostgreSQL Passwort für user 'postgres' ein: " PG_PASSWORD
-echo ""
+    # Frage nach PostgreSQL-Passwort
+    read -sp "Bitte gib das PostgreSQL Passwort für user 'postgres' ein: " PG_PASSWORD
+    echo ""
 
-export PGPASSWORD=$PG_PASSWORD
+    export PGPASSWORD=$PG_PASSWORD
 
-# Erstelle kynso_dev Datenbank
-echo "  Erstelle kynso_dev..."
-if ! psql -U postgres -lqt | cut -d \| -f 1 | grep -qw kynso_dev; then
-    psql -U postgres -c "CREATE DATABASE kynso_dev;"
-    if [ $? -eq 0 ]; then
-        echo "  ✅ kynso_dev Datenbank erstellt!"
+    # Erstelle kynso_dev Datenbank
+    echo "  Erstelle kynso_dev..."
+    if ! psql -U postgres -lqt | cut -d \| -f 1 | grep -qw kynso_dev; then
+        psql -U postgres -c "CREATE DATABASE kynso_dev;"
+        if [ $? -eq 0 ]; then
+            echo "  ✅ kynso_dev Datenbank erstellt!"
+        else
+            echo "  ❌ Fehler beim Erstellen von kynso_dev"
+        fi
     else
-        echo "  ❌ Fehler beim Erstellen von kynso_dev"
+        echo "  ℹ️  kynso_dev existiert bereits"
     fi
-else
-    echo "  ℹ️  kynso_dev existiert bereits"
-fi
 
-# Erstelle kynso_test Datenbank
-echo "  Erstelle kynso_test..."
-if ! psql -U postgres -lqt | cut -d \| -f 1 | grep -qw kynso_test; then
-    psql -U postgres -c "CREATE DATABASE kynso_test;"
-    if [ $? -eq 0 ]; then
-        echo "  ✅ kynso_test Datenbank erstellt!"
+    # Erstelle kynso_test Datenbank
+    echo "  Erstelle kynso_test..."
+    if ! psql -U postgres -lqt | cut -d \| -f 1 | grep -qw kynso_test; then
+        psql -U postgres -c "CREATE DATABASE kynso_test;"
+        if [ $? -eq 0 ]; then
+            echo "  ✅ kynso_test Datenbank erstellt!"
+        else
+            echo "  ❌ Fehler beim Erstellen von kynso_test"
+        fi
     else
-        echo "  ❌ Fehler beim Erstellen von kynso_test"
+        echo "  ℹ️  kynso_test existiert bereits"
     fi
-else
-    echo "  ℹ️  kynso_test existiert bereits"
-fi
 
-unset PGPASSWORD
+    unset PGPASSWORD
+else
+    echo "⏭️  Datenbank-Setup übersprungen"
+    echo ""
+    echo "💡 Manuelle Datenbank-Erstellung:"
+    echo "   1. Öffne psql oder ein anderes PostgreSQL Tool"
+    echo "   2. Erstelle Datenbanken: kynso_dev, kynso_test"
+    echo "   3. Führe Migrationen aus (siehe unten)"
+fi
 
 echo ""
 echo "🔧 Wende Datenbank-Migrationen an..."
