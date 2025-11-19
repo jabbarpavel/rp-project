@@ -1,4 +1,4 @@
-# Setup-Script für Windows PowerShell
+﻿# Setup-Script für Windows PowerShell
 # Dieses Script erstellt die Branches und Datenbanken für DEV/TEST/PRODUCTION Workflow
 
 Write-Host "🚀 Kynso CRM - Umgebungs-Setup" -ForegroundColor Green
