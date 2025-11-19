@@ -24,6 +24,12 @@ Ein modernes, Multi-Tenant CRM System gebaut mit .NET 8 und Angular.
 
 ## 🏃 Quick Start - Lokale Entwicklung
 
+Für lokale Entwicklung und Tests siehe **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - dieser Guide erklärt:
+- Wie man die Entwicklungsumgebung einrichtet
+- Wie man mit localhost arbeitet statt mit Produktionsdomains
+- Wie man .NET SDK Versionsprobleme löst
+- Wie man die lokale Datenbank konfiguriert
+
 Für detaillierte Setup-Anweisungen siehe **[SETUP_GUIDE.md](SETUP_GUIDE.md)**
 
 ---

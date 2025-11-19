@@ -24,7 +24,8 @@ Thumbs.db
 .env.local
 .env.production
 .env.*.local
-appsettings.Production.json
+# appsettings.Production.json with secrets should not be committed
+# The template in the repo is safe (contains no real secrets)
 
 # Docker
 docker-compose.override.yml
