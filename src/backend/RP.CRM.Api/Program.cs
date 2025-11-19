@@ -151,6 +151,25 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // -----------------------------
+// Apply Database Migrations on Startup
+// -----------------------------
+using (var scope = app.Services.CreateScope())
+{
+    var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        Console.WriteLine("🔄 Applying database migrations...");
+        ctx.Database.Migrate();
+        Console.WriteLine("✅ Database migrations applied successfully!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️  Migration failed: {ex.Message}");
+        throw;
+    }
+}
+
+// -----------------------------
 // Tenant Seeding (auto create if missing)
 // -----------------------------
 using (var scope = app.Services.CreateScope())
