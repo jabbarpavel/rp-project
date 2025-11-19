@@ -12,15 +12,15 @@ using RP.CRM.Infrastructure.Data;
 namespace RP.CRM.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251117231407_AddDocumentCategoryAndCustomerTasks")]
-    partial class AddDocumentCategoryAndCustomerTasks
+    [Migration("20251119220927_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0-preview.1.25081.1")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -89,6 +89,9 @@ namespace RP.CRM.Infrastructure.Migrations
                     b.Property<DateOnly?>("BirthDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("Canton")
+                        .HasColumnType("text");
+
                     b.Property<string>("CivilStatus")
                         .HasColumnType("text");
 
@@ -109,11 +112,20 @@ namespace RP.CRM.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsPrimaryContact")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Language")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Locality")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PostalCode")
                         .HasColumnType("text");
 
                     b.Property<string>("Profession")
@@ -123,6 +135,9 @@ namespace RP.CRM.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Salutation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Street")
                         .HasColumnType("text");
 
                     b.Property<int>("TenantId")
@@ -138,6 +153,49 @@ namespace RP.CRM.Infrastructure.Migrations
                     b.HasIndex("TenantId", "AdvisorId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("RP.CRM.Domain.Entities.CustomerRelationship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsPrimaryContact")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("RelatedCustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RelationshipType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelatedCustomerId");
+
+                    b.HasIndex("CustomerId", "RelatedCustomerId");
+
+                    b.HasIndex("TenantId", "CustomerId");
+
+                    b.HasIndex("TenantId", "RelatedCustomerId");
+
+                    b.ToTable("CustomerRelationships");
                 });
 
             modelBuilder.Entity("RP.CRM.Domain.Entities.CustomerTask", b =>
@@ -346,6 +404,33 @@ namespace RP.CRM.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Advisor");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("RP.CRM.Domain.Entities.CustomerRelationship", b =>
+                {
+                    b.HasOne("RP.CRM.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RP.CRM.Domain.Entities.Customer", "RelatedCustomer")
+                        .WithMany()
+                        .HasForeignKey("RelatedCustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RP.CRM.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("RelatedCustomer");
 
                     b.Navigation("Tenant");
                 });
