@@ -257,6 +257,34 @@ http://finaro:4200
 6. Wähle eine Datei (max 10 MB)
 7. Datei wird hochgeladen und erscheint in der Liste
 
+### Datenbank Zugriff (für Testing & Entwicklung):
+
+Um direkt auf die lokale Entwicklungsdatenbank zuzugreifen:
+
+```bash
+# In die PostgreSQL Datenbank einloggen
+psql -U postgres -d kynso_dev
+
+# Falls Passwort gefragt wird, verwende dein lokales PostgreSQL Passwort
+# (Standard ist oft 'postgres' oder 'admin123' je nach Installation)
+```
+
+**Häufige Befehle in psql:**
+```sql
+-- Alle Tabellen anzeigen
+\dt
+
+-- Tabellenstruktur anzeigen
+\d "Users"
+
+-- Datenbank verlassen
+\q
+```
+
+**Hinweis**: Für Production-Zugriff siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - Teil 7: Datenbank Zugriff.
+
+---
+
 ### Permissions testen:
 
 Die Permissions sind aktuell in der Datenbank konfiguriert:

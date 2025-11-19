@@ -607,6 +607,186 @@ crontab -e
 
 ---
 
+## 🗄️ Teil 7: Datenbank Zugriff
+
+### Schritt 7.1: In die PostgreSQL Datenbank einloggen
+
+Es gibt zwei Möglichkeiten, auf die Kynso Production Datenbank zuzugreifen:
+
+#### Option 1: Über Docker Container (Empfohlen)
+
+```bash
+# SSH zum Server (falls noch nicht verbunden)
+ssh ubuntu@83.228.225.166
+
+# In die Datenbank einloggen
+docker exec -it kynso-postgres psql -U kynso_user -d kynso_prod
+```
+
+**Credentials:**
+- **Database**: kynso_prod
+- **User**: kynso_user  
+- **Password**: Kynso5796 (wird automatisch verwendet)
+
+**✅ Erfolgreich wenn du siehst:**
+```
+psql (15.x)
+Type "help" for help.
+
+kynso_prod=>
+```
+
+#### Option 2: Direkter psql Zugriff (falls psql installiert ist)
+
+```bash
+# Falls PostgreSQL Client installiert ist
+psql -h localhost -U kynso_user -d kynso_prod
+
+# Password eingeben wenn gefragt: Kynso5796
+```
+
+---
+
+### Schritt 7.2: Nützliche Datenbank Befehle
+
+Wenn du in der PostgreSQL Konsole bist (`kynso_prod=>`), kannst du diese Befehle verwenden:
+
+#### Datenbank erkunden:
+```sql
+-- Alle Tabellen anzeigen
+\dt
+
+-- Tabellenstruktur anzeigen (z.B. für Users Tabelle)
+\d "Users"
+
+-- Alle Datenbanken anzeigen
+\l
+
+-- Aktuell verbundene Datenbank anzeigen
+\conninfo
+```
+
+#### Häufige Abfragen:
+```sql
+-- Alle Benutzer anzeigen
+SELECT "Id", "Email", "FirstName", "LastName", "TenantId", "Permissions" FROM "Users";
+
+-- Alle Tenants anzeigen
+SELECT * FROM "Tenants";
+
+-- Alle Kunden eines bestimmten Tenants anzeigen (z.B. Tenant 1)
+SELECT "Id", "FirstName", "LastName", "Email", "Phone" FROM "Customers" WHERE "TenantId" = 1;
+
+-- Dokumente anzeigen
+SELECT "Id", "FileName", "FilePath", "CustomerId", "UploadedAt" FROM "Documents";
+```
+
+#### Benutzer-Berechtigungen verwalten:
+```sql
+-- Benutzer zu Admin machen (alle Rechte = 4095)
+UPDATE "Users" SET "Permissions" = 4095 WHERE "Email" = 'user@example.com';
+
+-- Standard Benutzer Rechte setzen (55)
+UPDATE "Users" SET "Permissions" = 55 WHERE "Email" = 'user@example.com';
+
+-- Permissions überprüfen
+SELECT "Email", "Permissions" FROM "Users";
+```
+
+#### Datenbank Konsole verlassen:
+```sql
+-- PostgreSQL Konsole beenden
+\q
+```
+
+---
+
+### Schritt 7.3: Datenbank Backup & Restore
+
+#### Backup erstellen:
+```bash
+# Auf dem Server
+cd /opt/kynso/prod/app
+
+# Manuelles Backup der Datenbank
+docker exec kynso-postgres pg_dump -U kynso_user kynso_prod > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# Komprimiertes Backup
+docker exec kynso-postgres pg_dump -U kynso_user kynso_prod | gzip > backup_$(date +%Y%m%d_%H%M%S).sql.gz
+```
+
+#### Backup wiederherstellen:
+```bash
+# Aus einem SQL Backup
+docker exec -i kynso-postgres psql -U kynso_user -d kynso_prod < backup_file.sql
+
+# Aus einem komprimierten Backup
+gunzip -c backup_file.sql.gz | docker exec -i kynso-postgres psql -U kynso_user -d kynso_prod
+```
+
+---
+
+### Schritt 7.4: Datenbank Verbindung von außen (Optional)
+
+**⚠️ Sicherheitshinweis**: Für erhöhte Sicherheit sollte die Datenbank nur intern erreichbar sein!
+
+Falls du von deinem lokalen Computer auf die Datenbank zugreifen möchtest (z.B. mit pgAdmin oder DBeaver):
+
+#### Port-Forwarding über SSH:
+```bash
+# SSH Tunnel erstellen
+ssh -L 5433:localhost:5432 ubuntu@83.228.225.166
+
+# In einem anderen Terminal / pgAdmin / DBeaver:
+# Host: localhost
+# Port: 5433
+# Database: kynso_prod
+# User: kynso_user
+# Password: Kynso5796
+```
+
+Jetzt kannst du mit einem PostgreSQL Client (pgAdmin, DBeaver, DataGrip, etc.) verbinden:
+- **Host**: localhost
+- **Port**: 5433 (lokaler Port)
+- **Database**: kynso_prod
+- **Username**: kynso_user
+- **Password**: Kynso5796
+
+---
+
+### Schritt 7.5: Troubleshooting Datenbank
+
+#### Container läuft nicht:
+```bash
+# Status prüfen
+docker ps | grep postgres
+
+# Logs ansehen
+docker logs kynso-postgres
+
+# Container neu starten
+docker restart kynso-postgres
+```
+
+#### Verbindung fehlgeschlagen:
+```bash
+# Prüfen ob PostgreSQL läuft
+docker exec kynso-postgres pg_isready -U kynso_user -d kynso_prod
+
+# Sollte ausgeben: "accepting connections"
+```
+
+#### Passwort funktioniert nicht:
+```bash
+# Umgebungsvariablen im Container prüfen
+docker exec kynso-postgres env | grep POSTGRES
+
+# .env Datei auf dem Server prüfen
+cat /opt/kynso/prod/app/.env | grep POSTGRES
+```
+
+---
+
 ## ✅ Zusammenfassung - Kynso System
 
 ### 🌐 Live URLs:
