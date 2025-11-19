@@ -6,6 +6,40 @@ param(
     [switch]$SkipConfirmation
 )
 
+# Funktion zum Finden von PostgreSQL psql
+function Find-PostgreSQLPath {
+    Write-Host "Suche PostgreSQL Installation..." -ForegroundColor Cyan
+    
+    # Prüfe ob psql bereits im PATH ist
+    $psqlCmd = Get-Command psql -ErrorAction SilentlyContinue
+    if ($psqlCmd) {
+        Write-Host "psql gefunden in PATH" -ForegroundColor Green
+        return $psqlCmd.Source
+    }
+    
+    # Suche in typischen PostgreSQL Installationspfaden
+    $possiblePaths = @(
+        "C:\Program Files\PostgreSQL\*\bin\psql.exe",
+        "C:\Program Files (x86)\PostgreSQL\*\bin\psql.exe",
+        "$env:ProgramFiles\PostgreSQL\*\bin\psql.exe",
+        "${env:ProgramFiles(x86)}\PostgreSQL\*\bin\psql.exe"
+    )
+    
+    foreach ($path in $possiblePaths) {
+        $found = Get-ChildItem -Path $path -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($found) {
+            Write-Host "psql gefunden: $($found.DirectoryName)" -ForegroundColor Green
+            $env:PATH = "$($found.DirectoryName);$env:PATH"
+            return $found.FullName
+        }
+    }
+    
+    Write-Host "PostgreSQL (psql) nicht gefunden!" -ForegroundColor Red
+    Write-Host "Bitte installiere PostgreSQL oder fuege den bin Ordner zum PATH hinzu." -ForegroundColor Yellow
+    Write-Host "Beispiel: C:\Program Files\PostgreSQL\16\bin" -ForegroundColor Gray
+    return $null
+}
+
 Write-Host ""
 Write-Host "Kynso CRM - Datenbank Reset" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
@@ -30,9 +64,17 @@ if (-not (Test-Path "global.json")) {
     exit 1
 }
 
+# Finde PostgreSQL
+Write-Host ""
+$psqlPath = Find-PostgreSQLPath
+if (-not $psqlPath) {
+    Write-Host "PostgreSQL muss installiert sein, um fortzufahren." -ForegroundColor Red
+    exit 1
+}
+
 if ([string]::IsNullOrEmpty($PostgresPassword)) {
-    $PostgresPassword = Read-Host "PostgreSQL Passwort fuer postgres" -AsSecureString
-    $PostgresPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($PostgresPassword))
+    $securePassword = Read-Host "PostgreSQL Passwort fuer postgres" -AsSecureString
+    $PostgresPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword))
 }
 
 Write-Host ""
