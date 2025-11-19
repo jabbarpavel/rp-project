@@ -3,7 +3,7 @@
 ## 📋 Voraussetzungen
 
 Stelle sicher, dass folgende Tools installiert sind:
-- ✅ .NET 10 SDK
+- ✅ .NET 8 SDK
 - ✅ Node.js (v18+)
 - ✅ PostgreSQL
 - ✅ VS Code
@@ -29,7 +29,7 @@ sudo systemctl status postgresql
 psql -U postgres
 
 # Datenbank erstellen
-CREATE DATABASE rp_crm;
+CREATE DATABASE kynso_prod;
 
 # Beenden
 \q
@@ -42,7 +42,7 @@ Die Datenbankverbindung ist in `src/backend/RP.CRM.Api/appsettings.json` konfigu
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=rp_crm;Username=postgres;Password=admin123"
+    "DefaultConnection": "Host=localhost;Database=kynso_prod;Username=postgres;Password=admin123"
   }
 }
 ```
@@ -346,7 +346,7 @@ dotnet ef migrations add MeineMigration --project ../RP.CRM.Infrastructure
 ## ✅ Checkliste für ersten Start
 
 - [ ] PostgreSQL läuft
-- [ ] Datenbank `rp_crm` existiert
+- [ ] Datenbank `kynso_prod` existiert
 - [ ] Connection String ist korrekt
 - [ ] Migration ausgeführt (`dotnet ef database update`)
 - [ ] Backend gestartet (`dotnet watch run`)
