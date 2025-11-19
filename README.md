@@ -1,6 +1,6 @@
-# RP CRM - Multi-Tenant Customer Relationship Management
+# Kynso - Multi-Tenant Customer Relationship Management
 
-Ein modernes, Multi-Tenant CRM System gebaut mit .NET und Angular.
+Ein modernes, Multi-Tenant CRM System gebaut mit .NET 8 und Angular.
 
 ## 🚀 Features
 
@@ -17,7 +17,7 @@ Ein modernes, Multi-Tenant CRM System gebaut mit .NET und Angular.
 ## 📋 Voraussetzungen
 
 ### Entwicklung:
-- .NET 8.0 SDK oder höher
+- .NET 8.0 SDK
 - Node.js 20.x oder höher
 - PostgreSQL 14 oder höher
 - VS Code oder Visual Studio
@@ -32,16 +32,14 @@ Für detaillierte Setup-Anweisungen siehe **[SETUP_GUIDE.md](SETUP_GUIDE.md)**
 
 ### 📚 Dokumentation
 
-Wir haben umfassende Guides für Production Deployment erstellt:
-
-#### 🎯 [DEPLOYMENT_OVERVIEW.md](docs/DEPLOYMENT_OVERVIEW.md) - **START HIER!**
-Übersicht über alle Dokumentationen und nächste Schritte
-
-#### 💰 [INFOMANIAK_REQUIREMENTS.md](docs/INFOMANIAK_REQUIREMENTS.md)
-Was du von Infomaniak brauchst (CHF 13-98/Monat)
+#### 🎯 [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - **KYNSO PRODUCTION SETUP**
+Kompletter Setup Guide für Kynso Production System mit:
+- Domain: kynso.ch
+- Mandanten: finaro.kynso.ch & demo.kynso.ch
+- Server IP: 83.228.225.166
 
 #### 🚀 [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md)
-Kompletter Deployment Guide (Server, Nginx, SSL, Backups)
+Allgemeiner Production Deployment Guide (Server, Nginx, SSL, Backups)
 
 #### 🐳 [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md)
 Docker-basierte Deployment Alternative
@@ -56,14 +54,14 @@ Go-Live Checkliste mit 100+ Punkten
 
 ## 🔧 Deployment Optionen
 
-### Option 1: Manuelles Deployment
+### Option 1: Kynso Production Setup
+Folge [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md)
+
+### Option 2: Allgemeines Deployment
 Folge [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md)
 
-### Option 2: Docker Deployment
+### Option 3: Docker Deployment
 Folge [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md)
-
-### Option 3: CI/CD Automatisierung
-Folge [CI_CD_SETUP.md](docs/CI_CD_SETUP.md)
 
 ---
 
@@ -75,6 +73,12 @@ Folge [CI_CD_SETUP.md](docs/CI_CD_SETUP.md)
 
 ---
 
-## 🎉 Ready for Production!
+## 🎉 Production System
 
-Folge der [DEPLOYMENT_OVERVIEW.md](docs/DEPLOYMENT_OVERVIEW.md) um deine Anwendung in Production zu bringen! 🚀
+Kynso läuft bereits auf:
+- **Domain**: kynso.ch
+- **Server**: 83.228.225.166
+- **Finaro**: https://finaro.kynso.ch
+- **Demo**: https://demo.kynso.ch
+
+Siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) für Details! 🚀

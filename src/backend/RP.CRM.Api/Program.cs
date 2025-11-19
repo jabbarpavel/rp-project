@@ -107,14 +107,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // -----------------------------
 // DB
 // -----------------------------
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Host=localhost;Database=rp_crm;Username=postgres;Password=admin123";
+    ?? "Host=localhost;Database=kynso_prod;Username=postgres;Password=admin123";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -177,7 +177,6 @@ using (var scope = app.Services.CreateScope())
 // -----------------------------
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.MapScalarApiReference();
 }
 

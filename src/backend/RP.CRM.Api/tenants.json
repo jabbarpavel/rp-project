@@ -1,10 +1,10 @@
 [
   {
     "Name": "Finaro",
-    "Domain": "finaro.localhost"
+    "Domain": "finaro.kynso.ch"
   },
   {
-    "Name": "DemoCorp",
-    "Domain": "democorp.localhost"
+    "Name": "Demo",
+    "Domain": "demo.kynso.ch"
   }
 ]
