@@ -2,6 +2,23 @@
 
 Diese Anleitung zeigt, wie du die PostgreSQL-Datenbanken komplett neu aufsetzen kannst, wenn Migrations-Konflikte auftreten.
 
+## ⚡ Schnelle Lösung
+
+**Für Windows:** Nutze das automatische Reset-Script:
+```powershell
+.\reset-database.ps1
+```
+
+Das Script wird:
+- ✅ Alle Datenbankverbindungen beenden
+- ✅ Alte Datenbanken löschen (kynso_dev, kynso_test)
+- ✅ Neue Datenbanken erstellen
+- ✅ Migrationen automatisch anwenden
+
+**Wenn das nicht funktioniert**, folge den manuellen Schritten unten.
+
+---
+
 ## Problem
 
 Die Fehlermeldung "Relation »ChangeLogs« existiert bereits" bedeutet, dass:
@@ -161,11 +178,31 @@ dotnet ef database update --no-build
 
 ### "System.Runtime, Version=10.0.0.0" Fehler
 - **Problem**: dotnet-ef Tool Version passt nicht zu .NET SDK
+- **Ursache**: 
+  - Manchmal wird eine falsche Version von `dotnet-ef` installiert
+  - Oder es gibt einen Konflikt mit NuGet Package Caches
+  - Der Fehler "Version=10.0.0.0" deutet auf einen .NET 10 Verweis hin, aber das Projekt nutzt .NET 8.0
 - **Lösung**: 
   ```powershell
+  # Deinstalliere das alte dotnet-ef Tool
   dotnet tool uninstall --global dotnet-ef
+  
+  # Installiere die korrekte Version für .NET 8.0
   dotnet tool install --global dotnet-ef --version 8.0.11
+  
+  # Prüfe die Installation
+  dotnet ef --version
+  # Sollte anzeigen: Entity Framework Core .NET Command-line Tools 8.0.11
+  
+  # Lösche NuGet Caches falls Problem weiterhin besteht
+  dotnet nuget locals all --clear
+  
+  # Restore und neu bauen
+  cd src\backend\RP.CRM.Api
+  dotnet restore
+  dotnet build
   ```
+- **Alternative**: Nutze den `reset-database.ps1` Script, der diese Schritte automatisch durchführt
 
 ### Migration wird angewendet aber Tabellen fehlen
 - **Lösung**: Kompletter Reset (siehe oben)
