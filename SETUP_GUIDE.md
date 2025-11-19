@@ -1,5 +1,7 @@
 # VS Code Setup und Start Guide
 
+**Hinweis:** Dieser Guide ist für die **lokale Entwicklung**. Für die Production-Umgebung siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md).
+
 ## 📋 Voraussetzungen
 
 Stelle sicher, dass folgende Tools installiert sind:
@@ -24,12 +26,27 @@ sudo systemctl status postgresql
 
 ### 1.2 Datenbank erstellen (falls noch nicht vorhanden)
 
+**Für lokale Entwicklung** verwenden wir die Datenbank `kynso_dev`:
+
 ```bash
 # In PostgreSQL einloggen
 psql -U postgres
 
 # Datenbank erstellen
-CREATE DATABASE kynso_prod;
+CREATE DATABASE kynso_dev;
+
+# Beenden
+\q
+```
+
+**Hinweis:** Die Production-Umgebung verwendet `kynso_prod` - siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md).
+
+```bash
+# In PostgreSQL einloggen
+psql -U postgres
+
+# Datenbank erstellen
+CREATE DATABASE kynso_dev;
 
 # Beenden
 \q
@@ -42,7 +59,7 @@ Die Datenbankverbindung ist in `src/backend/RP.CRM.Api/appsettings.json` konfigu
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=kynso_prod;Username=postgres;Password=admin123"
+    "DefaultConnection": "Host=localhost;Database=kynso_dev;Username=postgres;Password=admin123"
   }
 }
 ```
@@ -346,7 +363,7 @@ dotnet ef migrations add MeineMigration --project ../RP.CRM.Infrastructure
 ## ✅ Checkliste für ersten Start
 
 - [ ] PostgreSQL läuft
-- [ ] Datenbank `kynso_prod` existiert
+- [ ] Datenbank `kynso_dev` existiert
 - [ ] Connection String ist korrekt
 - [ ] Migration ausgeführt (`dotnet ef database update`)
 - [ ] Backend gestartet (`dotnet watch run`)

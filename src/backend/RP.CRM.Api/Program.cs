@@ -114,7 +114,7 @@ builder.Services.AddSwaggerGen();
 // DB
 // -----------------------------
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Host=localhost;Database=kynso_prod;Username=postgres;Password=admin123";
+    ?? "Host=localhost;Database=kynso_dev;Username=postgres;Password=admin123";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
