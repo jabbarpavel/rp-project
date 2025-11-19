@@ -257,6 +257,34 @@ http://finaro:4200
 6. Wähle eine Datei (max 10 MB)
 7. Datei wird hochgeladen und erscheint in der Liste
 
+### Datenbank Zugriff (für Testing & Entwicklung):
+
+Um direkt auf die lokale Entwicklungsdatenbank zuzugreifen:
+
+```bash
+# In die PostgreSQL Datenbank einloggen
+psql -U postgres -d kynso_dev
+
+# Falls Passwort gefragt wird, verwende dein lokales PostgreSQL Passwort
+# (Standard ist oft 'postgres' oder 'admin123' je nach Installation)
+```
+
+**Häufige Befehle in psql:**
+```sql
+-- Alle Tabellen anzeigen
+\dt
+
+-- Tabellenstruktur anzeigen
+\d "Users"
+
+-- Datenbank verlassen
+\q
+```
+
+**Hinweis**: Für Production-Zugriff siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - Teil 7: Datenbank Zugriff.
+
+---
+
 ### Permissions testen:
 
 Die Permissions sind aktuell in der Datenbank konfiguriert:
@@ -275,6 +303,35 @@ UPDATE "Users" SET "Permissions" = 4095 WHERE "Email" = 'deine@email.com';
 -- Zurück zu User
 UPDATE "Users" SET "Permissions" = 55 WHERE "Email" = 'deine@email.com';
 ```
+
+### Neuen Benutzer erstellen (Lokal):
+
+**Via Register API:**
+
+```bash
+# Stelle sicher, dass Backend läuft (localhost:5015)
+curl -X POST http://localhost:5015/api/User/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "TestPassword123!",
+    "tenantId": 1
+  }'
+```
+
+**Tenant ID ermitteln:**
+```sql
+-- In psql
+SELECT "Id", "Name" FROM "Tenants";
+```
+
+**Benutzer überprüfen:**
+```sql
+-- Alle lokalen Benutzer anzeigen
+SELECT "Id", "Email", "TenantId", "Permissions", "IsActive" FROM "Users";
+```
+
+**Hinweis**: Für Production siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - Schritt 7.2.
 
 ---
 
