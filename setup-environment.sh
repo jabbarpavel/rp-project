@@ -167,9 +167,19 @@ fi
 echo ""
 echo "🔧 Wende Datenbank-Migrationen an..."
 
+# NuGet Pakete wiederherstellen
+echo "  📦 Stelle NuGet-Pakete wieder her..."
+cd src/backend/RP.CRM.Api
+dotnet restore
+if [ $? -ne 0 ]; then
+    echo "  ❌ Fehler bei der Paketwiederherstellung"
+    cd ../../..
+    exit 1
+fi
+echo "  ✅ Pakete erfolgreich wiederhergestellt!"
+
 # Development Migrationen
 echo "  Wende DEV Migrationen an..."
-cd src/backend/RP.CRM.Api
 export ASPNETCORE_ENVIRONMENT=Development
 dotnet ef database update
 if [ $? -eq 0 ]; then

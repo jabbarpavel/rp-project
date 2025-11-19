@@ -196,9 +196,19 @@ if (-not $skipDatabase) {
 Write-Host ""
 Write-Host "🔧 Wende Datenbank-Migrationen an..." -ForegroundColor Cyan
 
+# NuGet Pakete wiederherstellen
+Write-Host "  📦 Stelle NuGet-Pakete wieder her..." -ForegroundColor Gray
+cd src\backend\RP.CRM.Api
+dotnet restore
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "  ❌ Fehler bei der Paketwiederherstellung" -ForegroundColor Red
+    cd ..\..\..
+    exit 1
+}
+Write-Host "  ✅ Pakete erfolgreich wiederhergestellt!" -ForegroundColor Green
+
 # Development Migrationen
 Write-Host "  Wende DEV Migrationen an..." -ForegroundColor Gray
-cd src\backend\RP.CRM.Api
 $env:ASPNETCORE_ENVIRONMENT = "Development"
 dotnet ef database update
 if ($LASTEXITCODE -eq 0) {
