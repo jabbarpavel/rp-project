@@ -43,8 +43,8 @@ Write-Host "🔧 Schritt 1: Beende alle Datenbankverbindungen..." -ForegroundCol
 $env:PGPASSWORD = $PostgresPassword
 
 # Beende alle Verbindungen zu kynso_dev
-psql -U postgres -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kynso_dev' AND pid <> pg_backend_pid();" 2>$null
-psql -U postgres -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kynso_test' AND pid <> pg_backend_pid();" 2>$null
+& psql -U postgres -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kynso_dev' AND pid != pg_backend_pid();" 2>$null
+& psql -U postgres -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kynso_test' AND pid != pg_backend_pid();" 2>$null
 
 Write-Host "  ✅ Verbindungen beendet" -ForegroundColor Green
 
@@ -52,14 +52,14 @@ Write-Host ""
 Write-Host "🗑️  Schritt 2: Lösche alte Datenbanken..." -ForegroundColor Cyan
 
 # Lösche Datenbanken
-psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS kynso_dev;" 2>$null
+& psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS kynso_dev;" 2>$null
 if ($LASTEXITCODE -eq 0) {
     Write-Host "  ✅ kynso_dev gelöscht" -ForegroundColor Green
 } else {
     Write-Host "  ⚠️  Fehler beim Löschen von kynso_dev (möglicherweise existiert sie nicht)" -ForegroundColor Yellow
 }
 
-psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS kynso_test;" 2>$null
+& psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS kynso_test;" 2>$null
 if ($LASTEXITCODE -eq 0) {
     Write-Host "  ✅ kynso_test gelöscht" -ForegroundColor Green
 } else {
@@ -70,7 +70,7 @@ Write-Host ""
 Write-Host "🆕 Schritt 3: Erstelle neue Datenbanken..." -ForegroundColor Cyan
 
 # Erstelle kynso_dev
-psql -U postgres -d postgres -c "CREATE DATABASE kynso_dev OWNER = postgres ENCODING = 'UTF8';" 2>$null
+& psql -U postgres -d postgres -c "CREATE DATABASE kynso_dev OWNER = postgres ENCODING = 'UTF8';" 2>$null
 if ($LASTEXITCODE -eq 0) {
     Write-Host "  ✅ kynso_dev erstellt" -ForegroundColor Green
 } else {
@@ -80,7 +80,7 @@ if ($LASTEXITCODE -eq 0) {
 }
 
 # Erstelle kynso_test
-psql -U postgres -d postgres -c "CREATE DATABASE kynso_test OWNER = postgres ENCODING = 'UTF8';" 2>$null
+& psql -U postgres -d postgres -c "CREATE DATABASE kynso_test OWNER = postgres ENCODING = 'UTF8';" 2>$null
 if ($LASTEXITCODE -eq 0) {
     Write-Host "  ✅ kynso_test erstellt" -ForegroundColor Green
 } else {
