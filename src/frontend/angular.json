@@ -53,6 +53,11 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "test": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -65,6 +70,10 @@
             },
             "development": {
               "buildTarget": "frontend:build:development"
+            },
+            "test": {
+              "buildTarget": "frontend:build:test",
+              "port": 4300
             }
           },
           "defaultConfiguration": "development"
