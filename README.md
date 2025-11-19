@@ -24,20 +24,46 @@ Ein modernes, Multi-Tenant CRM System gebaut mit .NET 8 und Angular.
 
 ## 🏃 Quick Start
 
-### 🎯 NEU: Vollständiger Entwicklungs-Workflow
+### 1️⃣ Umgebung einrichten
 
-Für die Arbeit mit **DEV**, **TEST** und **PRODUCTION** Umgebungen:
-- **[WORKFLOW_ANLEITUNG.md](WORKFLOW_ANLEITUNG.md)** - Komplette Anleitung mit Workflow, Branch-Struktur und Umgebungs-Setup
-- **[SCHNELLREFERENZ.md](SCHNELLREFERENZ.md)** - Schnelle Befehls-Übersicht für den täglichen Gebrauch
+**Windows PowerShell:**
+```powershell
+.\setup-environment.ps1
+```
 
-### Lokale Entwicklung und Tests
-Für lokale Entwicklung siehe **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - dieser Guide erklärt:
-- Wie man die Entwicklungsumgebung einrichtet
-- Wie man mit localhost arbeitet statt mit Produktionsdomains
-- Wie man .NET SDK Versionsprobleme löst
-- Wie man die lokale Datenbank konfiguriert
+**Linux/Mac:**
+```bash
+chmod +x setup-environment.sh
+./setup-environment.sh
+```
 
-Für detaillierte Setup-Anweisungen siehe **[SETUP_GUIDE.md](SETUP_GUIDE.md)**
+### 2️⃣ Backend starten (DEV)
+```powershell
+cd src\backend\RP.CRM.Api
+dotnet run --launch-profile Development
+```
+
+### 3️⃣ Frontend starten (DEV)
+```powershell
+cd src\frontend
+npm install
+npm start
+```
+
+## 📚 Wichtige Dokumentation
+
+### Entwicklung
+- **[START_HIER.md](START_HIER.md)** - Schnellstart für neue Entwickler
+- **[SCHNELLSTART.md](SCHNELLSTART.md)** - Kurzanleitung zum Loslegen
+- **[WORKFLOW_ANLEITUNG.md](WORKFLOW_ANLEITUNG.md)** - Vollständiger DEV/TEST/MAIN Workflow
+- **[SCHNELLREFERENZ.md](SCHNELLREFERENZ.md)** - Befehls-Referenz
+- **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - Lokale Entwicklungsumgebung
+
+### Datenbank
+- **[DATENBANK_RESET_ANLEITUNG.md](DATENBANK_RESET_ANLEITUNG.md)** - ⚠️ **NEU!** Migrations-Probleme beheben
+
+### Setup & Deployment
+- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Detaillierte Setup-Anweisungen
 
 ---
 
