@@ -22,4 +22,16 @@
     <ProjectReference Include="..\RP.CRM.Infrastructure\RP.CRM.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="tenants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tenants.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tenants.Production.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
