@@ -74,11 +74,17 @@ DEV (lokal) → TEST (lokal) → PRODUCTION (online auf kynso.ch)
 
 #### Setup-Scripts:
 - ✅ **`setup-environment.ps1`** - Windows PowerShell Setup-Script
+  - Prüft Voraussetzungen (.NET Version)
+  - Installiert automatisch `dotnet-ef` Tool
+  - Findet automatisch PostgreSQL Installation
   - Erstellt dev/test Branches
   - Erstellt PostgreSQL Datenbanken
   - Wendet Migrationen an
   
 - ✅ **`setup-environment.sh`** - Linux/Mac Bash Setup-Script
+  - Prüft Voraussetzungen (.NET Version)
+  - Installiert automatisch `dotnet-ef` Tool
+  - Prüft PostgreSQL Installation
   - Gleiche Funktionalität wie PowerShell-Version
 
 #### Aktualisierte Dokumente:
