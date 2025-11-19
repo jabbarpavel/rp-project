@@ -32,6 +32,9 @@ chmod +x setup-environment.sh
 ```
 
 **Das Script wird:**
+- ✅ Voraussetzungen prüfen (.NET Version, PostgreSQL)
+- ✅ `dotnet-ef` Tool automatisch installieren (falls benötigt)
+- ✅ PostgreSQL automatisch finden (Windows)
 - ✅ `dev` und `test` Branches erstellen
 - ✅ `kynso_dev` und `kynso_test` Datenbanken erstellen
 - ✅ Alle Migrationen anwenden
@@ -175,10 +178,16 @@ dotnet ef database update
 ## 🐛 Probleme?
 
 ### **Problem: `dotnet ef database update` schlägt fehl**
-**Lösung:** Das wurde bereits behoben! `global.json` erzwingt jetzt .NET 8.0.
+**Lösung:** Das Setup-Script installiert jetzt automatisch `dotnet-ef` Tool! 
 ```bash
 dotnet --version  # Sollte 8.0.x zeigen
+dotnet ef --version  # Sollte installiert sein
 ```
+
+### **Problem: `psql` nicht gefunden (Windows)**
+**Lösung:** Das Setup-Script sucht jetzt automatisch nach PostgreSQL!
+- Script findet psql.exe automatisch in typischen Installationspfaden
+- Oder du kannst das Datenbank-Setup überspringen und manuell durchführen
 
 ### **Problem: Port bereits belegt**
 ```powershell
