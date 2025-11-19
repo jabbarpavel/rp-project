@@ -119,6 +119,8 @@ cd app
 git pull origin main
 ```
 
+**⚠️ WICHTIG**: Stelle sicher, dass du IMMER `git pull origin main` ausführst, bevor du die Docker Container neu baust! Ohne diesen Schritt könntest du eine veraltete Version des Codes verwenden.
+
 ---
 
 ### Schritt 2.2: Production .env Datei prüfen
@@ -187,8 +189,13 @@ nano src/backend/RP.CRM.Api/tenants.json
 
 ### Schritt 2.4: Docker Container starten/neu starten
 
+**⚠️ WICHTIG**: Bevor du die Container baust, stelle sicher, dass du die neueste Version des Codes hast:
+
 ```bash
 cd /opt/kynso/prod/app
+
+# Code aktualisieren (sehr wichtig!)
+git pull origin main
 
 # Alte Container stoppen und entfernen (falls vorhanden)
 docker-compose down
@@ -634,6 +641,41 @@ crontab -e
 ---
 
 ## 🆘 Troubleshooting
+
+### Docker Build Fehler: ".NET SDK does not support targeting .NET 10.0"
+
+**Symptom**: Beim Ausführen von `docker-compose up -d --build` erhältst du einen Fehler:
+```
+error NETSDK1045: The current .NET SDK does not support targeting .NET 10.0
+```
+
+**Ursache**: Du verwendest eine veraltete Version des Codes. Das Projekt wurde von .NET 10 (Preview) auf .NET 8 migriert.
+
+**Lösung**:
+```bash
+cd /opt/kynso/prod/app
+
+# Hol dir die neueste Version des Codes
+git pull origin main
+
+# Stelle sicher, dass du auf dem main branch bist
+git status
+
+# Falls du auf einem anderen Branch bist:
+git checkout main
+git pull origin main
+
+# Jetzt die Container neu bauen
+docker-compose down
+docker-compose --env-file .env up -d --build
+```
+
+**Prüfen**: Nach dem `git pull` sollten alle `.csproj` Dateien `<TargetFramework>net8.0</TargetFramework>` enthalten:
+```bash
+grep -r "TargetFramework" src/backend/ --include="*.csproj"
+```
+
+---
 
 ### Container startet nicht
 ```bash
