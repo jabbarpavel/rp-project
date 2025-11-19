@@ -44,9 +44,18 @@ if (File.Exists(tenantFile))
         // For localhost domain, allow standard port configurations
         if (domain == "localhost")
         {
+            // Development ports
             allowedOrigins.Add($"http://localhost:4200");
             allowedOrigins.Add($"http://localhost:5015");
             allowedOrigins.Add($"http://127.0.0.1:4200");
+            
+            // Test environment ports
+            if (environment == "Test")
+            {
+                allowedOrigins.Add($"http://localhost:4300");
+                allowedOrigins.Add($"http://localhost:5016");
+                allowedOrigins.Add($"http://127.0.0.1:4300");
+            }
         }
         else
         {
@@ -69,9 +78,18 @@ else
 // -----------------------------
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenLocalhost(5015);
-    options.ListenAnyIP(5020);
-    Console.WriteLine("✅ Bound port 5020 for all tenant hostnames");
+    if (environment == "Test")
+    {
+        options.ListenLocalhost(5016);
+        options.ListenAnyIP(5021);
+        Console.WriteLine("✅ Test environment: Bound ports 5016 (localhost) and 5021 (all IPs)");
+    }
+    else
+    {
+        options.ListenLocalhost(5015);
+        options.ListenAnyIP(5020);
+        Console.WriteLine("✅ Bound ports 5015 (localhost) and 5020 (all IPs)");
+    }
 });
 
 // -----------------------------

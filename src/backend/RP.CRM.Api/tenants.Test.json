@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Test Environment",
+    "Domain": "localhost"
+  },
+  {
+    "Name": "Test Finaro",
+    "Domain": "finaro.test"
+  },
+  {
+    "Name": "Test Demo",
+    "Domain": "demo.test"
+  }
+]

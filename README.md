@@ -22,9 +22,16 @@ Ein modernes, Multi-Tenant CRM System gebaut mit .NET 8 und Angular.
 - PostgreSQL 14 oder höher
 - VS Code oder Visual Studio
 
-## 🏃 Quick Start - Lokale Entwicklung
+## 🏃 Quick Start
 
-Für lokale Entwicklung und Tests siehe **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - dieser Guide erklärt:
+### 🎯 NEU: Vollständiger Entwicklungs-Workflow
+
+Für die Arbeit mit **DEV**, **TEST** und **PRODUCTION** Umgebungen:
+- **[WORKFLOW_ANLEITUNG.md](WORKFLOW_ANLEITUNG.md)** - Komplette Anleitung mit Workflow, Branch-Struktur und Umgebungs-Setup
+- **[SCHNELLREFERENZ.md](SCHNELLREFERENZ.md)** - Schnelle Befehls-Übersicht für den täglichen Gebrauch
+
+### Lokale Entwicklung und Tests
+Für lokale Entwicklung siehe **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - dieser Guide erklärt:
 - Wie man die Entwicklungsumgebung einrichtet
 - Wie man mit localhost arbeitet statt mit Produktionsdomains
 - Wie man .NET SDK Versionsprobleme löst
