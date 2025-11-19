@@ -1,5 +1,11 @@
 # PostgreSQL Installation und Setup Guide
 
+## Kompatibilität
+✅ **Unterstützte PostgreSQL Versionen**: 14, 15, 16, 17, 18 (und höher)  
+✅ **Dein System**: PostgreSQL 18 ist vollständig kompatibel!
+
+Das Script findet automatisch alle installierten PostgreSQL Versionen (14-18+) und bevorzugt die neueste.
+
 ## Problem
 Das Script kann `psql` nicht finden, da PostgreSQL entweder nicht installiert ist oder nicht im PATH verfügbar ist.
 
@@ -10,12 +16,12 @@ Das Script kann `psql` nicht finden, da PostgreSQL entweder nicht installiert is
 #### Schritt 1: PostgreSQL herunterladen
 1. Gehe zu: https://www.postgresql.org/download/windows/
 2. Klicke auf "Download the installer"
-3. Wähle die neueste Version (z.B. PostgreSQL 16.x)
+3. Wähle die neueste Version (z.B. PostgreSQL 16.x, 17.x oder 18.x)
 4. Lade den Windows x86-64 Installer herunter
 
 #### Schritt 2: Installation
 1. **Starte den Installer** (Rechtsklick → Als Administrator ausführen)
-2. **Installation Directory**: Standard lassen (z.B. `C:\Program Files\PostgreSQL\16`)
+2. **Installation Directory**: Standard lassen (z.B. `C:\Program Files\PostgreSQL\18`)
 3. **Components auswählen**:
    - ✅ PostgreSQL Server
    - ✅ pgAdmin 4
@@ -41,19 +47,22 @@ Das Script kann `psql` nicht finden, da PostgreSQL entweder nicht installiert is
    ```powershell
    psql --version
    ```
-3. Wenn es funktioniert, siehst du:
+3. Wenn es funktioniert, siehst du z.B.:
    ```
-   psql (PostgreSQL) 16.x
+   psql (PostgreSQL) 18.0
+   # Oder: psql (PostgreSQL) 16.x, 17.x, etc.
    ```
 
 **Falls psql nicht gefunden wird, manuell zum PATH hinzufügen**:
 
 1. **Finde den PostgreSQL bin Ordner**:
    ```powershell
-   # Standardpfad für PostgreSQL 16:
-   C:\Program Files\PostgreSQL\16\bin
+   # Für PostgreSQL 18:
+   C:\Program Files\PostgreSQL\18\bin
    
-   # Oder für PostgreSQL 15:
+   # Oder für andere Versionen:
+   C:\Program Files\PostgreSQL\17\bin
+   C:\Program Files\PostgreSQL\16\bin
    C:\Program Files\PostgreSQL\15\bin
    ```
 
@@ -63,7 +72,7 @@ Das Script kann `psql` nicht finden, da PostgreSQL entweder nicht installiert is
    - Klicke auf "Umgebungsvariablen"
    - Unter "Systemvariablen" finde "Path" und klicke "Bearbeiten"
    - Klicke "Neu"
-   - Füge hinzu: `C:\Program Files\PostgreSQL\16\bin`
+   - Füge hinzu: `C:\Program Files\PostgreSQL\18\bin` (oder deine Version)
    - Klicke "OK" auf allen Dialogen
    
 3. **Starte PowerShell NEU** und teste:

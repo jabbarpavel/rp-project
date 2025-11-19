@@ -26,7 +26,10 @@ function Find-PostgreSQLPath {
     )
     
     foreach ($path in $possiblePaths) {
-        $found = Get-ChildItem -Path $path -ErrorAction SilentlyContinue | Select-Object -First 1
+        # Sortiere nach Version (neueste zuerst) um PostgreSQL 18, 17, 16, etc. zu bevorzugen
+        $found = Get-ChildItem -Path $path -ErrorAction SilentlyContinue | 
+                 Sort-Object DirectoryName -Descending | 
+                 Select-Object -First 1
         if ($found) {
             Write-Host "psql gefunden: $($found.DirectoryName)" -ForegroundColor Green
             $env:PATH = "$($found.DirectoryName);$env:PATH"
