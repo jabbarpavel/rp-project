@@ -55,6 +55,7 @@ npm start
 ## 📚 Wichtige Dokumentation
 
 ### Entwicklung
+- **[BACKEND_START_ANLEITUNG.md](docs/BACKEND_START_ANLEITUNG.md)** - ⭐ **NEU!** Backend starten (DEV/TEST/PROD)
 - **[FRONTEND_START_UND_TEST_USERS.md](docs/FRONTEND_START_UND_TEST_USERS.md)** - ⭐ **NEU!** Frontend starten & Test Users erstellen
 - **[START_HIER.md](START_HIER.md)** - Schnellstart für neue Entwickler
 - **[SCHNELLSTART.md](SCHNELLSTART.md)** - Kurzanleitung zum Loslegen
