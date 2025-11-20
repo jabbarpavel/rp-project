@@ -1,14 +1,10 @@
 [
   {
-    "Name": "Test Environment",
-    "Domain": "localhost"
+    "Name": "Finaro",
+    "Domain": "finaro.localhost"
   },
   {
-    "Name": "Test Finaro",
-    "Domain": "finaro.test"
-  },
-  {
-    "Name": "Test Demo",
-    "Domain": "demo.test"
+    "Name": "Demo Corp",
+    "Domain": "democorp.localhost"
   }
 ]

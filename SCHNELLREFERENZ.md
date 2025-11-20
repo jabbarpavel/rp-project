@@ -24,7 +24,8 @@ dotnet run --launch-profile Development
 
 # Frontend (Terminal 2)
 cd src/frontend
-npm start
+npm run start:dev
+# oder einfach: npm start (nutzt dev als Standard)
 # Öffnet: http://localhost:4200
 ```
 
