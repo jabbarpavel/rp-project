@@ -48,11 +48,14 @@ dotnet run --launch-profile Development
 cd src\frontend
 npm install
 npm start
+# oder spezifisch für DEV: npm run start:dev
+# oder für TEST: npm run start:test
 ```
 
 ## 📚 Wichtige Dokumentation
 
 ### Entwicklung
+- **[FRONTEND_START_UND_TEST_USERS.md](docs/FRONTEND_START_UND_TEST_USERS.md)** - ⭐ **NEU!** Frontend starten & Test Users erstellen
 - **[START_HIER.md](START_HIER.md)** - Schnellstart für neue Entwickler
 - **[SCHNELLSTART.md](SCHNELLSTART.md)** - Kurzanleitung zum Loslegen
 - **[WORKFLOW_ANLEITUNG.md](WORKFLOW_ANLEITUNG.md)** - Vollständiger DEV/TEST/MAIN Workflow

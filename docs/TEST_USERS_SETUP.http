@@ -1,0 +1,113 @@
+### Kynso CRM - Test Users Setup
+### Diese Datei enthält vordefinierte HTTP-Requests um Test-User für DEV und TEST zu erstellen
+### Verwendung: VS Code mit REST Client Extension oder Postman
+
+### =============================================================================
+### DEVELOPMENT ENVIRONMENT (Port 5015)
+### =============================================================================
+
+@dev_baseUrl = http://localhost:5015
+@dev_email = dev@kynso.ch
+@dev_password = 123456
+@dev_tenantId = 1
+
+### 1. DEV - User registrieren
+POST {{dev_baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "{{dev_email}}",
+  "password": "{{dev_password}}",
+  "tenantId": {{dev_tenantId}}
+}
+
+### 2. DEV - User einloggen
+# @name devLogin
+POST {{dev_baseUrl}}/api/user/login
+Content-Type: application/json
+Host: localhost
+
+{
+  "email": "{{dev_email}}",
+  "password": "{{dev_password}}"
+}
+
+### 3. DEV - Aktuellen User abrufen (benötigt Token aus Login)
+GET {{dev_baseUrl}}/api/user/me
+Authorization: Bearer {{devLogin.response.body.token}}
+TenantID: {{dev_tenantId}}
+
+
+### =============================================================================
+### TEST ENVIRONMENT (Port 5016)
+### =============================================================================
+
+@test_baseUrl = http://localhost:5016
+@test_email = test@kynso.ch
+@test_password = 123456
+@test_tenantId = 1
+
+### 4. TEST - User registrieren
+POST {{test_baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}",
+  "tenantId": {{test_tenantId}}
+}
+
+### 5. TEST - User einloggen
+# @name testLogin
+POST {{test_baseUrl}}/api/user/login
+Content-Type: application/json
+Host: localhost
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}"
+}
+
+### 6. TEST - Aktuellen User abrufen (benötigt Token aus Login)
+GET {{test_baseUrl}}/api/user/me
+Authorization: Bearer {{testLogin.response.body.token}}
+TenantID: {{test_tenantId}}
+
+
+### =============================================================================
+### OPTIONAL: Berechtigungen setzen (via SQL)
+### =============================================================================
+
+# Nach dem Erstellen der User, müssen die Berechtigungen in der Datenbank gesetzt werden:
+# 
+# Für DEV Datenbank (kynso_dev):
+# UPDATE "Users" SET "Permissions" = 4095 WHERE "Email" = 'dev@kynso.ch';
+#
+# Für TEST Datenbank (kynso_test):
+# UPDATE "Users" SET "Permissions" = 4095 WHERE "Email" = 'test@kynso.ch';
+#
+# Permission 4095 = Admin mit allen Rechten
+
+
+### =============================================================================
+### ANLEITUNG
+### =============================================================================
+
+# 1. Backend für DEV starten:
+#    cd src/backend/RP.CRM.Api
+#    dotnet run --launch-profile Development
+#
+# 2. Requests 1-3 ausführen für DEV User
+#
+# 3. Backend für TEST starten:
+#    cd src/backend/RP.CRM.Api
+#    dotnet run --launch-profile Test
+#
+# 4. Requests 4-6 ausführen für TEST User
+#
+# 5. Optional: Berechtigungen in der Datenbank setzen (siehe oben)
+#
+# HINWEIS: 
+# - Stellen Sie sicher, dass die entsprechende Datenbank (kynso_dev oder kynso_test) existiert
+# - Der Tenant mit ID 1 muss in der Datenbank vorhanden sein
+# - Nach dem Erstellen der User, sollten Sie die Berechtigungen in der DB setzen
