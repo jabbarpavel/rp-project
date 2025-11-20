@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "kynso-test-users-001",
+		"name": "Kynso - Test Users Setup",
+		"description": "Vordefinierte Requests zum Erstellen von Test-Usern für DEV und TEST Umgebungen\n\nTest Users:\n- dev@kynso.ch / 123456 (für Development)\n- test@kynso.ch / 123456 (für Test)\n\nBeide User für TenantID = 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "DEV Environment",
+			"item": [
+				{
+					"name": "1. Register DEV User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"dev@kynso.ch\",\n  \"password\": \"123456\",\n  \"tenantId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5015/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5015",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						},
+						"description": "Erstellt einen neuen User für die DEV Umgebung"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login DEV User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"dev_jwt_token\", response.token);",
+									"    pm.environment.set(\"dev_tenantId\", response.tenantId);",
+									"    console.log(\"DEV Token gespeichert\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Host",
+								"value": "localhost"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"dev@kynso.ch\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5015/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5015",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						},
+						"description": "Login für DEV User - Token wird automatisch in Environment gespeichert"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get DEV User Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{dev_jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "TenantID",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5015/api/user/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5015",
+							"path": [
+								"api",
+								"user",
+								"me"
+							]
+						},
+						"description": "Ruft Informationen des aktuell eingeloggten DEV Users ab"
+					},
+					"response": []
+				}
+			],
+			"description": "Requests für die Development Umgebung (Port 5015)"
+		},
+		{
+			"name": "TEST Environment",
+			"item": [
+				{
+					"name": "4. Register TEST User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@kynso.ch\",\n  \"password\": \"123456\",\n  \"tenantId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5016/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5016",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						},
+						"description": "Erstellt einen neuen User für die TEST Umgebung"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Login TEST User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"test_jwt_token\", response.token);",
+									"    pm.environment.set(\"test_tenantId\", response.tenantId);",
+									"    console.log(\"TEST Token gespeichert\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Host",
+								"value": "localhost"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@kynso.ch\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5016/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5016",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						},
+						"description": "Login für TEST User - Token wird automatisch in Environment gespeichert"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Get TEST User Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{test_jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "TenantID",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5016/api/user/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5016",
+							"path": [
+								"api",
+								"user",
+								"me"
+							]
+						},
+						"description": "Ruft Informationen des aktuell eingeloggten TEST Users ab"
+					},
+					"response": []
+				}
+			],
+			"description": "Requests für die Test Umgebung (Port 5016)"
+		}
+	]
+}
