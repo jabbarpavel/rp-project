@@ -9,11 +9,14 @@ namespace RP.CRM.Infrastructure.Data
     {
         public AppDbContext CreateDbContext(string[] args)
         {
+            // Get environment from ASPNETCORE_ENVIRONMENT or default to Development
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            
             // Build configuration from appsettings
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();
 
