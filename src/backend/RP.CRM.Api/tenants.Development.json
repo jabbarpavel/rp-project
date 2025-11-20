@@ -1,14 +1,10 @@
 [
   {
-    "Name": "Local Development",
-    "Domain": "localhost"
+    "Name": "Finaro",
+    "Domain": "finaro.localhost"
   },
   {
-    "Name": "Local Finaro",
-    "Domain": "finaro.local"
-  },
-  {
-    "Name": "Local Demo",
-    "Domain": "demo.local"
+    "Name": "Demo Corp",
+    "Domain": "democorp.localhost"
   }
 ]
