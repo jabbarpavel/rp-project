@@ -9,10 +9,12 @@ namespace RP.CRM.Api.Controllers
     public class HealthController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<HealthController> _logger;
 
-        public HealthController(AppDbContext context)
+        public HealthController(AppDbContext context, ILogger<HealthController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -33,13 +35,15 @@ namespace RP.CRM.Api.Controllers
             }
             catch (Exception ex)
             {
+                // Log the detailed error for diagnostics
+                _logger.LogError(ex, "Health check failed: Database connection error");
+                
                 return StatusCode(503, new
                 {
                     status = "unhealthy",
                     timestamp = DateTime.UtcNow,
                     service = "Kynso CRM API",
-                    database = "disconnected",
-                    error = ex.Message
+                    database = "disconnected"
                 });
             }
         }

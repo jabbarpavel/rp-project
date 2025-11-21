@@ -55,7 +55,7 @@ Frontend URL: http://localhost:4200
 🔧 Testing Backend...
 ------------------------------------------
 ✅ Backend is running
-Response: {"status":"healthy","timestamp":"2025-11-21T15:00:00Z","service":"Kynso CRM API","database":"connected"}
+Response: {"status":"healthy","timestamp":"2025-11-21T15:00:00.000Z","service":"Kynso CRM API","database":"connected"}
 
 ------------------------------------------
 🎨 Testing Frontend...
@@ -124,7 +124,7 @@ GET /api/health
 ```json
 {
   "status": "healthy",
-  "timestamp": "2025-11-21T15:00:00.123Z",
+  "timestamp": "2025-11-21T15:00:00.000Z",
   "service": "Kynso CRM API",
   "database": "connected"
 }
@@ -134,10 +134,9 @@ GET /api/health
 ```json
 {
   "status": "unhealthy",
-  "timestamp": "2025-11-21T15:00:00.123Z",
+  "timestamp": "2025-11-21T15:00:00.000Z",
   "service": "Kynso CRM API",
-  "database": "disconnected",
-  "error": "Connection error message"
+  "database": "disconnected"
 }
 ```
 
