@@ -42,7 +42,7 @@ Der Production-Server verwendet Let's Encrypt SSL-Zertifikate und erzwingt HTTPS
 3. **Der Browser/curl folgt der Umleitung** zu HTTPS
 4. **ABER: Der POST-Body geht verloren!** ❌
 
-Dies ist das standardmäßige HTTP-Verhalten gemäß RFC 7231: Bei einer 301-Umleitung soll der Client den POST-Body **nicht** automatisch zur neuen URL senden.
+Dies ist das standardmäßige HTTP-Verhalten gemäß RFC 7231: Bei einer 301-Umleitung darf der Client den POST-Body nicht automatisch zur neuen URL senden. In der Praxis verwirft curl den Body, während Browser die Methode von POST zu GET ändern können.
 
 ---
 
@@ -119,7 +119,7 @@ curl -X POST https://finaro.kynso.ch/api/user/register \
 
 ```bash
 # SSH zum Server
-ssh ubuntu@83.228.225.166
+ssh ubuntu@<your-server-ip>
 
 # Dann auf dem Server
 curl -X POST http://localhost:5000/api/user/register \
@@ -225,8 +225,9 @@ curl -X POST https://finaro.kynso.ch/api/user/register ...
 
 ```bash
 # ❌ FALSCH (von extern)
-curl -X POST http://83.228.225.166:5000/api/user/register ...
-# Resultat: Funktioniert nur wenn Firewall Port 5000 offen ist (nicht empfohlen!)
+curl -X POST http://<server-ip>:5000/api/user/register ...
+# Resultat: Umgeht SSL-Verschlüsselung und nginx-Sicherheit (nicht empfohlen!)
+# Funktioniert nur wenn Firewall Port 5000 offen ist
 
 # ✅ RICHTIG
 curl -X POST https://finaro.kynso.ch/api/user/register ...

@@ -315,17 +315,17 @@ FROM "Users";
 # ❌ FALSCH - HTTP von extern:
 curl -X POST http://finaro.kynso.ch/api/user/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@finaro.ch","password":"123456","tenantId":1}'
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
 
 # ✅ RICHTIG - HTTPS von extern:
 curl -X POST https://finaro.kynso.ch/api/user/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@finaro.ch","password":"123456","tenantId":1}'
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
 
 # ✅ AUCH RICHTIG - HTTP auf dem Server (via SSH):
 curl -X POST http://localhost:5000/api/user/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@finaro.ch","password":"123456","tenantId":1}'
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
 ```
 
 ### Problem: "Welcome to nginx" anstatt Login-Seite
