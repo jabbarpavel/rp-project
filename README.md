@@ -1,32 +1,35 @@
-# Kynso - Multi-Tenant Customer Relationship Management
+# 🚀 Kynso - Multi-Tenant Customer Relationship Management
 
-Ein modernes, Multi-Tenant CRM System gebaut mit .NET 8 und Angular.
+A modern, multi-tenant CRM system built with .NET 8 and Angular.
 
-## 🚀 Features
+---
 
-- ✅ Multi-Tenant Architektur
-- ✅ Role-Based Access Control (RBAC)
-- ✅ Customer Management (CRUD)
-- ✅ Document Management (Upload/Download/Delete)
-- ✅ User Management mit Permissions
-- ✅ RESTful API mit Swagger/Scalar Dokumentation
-- ✅ Responsive Angular Frontend
-- ✅ PostgreSQL Datenbank
-- ✅ JWT Authentication
+## ✨ Features
 
-## 📋 Voraussetzungen
+- ✅ **Multi-Tenant Architecture** - Complete tenant isolation
+- ✅ **Role-Based Access Control (RBAC)** - Fine-grained permissions
+- ✅ **Customer Management** - Full CRUD operations
+- ✅ **Document Management** - Upload, download, and manage documents
+- ✅ **User Management** - Control users and permissions per tenant
+- ✅ **RESTful API** - Well-documented with Swagger/Scalar
+- ✅ **Responsive Frontend** - Modern Angular-based UI
+- ✅ **PostgreSQL Database** - Reliable and scalable
+- ✅ **JWT Authentication** - Secure token-based authentication
 
-### Entwicklung:
-- .NET 8.0 SDK
-- Node.js 20.x oder höher
-- PostgreSQL 14 oder höher
-- VS Code oder Visual Studio
+---
 
-## 🏃 Quick Start
+## 🎯 Quick Start
 
-### 1️⃣ Umgebung einrichten
+### Prerequisites
 
-**Windows PowerShell:**
+- **.NET 8.0 SDK** (Version 8.0.416 or higher)
+- **Node.js** 20.x or higher
+- **PostgreSQL** 14 or higher
+- **Git**
+
+### Setup (One-Time)
+
+**Windows (PowerShell):**
 ```powershell
 .\setup-environment.ps1
 ```
@@ -37,91 +40,173 @@ chmod +x setup-environment.sh
 ./setup-environment.sh
 ```
 
-### 2️⃣ Backend starten (DEV)
-```powershell
-cd src\backend\RP.CRM.Api
+This script will:
+- ✅ Check prerequisites
+- ✅ Install required tools
+- ✅ Create dev and test branches
+- ✅ Create databases (kynso_dev, kynso_test)
+- ✅ Apply migrations
+
+### Start Development Environment
+
+**Terminal 1 - Backend:**
+```bash
+cd src/backend/RP.CRM.Api
 dotnet run --launch-profile Development
 ```
+Backend runs on: **http://localhost:5015**  
+API Docs: **http://localhost:5015/scalar/v1**
 
-### 3️⃣ Frontend starten (DEV)
-```powershell
-cd src\frontend
-npm install
+**Terminal 2 - Frontend:**
+```bash
+cd src/frontend
+npm install  # First time only
 npm start
-# oder spezifisch für DEV: npm run start:dev
-# oder für TEST: npm run start:test
+```
+Frontend runs on: **http://localhost:4200**
+
+---
+
+## 🌍 Environments
+
+The project uses three separate environments:
+
+| Environment | Branch | Database | Backend Port | Frontend Port |
+|------------|--------|----------|--------------|---------------|
+| **DEV** | `dev` | kynso_dev | 5015 | 4200 |
+| **TEST** | `test` | kynso_test | 5016 | 4300 |
+| **PROD** | `main` | Production | 5020 | - |
+
+**Development Flow:**
+```
+DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 ```
 
-## 📚 Wichtige Dokumentation
+---
 
-### Entwicklung
-- **[BACKEND_START_ANLEITUNG.md](docs/BACKEND_START_ANLEITUNG.md)** - ⭐ **NEU!** Backend starten (DEV/TEST/PROD)
-- **[FRONTEND_START_UND_TEST_USERS.md](docs/FRONTEND_START_UND_TEST_USERS.md)** - ⭐ **NEU!** Frontend starten & Test Users erstellen
-- **[START_HIER.md](START_HIER.md)** - Schnellstart für neue Entwickler
-- **[SCHNELLSTART.md](SCHNELLSTART.md)** - Kurzanleitung zum Loslegen
-- **[WORKFLOW_ANLEITUNG.md](WORKFLOW_ANLEITUNG.md)** - Vollständiger DEV/TEST/MAIN Workflow
-- **[SCHNELLREFERENZ.md](SCHNELLREFERENZ.md)** - Befehls-Referenz
-- **[LOCAL_DEVELOPMENT_SETUP.md](LOCAL_DEVELOPMENT_SETUP.md)** - Lokale Entwicklungsumgebung
+## 📚 Documentation
 
-### Datenbank
-- **[DATENBANK_RESET_ANLEITUNG.md](DATENBANK_RESET_ANLEITUNG.md)** - ⚠️ **NEU!** Migrations-Probleme beheben
+### 🔧 Development & Testing
 
-### Setup & Deployment
-- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Detaillierte Setup-Anweisungen
+| Document | Description |
+|----------|-------------|
+| **[DEVELOPMENT.md](docs/DEVELOPMENT.md)** | **⭐ START HERE** - Complete dev/test environment guide |
+| **[TENANT_WORKFLOW.md](docs/TENANT_WORKFLOW.md)** | **⭐ IMPORTANT** - Tenant creation to production deployment process |
+| **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | Common issues and solutions |
+
+### 🚀 Production Deployment
+
+| Document | Description |
+|----------|-------------|
+| [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) | Kynso production setup (kynso.ch) |
+| [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md) | General production deployment guide |
+| [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md) | Docker-based deployment |
+| [CI_CD_SETUP.md](docs/CI_CD_SETUP.md) | GitHub Actions CI/CD |
+| [PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md) | Production go-live checklist |
+
+### 📖 Reference
+
+| Document | Description |
+|----------|-------------|
+| [ARCHITECTURE_OVERVIEW.md](docs/ARCHITECTURE_OVERVIEW.md) | System architecture |
+| [PERMISSIONS_GUIDE.md](docs/PERMISSIONS_GUIDE.md) | Permission system details |
+| [FEATURE_GUIDE.md](docs/FEATURE_GUIDE.md) | Feature documentation |
+| [POSTMAN_GUIDE.md](docs/POSTMAN_GUIDE.md) | API testing guide |
 
 ---
 
-## 🌐 Production Deployment
+## 🛠️ Technology Stack
 
-### 📚 Dokumentation
-
-#### 🎯 [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) - **KYNSO PRODUCTION SETUP**
-Kompletter Setup Guide für Kynso Production System mit:
-- Domain: kynso.ch
-- Mandanten: finaro.kynso.ch & demo.kynso.ch
-- Server IP: 83.228.225.166
-
-#### 🚀 [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md)
-Allgemeiner Production Deployment Guide (Server, Nginx, SSL, Backups)
-
-#### 🐳 [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md)
-Docker-basierte Deployment Alternative
-
-#### 🔄 [CI_CD_SETUP.md](docs/CI_CD_SETUP.md)
-GitHub Actions für Automatisierung
-
-#### ✅ [PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md)
-Go-Live Checkliste mit 100+ Punkten
+| Layer | Technologies |
+|-------|-------------|
+| **Backend** | .NET 8.0, Entity Framework Core, PostgreSQL, JWT |
+| **Frontend** | Angular 20, TypeScript, RxJS, SCSS |
+| **DevOps** | Docker, Nginx, GitHub Actions, Let's Encrypt |
 
 ---
 
-## 🔧 Deployment Optionen
+## 🏗️ Project Structure
 
-### Option 1: Kynso Production Setup
-Folge [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md)
-
-### Option 2: Allgemeines Deployment
-Folge [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md)
-
-### Option 3: Docker Deployment
-Folge [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md)
-
----
-
-## 🛠️ Technologie Stack
-
-**Backend**: .NET 8.0, Entity Framework Core, PostgreSQL, JWT  
-**Frontend**: Angular 20, TypeScript, RxJS  
-**DevOps**: Docker, Nginx, GitHub Actions, Let's Encrypt
+```
+rp-project/
+├── src/
+│   ├── backend/
+│   │   ├── RP.CRM.Api/          # Main API project
+│   │   ├── RP.CRM.Application/  # Business logic
+│   │   ├── RP.CRM.Domain/       # Domain models
+│   │   ├── RP.CRM.Infrastructure/ # Data access
+│   │   └── RP.CRM.Tests/        # Tests
+│   └── frontend/                 # Angular application
+├── docs/                         # Documentation
+├── docker/                       # Docker configurations
+├── setup-environment.ps1         # Windows setup script
+├── setup-environment.sh          # Linux/Mac setup script
+└── docker-compose.yml           # Docker compose configuration
+```
 
 ---
 
 ## 🎉 Production System
 
-Kynso läuft bereits auf:
-- **Domain**: kynso.ch
+Kynso is live at:
+- **Main Domain**: kynso.ch
 - **Server**: 83.228.225.166
-- **Finaro**: https://finaro.kynso.ch
-- **Demo**: https://demo.kynso.ch
+- **Tenants**:
+  - Finaro: https://finaro.kynso.ch
+  - Demo: https://demo.kynso.ch
 
-Siehe [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) für Details! 🚀
+See [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) for production details.
+
+---
+
+## 🔄 Workflow
+
+### Daily Development
+
+1. **Develop** in DEV environment (branch: `dev`)
+2. **Test** in TEST environment (branch: `test`)
+3. **Deploy** to PRODUCTION (branch: `main`)
+
+### Common Commands
+
+```bash
+# Start DEV backend
+cd src/backend/RP.CRM.Api && dotnet run --launch-profile Development
+
+# Start TEST backend
+cd src/backend/RP.CRM.Api && dotnet run --launch-profile Test
+
+# Start DEV frontend
+cd src/frontend && npm start
+
+# Start TEST frontend
+cd src/frontend && npm run start:test
+
+# Create migration
+cd src/backend/RP.CRM.Api && dotnet ef migrations add MigrationName
+
+# Apply migration
+dotnet ef database update
+
+# Run tests
+cd src/backend/RP.CRM.Tests && dotnet test
+```
+
+---
+
+## 📞 Support
+
+- **Documentation**: See [docs/](docs/) folder
+- **Issues**: Check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+- **Development**: See [DEVELOPMENT.md](docs/DEVELOPMENT.md)
+- **Tenant Management**: See [TENANT_WORKFLOW.md](docs/TENANT_WORKFLOW.md)
+
+---
+
+## 📝 License
+
+Copyright © 2025 Kynso
+
+---
+
+**Ready to start?** 👉 See [DEVELOPMENT.md](docs/DEVELOPMENT.md) for detailed setup instructions!
