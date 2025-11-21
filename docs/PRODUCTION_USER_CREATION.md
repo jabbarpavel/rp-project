@@ -13,6 +13,11 @@ Diese Anleitung zeigt dir, wie du Benutzer für die **Production** Umgebung erst
 
 > **Hinweis zu Ports:** Das Backend in Docker verwendet Port 5000 (konfiguriert über `ASPNETCORE_URLS`). Bei lokaler Entwicklung wird Port 5015 (Development) oder 5016 (Test) verwendet.
 
+> **🚑 Probleme?** Falls du "Connection refused" oder andere Fehler bekommst:
+> 1. Führe auf dem Server aus: `./diagnose-production.sh`
+> 2. Siehe [PRODUCTION_TROUBLESHOOTING.md](PRODUCTION_TROUBLESHOOTING.md) für detaillierte Hilfe
+> 3. Siehe [QUICK_FIX_GUIDE.md](../QUICK_FIX_GUIDE.md) für schnelle Lösungen
+
 ---
 
 ## 🚀 Schnellanleitung
