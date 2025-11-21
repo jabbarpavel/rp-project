@@ -29,6 +29,7 @@ services:
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=kynso_prod;Username=kynso_user;Password=${DB_PASSWORD:-Kynso5796}
       - Jwt__Key=${JWT_SECRET:-Kynso5796Kynso5796Kynso5796R!P.E}
     volumes:
