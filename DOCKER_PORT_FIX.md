@@ -114,6 +114,7 @@ Nach dem Pull des Updates:
 
 4. **User erstellen:**
    ```bash
+   # Auf dem Server (via SSH) - HTTP über localhost:
    # Finaro User
    curl -X POST http://localhost:5000/api/user/register \
      -H "Content-Type: application/json" \
@@ -123,7 +124,15 @@ Nach dem Pull des Updates:
    curl -X POST http://localhost:5000/api/user/register \
      -H "Content-Type: application/json" \
      -d '{"email":"admin@demo.com","password":"DemoAdmin2025!","tenantId":2}'
+   
+   # Von extern (von deinem Computer) - HTTPS über Domain:
+   # Finaro User
+   curl -X POST https://finaro.kynso.ch/api/user/register \
+     -H "Content-Type: application/json" \
+     -d '{"email":"admin@finaro.com","password":"FinaroAdmin2025!","tenantId":1}'
    ```
+   
+   > **💡 Hinweis:** Verwende HTTP nur auf dem Server (localhost). Von extern muss HTTPS verwendet werden, da nginx HTTP auf HTTPS umleitet und POST-Bodies dabei verloren gehen.
 
 5. **Admin-Rechte setzen:**
    ```bash
