@@ -67,6 +67,11 @@ Datenbank verlassen:
 
 ## 🔧 Methode 1: User über API erstellen (EMPFOHLEN)
 
+> **⚠️ WICHTIG - HTTP vs HTTPS:**
+> - **Auf dem Server** (via SSH): Verwende `http://localhost:5000` - direkter Zugriff ohne SSL
+> - **Von extern** (dein Computer): Verwende `https://finaro.kynso.ch` oder `https://demo.kynso.ch` - HTTPS erforderlich
+> - **Warum?** Der externe nginx erzwingt HTTPS und leitet HTTP auf HTTPS um. Bei POST-Requests geht dabei der Request-Body verloren (301 Redirect).
+
 ### Option A: Mit curl (direkt auf dem Server)
 
 #### 1. User für Finaro erstellen
@@ -118,7 +123,8 @@ Erstelle eine neue Datei: `production-users.http`
 ### =============================================================================
 
 @prod_baseUrl = https://finaro.kynso.ch/api
-# Oder direkt über IP: http://83.228.225.166:5000/api
+# WICHTIG: Verwende HTTPS für externe Zugriffe (von deinem Computer aus)
+# Nur auf dem Server selbst kann HTTP verwendet werden: http://localhost:5000/api
 
 ### 1. User für Finaro erstellen (Tenant ID = 1)
 POST {{prod_baseUrl}}/user/register
@@ -186,6 +192,8 @@ TenantID: 2
 |----------|-------|
 | baseUrl | https://finaro.kynso.ch/api |
 | jwt_token | (leer lassen) |
+
+> **💡 Tipp:** Verwende immer HTTPS (`https://`) wenn du von deinem Computer aus zugreifst. HTTP funktioniert nur direkt auf dem Server über `localhost`.
 
 #### 2. User für Finaro registrieren
 
@@ -286,6 +294,39 @@ FROM "Users";
 ---
 
 ## 🔍 Troubleshooting
+
+### Problem: 301 Redirect bei curl/API-Anfragen
+
+**Symptom**: 
+```html
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body>
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
+```
+
+**Ursache**: Du versuchst von extern mit HTTP statt HTTPS zuzugreifen. Der nginx Server erzwingt HTTPS und leitet HTTP-Anfragen um. Bei POST-Requests geht dabei der Request-Body verloren.
+
+**Lösung**:
+```bash
+# ❌ FALSCH - HTTP von extern:
+curl -X POST http://finaro.kynso.ch/api/user/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
+
+# ✅ RICHTIG - HTTPS von extern:
+curl -X POST https://finaro.kynso.ch/api/user/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
+
+# ✅ AUCH RICHTIG - HTTP auf dem Server (via SSH):
+curl -X POST http://localhost:5000/api/user/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@finaro.ch","password":"SecurePass123!","tenantId":1}'
+```
 
 ### Problem: "Welcome to nginx" anstatt Login-Seite
 

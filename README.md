@@ -130,6 +130,7 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 |----------|-------------|
 | [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) | Kynso production setup (kynso.ch) |
 | **[PRODUCTION_USER_CREATION.md](docs/PRODUCTION_USER_CREATION.md)** | **👤 Create users in production** |
+| **[HTTP_VS_HTTPS_GUIDE.md](docs/HTTP_VS_HTTPS_GUIDE.md)** | **🔒 HTTP vs HTTPS - Fix 301 redirect issues** |
 | [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md) | General production deployment guide |
 | [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md) | Docker-based deployment |
 | [CI_CD_SETUP.md](docs/CI_CD_SETUP.md) | GitHub Actions CI/CD |

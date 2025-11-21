@@ -278,15 +278,17 @@ docker-compose up -d
 ### 1. Backend Health Check
 
 ```bash
-# Vom Server aus
+# Vom Server aus (via SSH)
 curl http://localhost:5000/api/health
 
-# Von extern (von deinem Laptop)
-curl http://83.228.225.166:5000/api/health
+# Von extern (von deinem Laptop) - HTTPS erforderlich
+curl https://finaro.kynso.ch/api/health
 
 # Erwartete Antwort:
 # {"status":"healthy","timestamp":"...","service":"Kynso CRM API","database":"connected"}
 ```
+
+> **💡 Hinweis:** Von extern (dein Computer) muss HTTPS verwendet werden. HTTP funktioniert nur auf dem Server über localhost, da der externe nginx HTTP auf HTTPS umleitet.
 
 ### 2. Frontend testen
 
