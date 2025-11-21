@@ -1,0 +1,132 @@
+### =============================================================================
+### PRODUCTION - User Erstellung für Finaro und Demo
+### =============================================================================
+### 
+### Diese Datei kann mit VS Code REST Client Extension verwendet werden
+### oder die Befehle können in Postman oder curl übertragen werden
+###
+### Voraussetzung: Backend läuft auf Production Server (Port 5000)
+### =============================================================================
+
+@prod_backend = http://83.228.225.166:5000
+# Alternativ: @prod_backend = https://finaro.kynso.ch
+
+### =============================================================================
+### SCHRITT 1: Tenant IDs herausfinden (optional, normalerweise: Finaro=1, Demo=2)
+### =============================================================================
+### Auf dem Server ausführen:
+### docker exec -it kynso-postgres psql -U kynso_user -d kynso_prod -c "SELECT \"Id\", \"Name\", \"Domain\" FROM \"Tenants\";"
+
+### =============================================================================
+### SCHRITT 2: User erstellen
+### =============================================================================
+
+### 1. User für FINARO erstellen (Tenant ID: 1)
+POST {{prod_backend}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "admin@finaro.com",
+  "password": "FinaroAdmin2025!",
+  "tenantId": 1
+}
+
+### 2. User für DEMO erstellen (Tenant ID: 2)
+POST {{prod_backend}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "admin@demo.com",
+  "password": "DemoAdmin2025!",
+  "tenantId": 2
+}
+
+### =============================================================================
+### SCHRITT 3: Login testen
+### =============================================================================
+
+### 3. Login für Finaro testen
+# @name finaroLogin
+POST {{prod_backend}}/api/user/login
+Content-Type: application/json
+Host: finaro.kynso.ch
+
+{
+  "email": "admin@finaro.com",
+  "password": "FinaroAdmin2025!"
+}
+
+### 4. Login für Demo testen
+# @name demoLogin
+POST {{prod_backend}}/api/user/login
+Content-Type: application/json
+Host: demo.kynso.ch
+
+{
+  "email": "admin@demo.com",
+  "password": "DemoAdmin2025!"
+}
+
+### =============================================================================
+### SCHRITT 4: User-Info abrufen (mit Token aus Login)
+### =============================================================================
+
+### 5. Finaro User Info abrufen
+GET {{prod_backend}}/api/user/me
+Authorization: Bearer {{finaroLogin.response.body.token}}
+TenantID: 1
+
+### 6. Demo User Info abrufen
+GET {{prod_backend}}/api/user/me
+Authorization: Bearer {{demoLogin.response.body.token}}
+TenantID: 2
+
+### =============================================================================
+### SCHRITT 5: Admin-Rechte vergeben (via SQL auf dem Server)
+### =============================================================================
+###
+### Auf dem Server ausführen:
+### 
+### docker exec -it kynso-postgres psql -U kynso_user -d kynso_prod
+### 
+### -- Admin-Rechte für Finaro User
+### UPDATE "Users" SET "Permissions" = 4095, "Role" = 'Admin' WHERE "Email" = 'admin@finaro.com';
+### 
+### -- Admin-Rechte für Demo User
+### UPDATE "Users" SET "Permissions" = 4095, "Role" = 'Admin' WHERE "Email" = 'admin@demo.com';
+### 
+### -- Prüfen
+### SELECT "Id", "Email", "TenantId", "Role", "Permissions", "IsActive" FROM "Users";
+### 
+### \q
+### =============================================================================
+
+### =============================================================================
+### CURL-Befehle (Alternative zu REST Client)
+### =============================================================================
+###
+### User für Finaro erstellen:
+### curl -X POST http://83.228.225.166:5000/api/user/register \
+###   -H "Content-Type: application/json" \
+###   -d '{"email":"admin@finaro.com","password":"FinaroAdmin2025!","tenantId":1}'
+###
+### User für Demo erstellen:
+### curl -X POST http://83.228.225.166:5000/api/user/register \
+###   -H "Content-Type: application/json" \
+###   -d '{"email":"admin@demo.com","password":"DemoAdmin2025!","tenantId":2}'
+### =============================================================================
+
+### =============================================================================
+### WICHTIGE HINWEISE
+### =============================================================================
+### 
+### 1. PASSWÖRTER ÄNDERN: Die Beispiel-Passwörter sind nur für Demo-Zwecke!
+### 2. Nach User-Erstellung: Admin-Rechte in der Datenbank setzen (siehe Schritt 5)
+### 3. Login testen auf: 
+###    - https://finaro.kynso.ch/login
+###    - https://demo.kynso.ch/login
+### 4. Falls "Welcome to nginx": Frontend Container neu starten
+###    docker-compose up -d --build frontend
+### 
+### Vollständige Dokumentation: docs/PRODUCTION_USER_CREATION.md
+### =============================================================================
