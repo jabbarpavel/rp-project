@@ -2,6 +2,8 @@
 
 A modern, multi-tenant CRM system built with .NET 8 and Angular.
 
+> **🚑 Production Issue?** If you're experiencing connection errors, see [QUICK_FIX_GUIDE.md](QUICK_FIX_GUIDE.md) or run `./diagnose-production.sh` on your server.
+
 ---
 
 ## ✨ Features
