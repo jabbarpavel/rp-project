@@ -123,6 +123,7 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 | **[SERVICE_TESTING.md](docs/SERVICE_TESTING.md)** | **🧪 NEW** - Test if frontend and backend are running |
 | **[TENANT_WORKFLOW.md](docs/TENANT_WORKFLOW.md)** | **⭐ IMPORTANT** - Tenant creation to production deployment process |
 | **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | Common issues and solutions |
+| **[PRODUCTION_TROUBLESHOOTING.md](docs/PRODUCTION_TROUBLESHOOTING.md)** | **🔧 NEW** - Fix connection refused and other production issues |
 
 ### 🚀 Production Deployment
 
