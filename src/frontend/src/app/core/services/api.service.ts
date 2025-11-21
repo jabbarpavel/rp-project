@@ -17,15 +17,19 @@ export class ApiService {
     const hostname = window.location.hostname.toLowerCase();
     const tenants = tenantsConfig.tenants;
 
-    const tenant = tenants.find((t: any) =>
-      hostname.includes(t.name.toLowerCase())
-    );
+    const tenant = tenants.find((t: any) => {
+      const domain = new URL(t.apiUrl).hostname.toLowerCase();
+      return hostname.includes(domain);
+    });
 
     if (tenant) {
       this.apiUrl = tenant.apiUrl;
       console.log('✅ API base URL gesetzt:', this.apiUrl);
     } else {
-      console.error('❌ Kein passender Tenant für Host:', hostname);
+      // Fallback: Nutze die aktuelle Domain mit /api
+      const protocol = window.location.protocol;
+      this.apiUrl = `${protocol}//${hostname}/api`;
+      console.log('⚠️ Kein Tenant gefunden für Host:', hostname, '- Fallback:', this.apiUrl);
     }
   }
 
