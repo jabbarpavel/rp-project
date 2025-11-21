@@ -55,7 +55,8 @@ cd src/backend/RP.CRM.Api
 dotnet run --launch-profile Development
 ```
 Backend runs on: **http://localhost:5015**  
-API Docs: **http://localhost:5015/scalar/v1**
+API Docs: **http://localhost:5015/scalar/v1**  
+Health Check: **http://localhost:5015/api/health**
 
 **Terminal 2 - Frontend:**
 ```bash
@@ -64,6 +65,33 @@ npm install  # First time only
 npm start
 ```
 Frontend runs on: **http://localhost:4200**
+
+### Test Services
+
+To verify that both frontend and backend are running correctly:
+
+**Linux/Mac:**
+```bash
+./test-services.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\test-services.ps1
+```
+
+**For Test Environment:**
+```bash
+./test-services.sh Test
+```
+```powershell
+.\test-services.ps1 -Environment Test
+```
+
+This script will check:
+- ✅ Backend API health status
+- ✅ Frontend accessibility
+- ✅ Provide helpful messages if services are not running
 
 ---
 
