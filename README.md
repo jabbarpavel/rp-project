@@ -55,7 +55,8 @@ cd src/backend/RP.CRM.Api
 dotnet run --launch-profile Development
 ```
 Backend runs on: **http://localhost:5015**  
-API Docs: **http://localhost:5015/scalar/v1**
+API Docs: **http://localhost:5015/scalar/v1**  
+Health Check: **http://localhost:5015/api/health**
 
 **Terminal 2 - Frontend:**
 ```bash
@@ -64,6 +65,33 @@ npm install  # First time only
 npm start
 ```
 Frontend runs on: **http://localhost:4200**
+
+### Test Services
+
+To verify that both frontend and backend are running correctly:
+
+**Linux/Mac:**
+```bash
+./test-services.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\test-services.ps1
+```
+
+**For Test Environment:**
+```bash
+./test-services.sh Test
+```
+```powershell
+.\test-services.ps1 -Environment Test
+```
+
+This script will check:
+- ✅ Backend API health status
+- ✅ Frontend accessibility
+- ✅ Provide helpful messages if services are not running
 
 ---
 
@@ -91,6 +119,8 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 | Document | Description |
 |----------|-------------|
 | **[DEVELOPMENT.md](docs/DEVELOPMENT.md)** | **⭐ START HERE** - Complete dev/test environment guide |
+| **[DEPLOYMENT_WORKFLOW.md](docs/DEPLOYMENT_WORKFLOW.md)** | **🚀 NEW** - Complete workflow from Dev → Test → Production |
+| **[SERVICE_TESTING.md](docs/SERVICE_TESTING.md)** | **🧪 NEW** - Test if frontend and backend are running |
 | **[TENANT_WORKFLOW.md](docs/TENANT_WORKFLOW.md)** | **⭐ IMPORTANT** - Tenant creation to production deployment process |
 | **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | Common issues and solutions |
 
@@ -99,6 +129,7 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 | Document | Description |
 |----------|-------------|
 | [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) | Kynso production setup (kynso.ch) |
+| **[PRODUCTION_USER_CREATION.md](docs/PRODUCTION_USER_CREATION.md)** | **👤 Create users in production** |
 | [PRODUCTION_DEPLOYMENT.md](docs/PRODUCTION_DEPLOYMENT.md) | General production deployment guide |
 | [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md) | Docker-based deployment |
 | [CI_CD_SETUP.md](docs/CI_CD_SETUP.md) | GitHub Actions CI/CD |
