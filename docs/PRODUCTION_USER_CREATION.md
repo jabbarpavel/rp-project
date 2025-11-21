@@ -9,7 +9,9 @@ Diese Anleitung zeigt dir, wie du Benutzer für die **Production** Umgebung erst
 - 🏢 Finaro Tenant: finaro.kynso.ch
 - 🎯 Demo Tenant: demo.kynso.ch
 - 🖥️ Server: 83.228.225.166
-- 🔌 Backend API: Port 5000
+- 🔌 Backend API: Port 5000 (Docker Container)
+
+> **Hinweis zu Ports:** Das Backend in Docker verwendet Port 5000 (konfiguriert über `ASPNETCORE_URLS`). Bei lokaler Entwicklung wird Port 5015 (Development) oder 5016 (Test) verwendet.
 
 ---
 

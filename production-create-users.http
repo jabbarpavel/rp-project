@@ -5,11 +5,13 @@
 ### Diese Datei kann mit VS Code REST Client Extension verwendet werden
 ### oder die Befehle können in Postman oder curl übertragen werden
 ###
-### Voraussetzung: Backend läuft auf Production Server (Port 5000)
+### Voraussetzung: Backend läuft auf Production Server (Port 5000 in Docker)
+### HINWEIS: Das Backend in Docker verwendet Port 5000 (konfiguriert über ASPNETCORE_URLS)
+###          Lokale Entwicklung verwendet Port 5015 (Development) oder 5016 (Test)
 ### =============================================================================
 
 @prod_backend = http://83.228.225.166:5000
-# Alternativ: @prod_backend = https://finaro.kynso.ch
+# Alternativ über Domain: @prod_backend = https://finaro.kynso.ch
 
 ### =============================================================================
 ### SCHRITT 1: Tenant IDs herausfinden (optional, normalerweise: Finaro=1, Demo=2)
