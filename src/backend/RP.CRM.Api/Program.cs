@@ -75,22 +75,34 @@ else
 
 // -----------------------------
 // Dynamic Kestrel binding (one shared port for all tenants)
+// Only apply custom port configuration if ASPNETCORE_URLS is not set
+// (Docker/Production environments set ASPNETCORE_URLS=http://+:5000)
 // -----------------------------
-builder.WebHost.ConfigureKestrel(options =>
+var aspnetcoreUrls = builder.Configuration["ASPNETCORE_URLS"];
+if (string.IsNullOrEmpty(aspnetcoreUrls))
 {
-    if (environment == "Test")
+    // Local development/test - use custom ports
+    builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ListenLocalhost(5016);
-        options.ListenAnyIP(5021);
-        Console.WriteLine("✅ Test environment: Bound ports 5016 (localhost) and 5021 (all IPs)");
-    }
-    else
-    {
-        options.ListenLocalhost(5015);
-        options.ListenAnyIP(5020);
-        Console.WriteLine("✅ Bound ports 5015 (localhost) and 5020 (all IPs)");
-    }
-});
+        if (environment == "Test")
+        {
+            options.ListenLocalhost(5016);
+            options.ListenAnyIP(5021);
+            Console.WriteLine("✅ Test environment: Bound ports 5016 (localhost) and 5021 (all IPs)");
+        }
+        else
+        {
+            options.ListenLocalhost(5015);
+            options.ListenAnyIP(5020);
+            Console.WriteLine("✅ Bound ports 5015 (localhost) and 5020 (all IPs)");
+        }
+    });
+}
+else
+{
+    // Docker/Production - use ASPNETCORE_URLS environment variable
+    Console.WriteLine($"✅ Using ASPNETCORE_URLS: {aspnetcoreUrls}");
+}
 
 // -----------------------------
 // Services
