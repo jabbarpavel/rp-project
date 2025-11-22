@@ -19,7 +19,7 @@ ASPNETCORE_ENVIRONMENT=Development dotnet run
 **Erwartete Ausgabe:**
 ```
 🌍 Environment: Development
-✅ Test environment: Bound ports 5015 (localhost) and 5020 (all IPs)
+✅ Development environment: Bound ports 5015 (localhost) and 5020 (all IPs)
 ✅ API base URL gesetzt: http://localhost:5020
 ```
 
@@ -42,10 +42,10 @@ npm start
 
 **Erwartete Console-Logs:**
 ```
-✅ ConfigService - Base URL set to: http://localhost:5020
+✅ ConfigService - Base URL set to: http://localhost:5015
    Environment detected: Development
-✅ AuthService - Using base URL: http://localhost:5020
-✅ ApiService - Using base URL: http://localhost:5020
+✅ AuthService - Using base URL: http://localhost:5015
+✅ ApiService - Using base URL: http://localhost:5015
 ```
 
 ### Schritt 4: Login testen
@@ -57,14 +57,14 @@ npm start
 
 **Erwartete Network-Request:**
 ```
-Request URL: http://localhost:5020/user/login
+Request URL: http://localhost:5015/user/login
 Request Method: POST
 Status: 200 OK (wenn User existiert) oder 401 (wenn nicht)
 ```
 
 **WICHTIG:** Es sollte **NICHT** sein:
-- ❌ `http://localhost:5015/user/login` (falscher Port)
-- ❌ `http://finaro.localhost:5020/user/login` (falscher Host)
+- ❌ `http://localhost:5020/user/login` (falscher Port - das war der alte Port)
+- ❌ `http://finaro.localhost:5015/user/login` (falscher Host bei localhost-Zugriff)
 
 ---
 
@@ -100,10 +100,10 @@ npm run start:test
 
 **Erwartete Console-Logs:**
 ```
-✅ ConfigService - Base URL set to: http://localhost:5021
+✅ ConfigService - Base URL set to: http://localhost:5016
    Environment detected: Test
-✅ AuthService - Using base URL: http://localhost:5021
-✅ ApiService - Using base URL: http://localhost:5021
+✅ AuthService - Using base URL: http://localhost:5016
+✅ ApiService - Using base URL: http://localhost:5016
 ```
 
 ### Schritt 4: Login testen
@@ -113,11 +113,11 @@ npm run start:test
 
 **Erwartete Network-Request:**
 ```
-Request URL: http://localhost:5021/user/login
+Request URL: http://localhost:5016/user/login
 Request Method: POST
 ```
 
-**WICHTIG:** Port muss **5021** sein, nicht 5020!
+**WICHTIG:** Port muss **5016** sein, nicht 5021 (alter Port)!
 
 ---
 
@@ -154,7 +154,7 @@ curl http://localhost:8080/api/health
 ## Test 4: CORS-Test
 
 ### Test 4.1: Development CORS
-Mit Backend auf Port 5020 und Frontend auf Port 4200:
+Mit Backend auf Port 5015 und Frontend auf Port 4200:
 
 ```bash
 # Terminal 1: Backend
@@ -169,7 +169,7 @@ npm start
 **Erwartung:** Keine CORS-Fehler in der Browser-Console
 
 ### Test 4.2: Test CORS
-Mit Backend auf Port 5021 und Frontend auf Port 4300:
+Mit Backend auf Port 5016 und Frontend auf Port 4300:
 
 ```bash
 # Terminal 1: Backend
@@ -192,10 +192,10 @@ npm run start:test
 #### Development:
 ```bash
 # Health Check
-curl http://localhost:5020/api/health
+curl http://localhost:5015/api/health
 
 # Login (wenn User existiert)
-curl -X POST http://localhost:5020/user/login \
+curl -X POST http://localhost:5015/user/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@finaro.local","password":"admin123"}'
 ```
@@ -203,10 +203,10 @@ curl -X POST http://localhost:5020/user/login \
 #### Test:
 ```bash
 # Health Check
-curl http://localhost:5021/api/health
+curl http://localhost:5016/api/health
 
 # Login
-curl -X POST http://localhost:5021/user/login \
+curl -X POST http://localhost:5016/user/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@finaro.local","password":"admin123"}'
 ```
@@ -247,15 +247,15 @@ curl -X POST http://localhost:5021/user/login \
 
 ✅ **Development:**
 - Frontend läuft auf Port 4200
-- Backend läuft auf Port 5020
-- Login-Request geht an http://localhost:5020/user/login
+- Backend läuft auf Port 5015
+- Login-Request geht an http://localhost:5015/user/login
 - Keine CORS-Fehler
 - Keine Connection-Refused-Fehler
 
 ✅ **Test:**
 - Frontend läuft auf Port 4300
-- Backend läuft auf Port 5021
-- Login-Request geht an http://localhost:5021/user/login
+- Backend läuft auf Port 5016
+- Login-Request geht an http://localhost:5016/user/login
 - Keine CORS-Fehler
 - Keine Connection-Refused-Fehler
 
