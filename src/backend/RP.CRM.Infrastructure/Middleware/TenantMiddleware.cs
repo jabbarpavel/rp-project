@@ -34,9 +34,9 @@ namespace RP.CRM.Infrastructure.Middleware
             //    z.B. "finaro.localhost" → Domain-Spalte: "finaro.localhost"
             //    Für /register: Falls Domain nicht gefunden, versuche TenantID aus Body
             // =====================================================
-            if (path.Contains("/api/user/login") ||
-                path.Contains("/api/user/register") ||
-                path.Contains("/api/tenant"))
+            if (path.Contains("/user/login") ||
+                path.Contains("/user/register") ||
+                path.Contains("/tenant"))
             {
                 var tenant = await tenantRepository.GetByDomainAsync(host);
                 if (tenant != null)
@@ -45,7 +45,7 @@ namespace RP.CRM.Infrastructure.Middleware
                 }
                 // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
                 // versuche tenantId aus Request Body zu extrahieren
-                else if (path.Contains("/api/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                else if (path.Contains("/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                 {
                     context.Request.EnableBuffering();
                     var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
