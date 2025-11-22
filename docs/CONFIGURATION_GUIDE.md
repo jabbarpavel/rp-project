@@ -46,8 +46,14 @@ src/backend/RP.CRM.Api/tenants.{Environment}.json
 ```json
 [
   {
+    "Id": 1,
     "Name": "Finaro",
-    "Domain": "localhost"
+    "Domain": "finaro.localhost"
+  },
+  {
+    "Id": 2,
+    "Name": "Demo Corp",
+    "Domain": "democorp.localhost"
   }
 ]
 ```

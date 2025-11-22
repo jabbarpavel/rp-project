@@ -128,12 +128,12 @@ dotnet run --launch-profile Development
   {
     "Id": 1,
     "Name": "Finaro",
-    "Domain": "localhost"
+    "Domain": "finaro.localhost"
   },
   {
     "Id": 2,
     "Name": "Demo Corp",
-    "Domain": "localhost"
+    "Domain": "democorp.localhost"
   }
 ]
 
