@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import tenantsConfig from '../../../environments/tenants.json';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,33 +9,12 @@ import tenantsConfig from '../../../environments/tenants.json';
 export class ApiService {
   private apiUrl = '';
 
-  constructor(private http: HttpClient) {
-    this.initializeApiUrl();
-  }
-
-  private initializeApiUrl(): void {
-    const hostname = window.location.hostname.toLowerCase();
-    const tenants = tenantsConfig.tenants;
-
-    const tenant = tenants.find((t: any) => {
-      try {
-        const domain = new URL(t.apiUrl).hostname.toLowerCase();
-        return hostname.includes(domain);
-      } catch {
-        console.warn(`Invalid apiUrl in tenant config: ${t.apiUrl}`);
-        return false;
-      }
-    });
-
-    if (tenant) {
-      this.apiUrl = tenant.apiUrl;
-      console.log('✅ API base URL gesetzt:', this.apiUrl);
-    } else {
-      // Fallback: Nutze die aktuelle Domain (API-Pfade wie /api/user/me werden in get/post/put/delete Methoden angehängt)
-      const protocol = window.location.protocol;
-      this.apiUrl = `${protocol}//${hostname}`;
-      console.log('⚠️ Kein Tenant gefunden für Host:', hostname, '- Fallback:', this.apiUrl);
-    }
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    this.apiUrl = this.configService.getBaseUrl();
+    console.log('✅ ApiService - Using base URL:', this.apiUrl);
   }
 
   private getHeaders(): HttpHeaders {

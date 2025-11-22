@@ -40,20 +40,22 @@ nano .env
 
 ### 3. Tenants konfigurieren
 ```bash
-# Für lokales Testing
-nano src/backend/RP.CRM.Api/tenants.json
+# Für Production Testing
+nano src/backend/RP.CRM.Api/tenants.Production.json
 ```
 
-Lokale Konfiguration:
+Production Konfiguration (für lokales Docker testing):
 ```json
 [
   {
+    "Id": 1,
     "Name": "Finaro",
-    "Domain": "finaro.localhost"
+    "Domain": "finaro.kynso.ch"
   },
   {
-    "Name": "DemoCorp",
-    "Domain": "democorp.localhost"
+    "Id": 2,
+    "Name": "Demo",
+    "Domain": "demo.kynso.ch"
   }
 ]
 ```
