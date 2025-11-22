@@ -8,6 +8,30 @@ Wenn du diese Probleme hast:
 
 ### Schnelle Lösung auf dem Server:
 
+**Option A: Automatisches All-in-One Script (Empfohlen)**
+
+```bash
+# SSH zum Server
+ssh ubuntu@83.228.225.166
+
+# Gehe zum App-Verzeichnis
+cd /opt/kynso/prod/app
+
+# Hole die neuesten Fixes
+git pull origin main
+
+# Führe das komplette Fix-Script aus
+./apply-production-fix.sh
+```
+
+Das Script macht alles automatisch:
+- ✅ Code aktualisieren
+- ✅ nginx konfigurieren
+- ✅ Container neu starten
+- ✅ Alles testen
+
+**Option B: Manuelle Schritte**
+
 ```bash
 # SSH zum Server
 ssh ubuntu@83.228.225.166
@@ -260,6 +284,7 @@ curl -I https://finaro.kynso.ch
 - [QUICK_FIX_GUIDE.md](QUICK_FIX_GUIDE.md) - Schnelle Fixes für häufige Probleme
 
 ### Scripts
+- `./apply-production-fix.sh` - **⭐ All-in-One Fix** - Automatische Komplettlösung
 - `./fix-demo-nginx.sh` - Behebt nginx Konfiguration für demo.kynso.ch
 - `./diagnose-production.sh` - Vollständige System-Diagnose
 - `./test-services.sh` - Testet Backend und Frontend
