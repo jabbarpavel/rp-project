@@ -47,17 +47,35 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/tenants.json",
+                  "with": "src/environments/tenants.Production.json"
+                }
+              ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/tenants.json",
+                  "with": "src/environments/tenants.Development.json"
+                }
+              ]
             },
             "test": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/tenants.json",
+                  "with": "src/environments/tenants.Test.json"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
