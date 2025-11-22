@@ -31,9 +31,9 @@ export class ApiService {
       this.apiUrl = tenant.apiUrl;
       console.log('✅ API base URL gesetzt:', this.apiUrl);
     } else {
-      // Fallback: Nutze die aktuelle Domain mit /api
+      // Fallback: Nutze die aktuelle Domain (API-Pfade werden dann angehängt)
       const protocol = window.location.protocol;
-      this.apiUrl = `${protocol}//${hostname}/api`;
+      this.apiUrl = `${protocol}//${hostname}`;
       console.log('⚠️ Kein Tenant gefunden für Host:', hostname, '- Fallback:', this.apiUrl);
     }
   }
