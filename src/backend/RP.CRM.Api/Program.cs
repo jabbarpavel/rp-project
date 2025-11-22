@@ -62,10 +62,25 @@ if (File.Exists(tenantFile))
                 allowedOrigins.Add($"http://127.0.0.1:4300");
             }
         }
+        else if (domain.EndsWith(".localhost"))
+        {
+            // Subdomain patterns like finaro.localhost, democorp.localhost
+            // Development ports
+            allowedOrigins.Add($"http://{domain}:4200");
+            allowedOrigins.Add($"http://{domain}:5015");
+            
+            // Test environment ports
+            if (environment == "Test")
+            {
+                allowedOrigins.Add($"http://{domain}:4300");
+                allowedOrigins.Add($"http://{domain}:5016");
+            }
+        }
         else
         {
-            allowedOrigins.Add($"http://{domain}:4200");
-            allowedOrigins.Add($"https://{domain}:4200");
+            // Production domains
+            allowedOrigins.Add($"http://{domain}");
+            allowedOrigins.Add($"https://{domain}");
         }
     }
 
