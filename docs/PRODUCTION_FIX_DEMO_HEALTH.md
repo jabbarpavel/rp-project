@@ -496,14 +496,23 @@ docker exec kynso-backend sh -c 'echo "Testing DB..." && curl http://localhost:5
 ```
 
 4. **Complete Rebuild (Notfall-Option):**
+
+**⚠️ WARNUNG: Die Option `-v` löscht ALLE Datenbank-Daten unwiderruflich!**
+
 ```bash
 cd /opt/kynso/prod/app
-docker-compose down -v  # ACHTUNG: Löscht Datenbank!
-# Oder ohne -v um Daten zu behalten:
+
+# ⚠️ GEFÄHRLICH: Löscht ALLE Daten inkl. Datenbank!
+# Nur verwenden wenn du ein Backup hast!
+# docker-compose down -v  
+
+# SICHER: Behält alle Daten:
 docker-compose down
 docker-compose build --no-cache
 docker-compose up -d
 ```
+
+**Empfohlen**: Verwende NIEMALS `-v` auf dem Production-Server ohne vorheriges Backup!
 
 ---
 
