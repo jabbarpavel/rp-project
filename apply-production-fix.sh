@@ -127,9 +127,14 @@ echo "  - Backend needs ~90 seconds for database migrations"
 echo "  - Frontend needs ~30 seconds"
 echo ""
 
-for i in {1..9}; do
+# Wait for services to initialize
+WAIT_TIME_SECONDS=90
+SLEEP_INTERVAL=10
+ITERATIONS=$((WAIT_TIME_SECONDS / SLEEP_INTERVAL))
+
+for i in $(seq 1 $ITERATIONS); do
     echo -n "."
-    sleep 10
+    sleep $SLEEP_INTERVAL
 done
 echo ""
 
