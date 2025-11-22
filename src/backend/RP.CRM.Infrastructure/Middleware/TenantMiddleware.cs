@@ -53,15 +53,16 @@ namespace RP.CRM.Infrastructure.Middleware
 
                     try
                     {
-                        var jsonDoc = JsonDocument.Parse(body);
+                        using var jsonDoc = JsonDocument.Parse(body);
                         if (jsonDoc.RootElement.TryGetProperty("tenantId", out var tenantIdElement))
                         {
                             tenantId = tenantIdElement.GetInt32();
                         }
                     }
-                    catch
+                    catch (JsonException)
                     {
-                        // Body parsing failed, tenantId bleibt 0
+                        // JSON parsing failed - invalid request body format
+                        // tenantId bleibt 0, was später zur Fehlermeldung führt
                     }
                 }
             }
