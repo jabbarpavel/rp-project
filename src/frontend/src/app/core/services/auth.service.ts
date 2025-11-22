@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import tenants from '../../../environments/tenants.json';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +12,13 @@ export class AuthService {
   private tokenKey = 'jwt_token';
   private baseUrl: string;
 
-  constructor(private http: HttpClient, private router: Router) {
-    const currentHost = window.location.hostname.toLowerCase();
-
-    // domain aus apiUrl extrahieren und mit aktuellem Host vergleichen
-    const tenant = tenants.tenants.find(t => {
-      try {
-        const domain = new URL(t.apiUrl).hostname.toLowerCase();
-        return currentHost.includes(domain);
-      } catch {
-        console.warn(`Invalid apiUrl in tenant config: ${t.apiUrl}`);
-        return false;
-      }
-    });
-
-    // Fallback: Wenn kein Tenant gefunden wird, nutze die aktuelle Domain
-    if (tenant) {
-      this.baseUrl = tenant.apiUrl;
-    } else {
-      // Für Produktion: Nutze die aktuelle URL (API-Pfade wie /api/user/login werden in den Methoden angehängt)
-      const protocol = window.location.protocol;
-      this.baseUrl = `${protocol}//${currentHost}`;
-    }
-    console.log(`✅ Auth baseUrl set to: ${this.baseUrl}`);
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private configService: ConfigService
+  ) {
+    this.baseUrl = this.configService.getBaseUrl();
+    console.log(`✅ AuthService - Using base URL: ${this.baseUrl}`);
   }
 
   async login(email: string, password: string): Promise<boolean> {

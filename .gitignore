@@ -50,3 +50,4 @@ docker/ssl/
 tmp/
 temp/
 *.tmp
+test-config.html
