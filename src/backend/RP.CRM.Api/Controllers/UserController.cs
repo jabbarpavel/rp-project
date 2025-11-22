@@ -8,15 +8,21 @@ namespace RP.CRM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("[controller]")]  // Also allow /user/... (without /api prefix)
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly ITenantService _tenantService;
+        private readonly RP.CRM.Infrastructure.Context.TenantContext _tenantContext;
 
-        public UserController(IUserService userService, ITenantService tenantService)
+        public UserController(
+            IUserService userService, 
+            ITenantService tenantService,
+            RP.CRM.Infrastructure.Context.TenantContext tenantContext)
         {
             _userService = userService;
             _tenantService = tenantService;
+            _tenantContext = tenantContext;
         }
 
         // ===== REGISTER =====
@@ -70,18 +76,18 @@ namespace RP.CRM.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var host = HttpContext.Request.Host.Host.ToLower();
-            var subdomain = host.Split('.')[0];
+            // TenantMiddleware has already validated and set the tenant
+            var tenantId = _tenantContext.TenantId;
+            if (tenantId <= 0)
+                return BadRequest("Tenant not found for this domain.");
 
-            var tenants = await _tenantService.GetAllAsync();
-            var tenant = tenants.FirstOrDefault(t =>
-                t.Name.ToLower() == subdomain ||
-                t.Domain.ToLower() == subdomain);
-
+            // Get tenant details for response
+            var tenant = await _tenantService.GetByIdAsync(tenantId);
             if (tenant == null)
-                return BadRequest($"Unknown tenant for subdomain '{subdomain}'.");
+                return BadRequest("Tenant configuration error.");
 
-            AppContext.SetData("RequestTenantId", tenant.Id);
+            // Set tenant ID for UserService to use
+            AppContext.SetData("RequestTenantId", tenantId);
 
             var token = await _userService.LoginAsync(request.Email, request.Password);
             if (token == null)

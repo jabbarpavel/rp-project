@@ -34,35 +34,42 @@ namespace RP.CRM.Infrastructure.Middleware
             //    z.B. "finaro.localhost" → Domain-Spalte: "finaro.localhost"
             //    Für /register: Falls Domain nicht gefunden, versuche TenantID aus Body
             // =====================================================
-            if (path.Contains("/api/user/login") ||
-                path.Contains("/api/user/register") ||
-                path.Contains("/api/tenant"))
+            if (path.Contains("/user/login") ||
+                path.Contains("/user/register") ||
+                path.Contains("/tenant"))
             {
+                Console.WriteLine($"[TenantMiddleware] Looking up tenant for host: '{host}' (path: {path})");
                 var tenant = await tenantRepository.GetByDomainAsync(host);
                 if (tenant != null)
                 {
+                    Console.WriteLine($"[TenantMiddleware] Found tenant: {tenant.Name} (ID: {tenant.Id})");
                     tenantId = tenant.Id;
                 }
-                // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
-                // versuche tenantId aus Request Body zu extrahieren
-                else if (path.Contains("/api/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                else
                 {
-                    context.Request.EnableBuffering();
-                    var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
-                    context.Request.Body.Position = 0;
+                    Console.WriteLine($"[TenantMiddleware] No tenant found for domain: '{host}'");
+                    
+                    // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
+                    // versuche tenantId aus Request Body zu extrahieren
+                    if (path.Contains("/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                    {
+                        context.Request.EnableBuffering();
+                        var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+                        context.Request.Body.Position = 0;
 
-                    try
-                    {
-                        using var jsonDoc = JsonDocument.Parse(body);
-                        if (jsonDoc.RootElement.TryGetProperty("tenantId", out var tenantIdElement))
+                        try
                         {
-                            tenantId = tenantIdElement.GetInt32();
+                            using var jsonDoc = JsonDocument.Parse(body);
+                            if (jsonDoc.RootElement.TryGetProperty("tenantId", out var tenantIdElement))
+                            {
+                                tenantId = tenantIdElement.GetInt32();
+                            }
                         }
-                    }
-                    catch (JsonException)
-                    {
-                        // JSON parsing failed - invalid request body format
-                        // tenantId bleibt 0, was später zur Fehlermeldung führt
+                        catch (JsonException)
+                        {
+                            // JSON parsing failed - invalid request body format
+                            // tenantId bleibt 0, was später zur Fehlermeldung führt
+                        }
                     }
                 }
             }
