@@ -17,8 +17,13 @@ export class AuthService {
 
     // domain aus apiUrl extrahieren und mit aktuellem Host vergleichen
     const tenant = tenants.tenants.find(t => {
-      const domain = new URL(t.apiUrl).hostname.toLowerCase();
-      return currentHost.includes(domain);
+      try {
+        const domain = new URL(t.apiUrl).hostname.toLowerCase();
+        return currentHost.includes(domain);
+      } catch {
+        console.warn(`Invalid apiUrl in tenant config: ${t.apiUrl}`);
+        return false;
+      }
     });
 
     // Fallback: Wenn kein Tenant gefunden wird, nutze die aktuelle Domain mit /api

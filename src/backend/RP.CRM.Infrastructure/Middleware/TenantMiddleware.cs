@@ -1,12 +1,12 @@
+using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using RP.CRM.Application.Interfaces;
 using RP.CRM.Infrastructure.Context;
-using System.Text.Json;
-using System.IO;
-using System;
 
 namespace RP.CRM.Infrastructure.Middleware
 {

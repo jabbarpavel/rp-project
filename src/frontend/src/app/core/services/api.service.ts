@@ -18,8 +18,13 @@ export class ApiService {
     const tenants = tenantsConfig.tenants;
 
     const tenant = tenants.find((t: any) => {
-      const domain = new URL(t.apiUrl).hostname.toLowerCase();
-      return hostname.includes(domain);
+      try {
+        const domain = new URL(t.apiUrl).hostname.toLowerCase();
+        return hostname.includes(domain);
+      } catch {
+        console.warn(`Invalid apiUrl in tenant config: ${t.apiUrl}`);
+        return false;
+      }
     });
 
     if (tenant) {
