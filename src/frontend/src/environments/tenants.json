@@ -1,6 +1,6 @@
 {
   "tenants": [
-    { "name": "Finaro", "apiUrl": "http://finaro.localhost:5020/api" },
-    { "name": "Demo Corp", "apiUrl": "http://democorp.localhost:5020/api" }
+    { "name": "Finaro", "apiUrl": "http://finaro.localhost:5020" },
+    { "name": "Demo Corp", "apiUrl": "http://democorp.localhost:5020" }
   ]
 }
