@@ -2,7 +2,8 @@
 
 A modern, multi-tenant CRM system built with .NET 8 and Angular.
 
-> **🚑 Production Issue?** If you're experiencing connection errors, see [QUICK_FIX_GUIDE.md](QUICK_FIX_GUIDE.md) or run `./diagnose-production.sh` on your server.
+> **🎯 Quick Start?** See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for **ONE clear way** to start each environment (Dev/Test/Prod)!  
+> **🚑 Production Issue?** See [QUICK_FIX_GUIDE.md](QUICK_FIX_GUIDE.md) or run `./diagnose-production.sh` on your server.
 
 ---
 
@@ -115,6 +116,15 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 ---
 
 ## 📚 Documentation
+
+### 🎯 Getting Started
+
+| Document | Description |
+|----------|-------------|
+| **[STARTUP_GUIDE.md](STARTUP_GUIDE.md)** | **⭐ START HERE** - One clear way to start each environment |
+| **[DEVELOPMENT.md](docs/DEVELOPMENT.md)** | Complete development and testing guide |
+| **[SERVICE_TESTING.md](docs/SERVICE_TESTING.md)** | Test if frontend and backend are running |
+| **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | Common issues and solutions |
 
 ### 🔧 Development & Testing
 

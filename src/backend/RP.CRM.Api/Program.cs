@@ -35,12 +35,6 @@ var environment = builder.Environment.EnvironmentName;
 Console.WriteLine($"🌍 Environment: {environment}");
 var tenantFile = Path.Combine(AppContext.BaseDirectory, $"tenants.{environment}.json");
 
-// Fallback to generic tenants.json if environment-specific file doesn't exist
-if (!File.Exists(tenantFile))
-{
-    tenantFile = Path.Combine(AppContext.BaseDirectory, "tenants.json");
-}
-
 List<Tenant> tenants = new();
 List<string> allowedOrigins = new();
 
@@ -81,7 +75,10 @@ if (File.Exists(tenantFile))
 }
 else
 {
-    Console.WriteLine("⚠ tenants.json not found — continuing without tenant data");
+    Console.WriteLine($"❌ ERROR: Tenant configuration file not found: {Path.GetFileName(tenantFile)}");
+    Console.WriteLine($"   Expected file: {tenantFile}");
+    Console.WriteLine($"   Make sure tenants.{environment}.json exists in the application directory.");
+    throw new FileNotFoundException($"Required tenant configuration file not found: {Path.GetFileName(tenantFile)}");
 }
 
 // -----------------------------

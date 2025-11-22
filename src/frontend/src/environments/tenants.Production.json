@@ -1,6 +1,0 @@
-{
-  "tenants": [
-    { "name": "Finaro", "apiUrl": "https://finaro.kynso.ch" },
-    { "name": "Demo", "apiUrl": "https://demo.kynso.ch" }
-  ]
-}
