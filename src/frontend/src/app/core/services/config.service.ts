@@ -46,15 +46,9 @@ export class ConfigService {
       // For production, the backend is typically behind a reverse proxy on the same domain
       const protocol = window.location.protocol;
       
-      // Check if it's a kynso.ch domain (production)
-      if (currentHost.includes('kynso.ch')) {
-        // Production uses HTTPS and same domain (reverse proxy handles routing)
-        this.baseUrl = `${protocol}//${currentHost}`;
-      } else {
-        // Custom domain - try to determine the backend URL
-        // Assuming backend is on the same host with standard HTTP/HTTPS
-        this.baseUrl = `${protocol}//${currentHost}`;
-      }
+      // For all production/custom domains, use the same domain
+      // The reverse proxy (nginx/traefik) handles routing to the backend
+      this.baseUrl = `${protocol}//${currentHost}`;
     }
 
     this.initialized = true;
