@@ -17,18 +17,30 @@ export class AuthService {
 
     // domain aus apiUrl extrahieren und mit aktuellem Host vergleichen
     const tenant = tenants.tenants.find(t => {
-      const domain = new URL(t.apiUrl).hostname.toLowerCase();
-      return currentHost.includes(domain);
+      try {
+        const domain = new URL(t.apiUrl).hostname.toLowerCase();
+        return currentHost.includes(domain);
+      } catch {
+        console.warn(`Invalid apiUrl in tenant config: ${t.apiUrl}`);
+        return false;
+      }
     });
 
-    this.baseUrl = tenant ? tenant.apiUrl : 'http://localhost:5020';
+    // Fallback: Wenn kein Tenant gefunden wird, nutze die aktuelle Domain mit /api
+    if (tenant) {
+      this.baseUrl = tenant.apiUrl;
+    } else {
+      // Für Produktion: Nutze die aktuelle URL mit /api
+      const protocol = window.location.protocol;
+      this.baseUrl = `${protocol}//${currentHost}/api`;
+    }
     console.log(`✅ Auth baseUrl set to: ${this.baseUrl}`);
   }
 
   async login(email: string, password: string): Promise<boolean> {
     try {
       const res = await lastValueFrom(
-        this.http.post<{ token: string; tenantId: number }>(`${this.baseUrl}/api/user/login`, { email, password })
+        this.http.post<{ token: string; tenantId: number }>(`${this.baseUrl}/user/login`, { email, password })
       );
       if (res?.token) {
         localStorage.setItem(this.tokenKey, res.token);

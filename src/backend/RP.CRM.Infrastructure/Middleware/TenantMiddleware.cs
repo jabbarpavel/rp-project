@@ -1,4 +1,7 @@
+using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +32,7 @@ namespace RP.CRM.Infrastructure.Middleware
             // 1) Login / Register / Tenant-Liste:
             //    Tenant aus voller Host-Domain ermitteln
             //    z.B. "finaro.localhost" → Domain-Spalte: "finaro.localhost"
+            //    Für /register: Falls Domain nicht gefunden, versuche TenantID aus Body
             // =====================================================
             if (path.Contains("/api/user/login") ||
                 path.Contains("/api/user/register") ||
@@ -38,6 +42,28 @@ namespace RP.CRM.Infrastructure.Middleware
                 if (tenant != null)
                 {
                     tenantId = tenant.Id;
+                }
+                // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
+                // versuche tenantId aus Request Body zu extrahieren
+                else if (path.Contains("/api/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Request.EnableBuffering();
+                    var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+                    context.Request.Body.Position = 0;
+
+                    try
+                    {
+                        using var jsonDoc = JsonDocument.Parse(body);
+                        if (jsonDoc.RootElement.TryGetProperty("tenantId", out var tenantIdElement))
+                        {
+                            tenantId = tenantIdElement.GetInt32();
+                        }
+                    }
+                    catch (JsonException)
+                    {
+                        // JSON parsing failed - invalid request body format
+                        // tenantId bleibt 0, was später zur Fehlermeldung führt
+                    }
                 }
             }
             // =====================================================
