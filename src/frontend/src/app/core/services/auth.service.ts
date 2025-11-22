@@ -30,7 +30,7 @@ export class AuthService {
     if (tenant) {
       this.baseUrl = tenant.apiUrl;
     } else {
-      // Für Produktion: Nutze die aktuelle URL (API-Pfade werden dann angehängt)
+      // Für Produktion: Nutze die aktuelle URL (API-Pfade wie /api/user/login werden in den Methoden angehängt)
       const protocol = window.location.protocol;
       this.baseUrl = `${protocol}//${currentHost}`;
     }
