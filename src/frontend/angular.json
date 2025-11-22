@@ -47,35 +47,17 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/tenants.json",
-                  "with": "src/environments/tenants.Production.json"
-                }
-              ]
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/tenants.json",
-                  "with": "src/environments/tenants.Development.json"
-                }
-              ]
+              "sourceMap": true
             },
             "test": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/tenants.json",
-                  "with": "src/environments/tenants.Test.json"
-                }
-              ]
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"

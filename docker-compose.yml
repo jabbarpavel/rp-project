@@ -34,7 +34,7 @@ services:
       - Jwt__Key=${JWT_SECRET:-Kynso5796Kynso5796Kynso5796R!P.E}
     volumes:
       - backend_uploads:/app/uploads
-      - ./src/backend/RP.CRM.Api/tenants.json:/app/tenants.json:ro
+      - ./src/backend/RP.CRM.Api/tenants.Production.json:/app/tenants.Production.json:ro
     ports:
       - "5000:5000"
     depends_on:
