@@ -31,16 +31,19 @@ export class ConfigService {
     // Determine backend port based on frontend port and hostname
     let backendPort: string;
     
-    if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+    // Check if we're running locally (localhost, 127.0.0.1, or *.localhost)
+    const isLocalhost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.endsWith('.localhost');
+    
+    if (isLocalhost) {
       // Local development/test environments
       if (currentPort === '4300') {
-        // Test environment - Frontend auf 4300, Backend auf 5021
-        backendPort = '5021';
+        // Test environment - Frontend auf 4300, Backend auf 5016
+        backendPort = '5016';
       } else {
-        // Development environment - Frontend auf 4200, Backend auf 5020
-        backendPort = '5020';
+        // Development environment - Frontend auf 4200, Backend auf 5015
+        backendPort = '5015';
       }
-      this.baseUrl = `http://${currentHost}:${backendPort}`;
+      this.baseUrl = `http://localhost:${backendPort}`;
     } else {
       // Production or custom domain
       // For production, the backend is typically behind a reverse proxy on the same domain
@@ -58,7 +61,7 @@ export class ConfigService {
 
   /**
    * Get the base URL for API calls
-   * @returns The base URL (e.g., "http://localhost:5020" or "https://finaro.kynso.ch")
+   * @returns The base URL (e.g., "http://localhost:5015" or "https://finaro.kynso.ch")
    */
   getBaseUrl(): string {
     if (!this.initialized) {
@@ -75,7 +78,9 @@ export class ConfigService {
     const currentPort = window.location.port;
     const currentHost = window.location.hostname.toLowerCase();
     
-    if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+    const isLocalhost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.endsWith('.localhost');
+    
+    if (isLocalhost) {
       if (currentPort === '4300') {
         return 'Test';
       }
@@ -89,6 +94,6 @@ export class ConfigService {
    */
   isLocal(): boolean {
     const currentHost = window.location.hostname.toLowerCase();
-    return currentHost === 'localhost' || currentHost === '127.0.0.1';
+    return currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.endsWith('.localhost');
   }
 }
