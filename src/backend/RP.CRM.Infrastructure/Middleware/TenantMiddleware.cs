@@ -38,10 +38,16 @@ namespace RP.CRM.Infrastructure.Middleware
                 path.Contains("/user/register") ||
                 path.Contains("/tenant"))
             {
+                Console.WriteLine($"[TenantMiddleware] Looking up tenant for host: '{host}' (path: {path})");
                 var tenant = await tenantRepository.GetByDomainAsync(host);
                 if (tenant != null)
                 {
+                    Console.WriteLine($"[TenantMiddleware] Found tenant: {tenant.Name} (ID: {tenant.Id})");
                     tenantId = tenant.Id;
+                }
+                else
+                {
+                    Console.WriteLine($"[TenantMiddleware] No tenant found for domain: '{host}'");
                 }
                 // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
                 // versuche tenantId aus Request Body zu extrahieren
