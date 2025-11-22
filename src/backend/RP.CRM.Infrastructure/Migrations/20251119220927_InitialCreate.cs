@@ -239,11 +239,6 @@ namespace RP.CRM.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Tenants",
-                columns: new[] { "Id", "CreatedAt", "Domain", "Name", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "finaro", "Finaro", null });
-
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerRelationships_CustomerId_RelatedCustomerId",
                 table: "CustomerRelationships",
