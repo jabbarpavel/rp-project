@@ -75,8 +75,9 @@ if (File.Exists(tenantFile))
 }
 else
 {
-    Console.WriteLine($"❌ ERROR: Tenant configuration file not found: {Path.GetFileName(tenantFile)}");
-    Console.WriteLine($"   Expected file: {tenantFile}");
+    Console.WriteLine($"❌ ERROR: Tenant configuration file not found!");
+    Console.WriteLine($"   Expected file: {Path.GetFileName(tenantFile)}");
+    Console.WriteLine($"   Full path: {tenantFile}");
     Console.WriteLine($"   Make sure tenants.{environment}.json exists in the application directory.");
     throw new FileNotFoundException($"Required tenant configuration file not found: {Path.GetFileName(tenantFile)}");
 }

@@ -122,6 +122,7 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 | Document | Description |
 |----------|-------------|
 | **[STARTUP_GUIDE.md](STARTUP_GUIDE.md)** | **⭐ START HERE** - One clear way to start each environment |
+| **[CONFIGURATION_GUIDE.md](docs/CONFIGURATION_GUIDE.md)** | **📝 NEW** - Complete guide to environment-specific settings |
 | **[DEVELOPMENT.md](docs/DEVELOPMENT.md)** | Complete development and testing guide |
 | **[SERVICE_TESTING.md](docs/SERVICE_TESTING.md)** | Test if frontend and backend are running |
 | **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | Common issues and solutions |
