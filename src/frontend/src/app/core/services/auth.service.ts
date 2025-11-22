@@ -26,13 +26,13 @@ export class AuthService {
       }
     });
 
-    // Fallback: Wenn kein Tenant gefunden wird, nutze die aktuelle Domain mit /api
+    // Fallback: Wenn kein Tenant gefunden wird, nutze die aktuelle Domain
     if (tenant) {
       this.baseUrl = tenant.apiUrl;
     } else {
-      // Für Produktion: Nutze die aktuelle URL mit /api
+      // Für Produktion: Nutze die aktuelle URL (API-Pfade wie /api/user/login werden in den Methoden angehängt)
       const protocol = window.location.protocol;
-      this.baseUrl = `${protocol}//${currentHost}/api`;
+      this.baseUrl = `${protocol}//${currentHost}`;
     }
     console.log(`✅ Auth baseUrl set to: ${this.baseUrl}`);
   }
