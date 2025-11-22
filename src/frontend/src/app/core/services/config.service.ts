@@ -43,7 +43,7 @@ export class ConfigService {
         // Development environment - Frontend auf 4200, Backend auf 5015
         backendPort = '5015';
       }
-      this.baseUrl = `http://localhost:${backendPort}`;
+      this.baseUrl = `http://${currentHost}:${backendPort}`;
     } else {
       // Production or custom domain
       // For production, the backend is typically behind a reverse proxy on the same domain
