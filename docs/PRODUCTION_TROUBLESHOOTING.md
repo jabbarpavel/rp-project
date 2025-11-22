@@ -225,7 +225,72 @@ docker-compose up -d
 
 ## Common Issues and Solutions
 
-### Issue 1: Container Keeps Restarting
+### Issue 1: 405 Not Allowed on Login/API Requests
+
+**Symptoms:**
+```
+POST https://finaro.kynso.ch/user/login 405 (Not Allowed)
+```
+
+Browser console shows:
+```
+POST https://finaro.kynso.ch/user/login 405 (Not Allowed)
+```
+
+Nginx logs show:
+```
+172.18.0.1 - - [22/Nov/2025:16:16:28 +0000] "POST /user/login HTTP/1.0" 405 559
+```
+
+**Root Cause:**
+The frontend container's nginx configuration is missing proxy rules to forward API requests to the backend.
+
+**Solution:**
+
+The `docker/nginx.conf` file must include proxy blocks for backend endpoints. Check if these sections exist:
+
+```nginx
+# Backend API endpoints
+location /api/ {
+    proxy_pass http://backend:5000/api/;
+    # ... proxy headers ...
+}
+
+# Backend User endpoints (for /user/login and /user/register)
+location /user/ {
+    proxy_pass http://backend:5000/user/;
+    # ... proxy headers ...
+}
+```
+
+**If these sections are missing:**
+
+1. Update `docker/nginx.conf` with the correct proxy configuration
+2. Rebuild the frontend container:
+   ```bash
+   docker-compose build frontend
+   docker-compose up -d frontend
+   ```
+3. Verify the fix:
+   ```bash
+   # Check frontend logs
+   docker-compose logs frontend
+   
+   # Test login from the browser or:
+   curl -X POST https://finaro.kynso.ch/user/login \
+     -H "Content-Type: application/json" \
+     -d '{"email":"test@example.com","password":"test123"}'
+   ```
+
+**Why this happens:**
+- The frontend makes API calls to the same domain (e.g., `https://finaro.kynso.ch/user/login`)
+- Without proxy rules, nginx tries to serve these as static files
+- Static files don't support POST/PUT/DELETE methods → 405 error
+- The proxy configuration forwards requests to the backend container
+
+---
+
+### Issue 2: Container Keeps Restarting
 
 **Symptoms:**
 ```bash
@@ -246,7 +311,7 @@ docker-compose logs backend --tail=100
 
 ---
 
-### Issue 2: Health Check Fails
+### Issue 3: Health Check Fails
 
 **Symptoms:**
 ```bash
@@ -266,7 +331,7 @@ docker inspect kynso-backend | grep -A 10 Health
 
 ---
 
-### Issue 3: Port 5000 Conflict
+### Issue 4: Port 5000 Conflict
 
 **Symptoms:**
 ```
@@ -291,7 +356,7 @@ ports:
 
 ---
 
-### Issue 4: Database Connection Fails
+### Issue 5: Database Connection Fails
 
 **Symptoms:**
 ```
@@ -332,7 +397,7 @@ Migration failed: Could not connect to server
 
 ---
 
-### Issue 5: Wrong Port Configuration
+### Issue 6: Wrong Port Configuration
 
 **Symptoms:**
 Logs show:
@@ -474,5 +539,5 @@ When troubleshooting connection refused errors, check:
 
 ---
 
-**Last Updated:** 2025-11-21
-**Version:** 1.0
+**Last Updated:** 2025-11-22
+**Version:** 1.1 - Added 405 Not Allowed troubleshooting
