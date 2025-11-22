@@ -142,6 +142,84 @@ POST https://finaro.kynso.ch/user/login 200 OK
 
 ## 🔍 Troubleshooting
 
+### If containers show "unhealthy" status:
+
+The health checks need time to pass, especially on first startup:
+
+```bash
+docker-compose ps
+```
+
+**If you see `(unhealthy)` status:**
+
+1. **Wait a bit longer** - Backend needs up to 60 seconds to initialize (database migrations, seeding)
+2. **Check the logs** to see if there are actual errors:
+   ```bash
+   docker-compose logs backend --tail=50
+   docker-compose logs frontend --tail=20
+   ```
+
+3. **Backend unhealthy** - Usually means:
+   - Database is still initializing
+   - Migrations are running
+   - Health check endpoint `/api/health` not responding yet
+   - Wait 60-90 seconds after `docker-compose up -d`
+
+4. **Frontend unhealthy** - Usually means:
+   - Nginx is starting up
+   - Backend not ready yet (frontend depends on backend)
+   - Wait 15-30 seconds after backend is healthy
+
+**The containers will show `(healthy)` once they pass all health checks.**
+
+### If a specific tenant (e.g., demo.kynso.ch) is not accessible:
+
+Check if the tenant is properly configured:
+
+1. **Verify tenant configuration:**
+   ```bash
+   docker exec -it kynso-backend cat /app/tenants.Production.json
+   ```
+   
+   Should show both tenants:
+   ```json
+   [
+     {"Id": 1, "Name": "Finaro", "Domain": "finaro.kynso.ch"},
+     {"Id": 2, "Name": "Demo", "Domain": "demo.kynso.ch"}
+   ]
+   ```
+
+2. **Check DNS resolution:**
+   ```bash
+   nslookup demo.kynso.ch
+   ping demo.kynso.ch
+   ```
+   
+   Both domains should resolve to the same server IP.
+
+3. **Check reverse proxy configuration:**
+   If using an external reverse proxy (Traefik, Caddy, nginx), ensure it's configured for both domains:
+   ```
+   finaro.kynso.ch → http://localhost:8080
+   demo.kynso.ch → http://localhost:8080
+   ```
+
+4. **Check backend logs for the domain:**
+   ```bash
+   docker-compose logs backend | grep -i demo
+   ```
+
+5. **Test backend directly:**
+   ```bash
+   curl -H "Host: demo.kynso.ch" http://localhost:8080/api/health
+   ```
+
+6. **Check SSL certificates** (if using HTTPS):
+   Ensure SSL certificates cover both domains:
+   ```bash
+   openssl s_client -connect demo.kynso.ch:443 -servername demo.kynso.ch < /dev/null 2>&1 | grep -A 2 "subject"
+   ```
+
 ### If login still doesn't work:
 
 1. **Check that frontend container is running:**
