@@ -1,8 +1,27 @@
 # 🚀 Deployment auf Production - Schnellanleitung
 
-## ✅ Voraussetzung
+## ⚠️ WICHTIG: Voraussetzung (VOR den 3 Schritten!)
 
-Du hast bereits Code auf dem `main` Branch (✓ fertig!)
+Deine Änderungen müssen **auf GitHub gepusht** sein, bevor du deployen kannst!
+
+### Prüfe zuerst (auf deinem lokalen Computer):
+
+```bash
+# 1. Bist du auf dem main Branch?
+git branch
+
+# 2. Sind alle Änderungen committed?
+git status
+
+# 3. Falls nicht committed, dann:
+git add .
+git commit -m "Deine Änderung (z.B. Kundentyp hinzugefügt)"
+
+# 4. ⭐ WICHTIG: Push zu GitHub!
+git push origin main
+```
+
+> **❌ Ohne `git push origin main` sieht der Production Server deine Änderungen NICHT!**
 
 ---
 
