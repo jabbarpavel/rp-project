@@ -10,10 +10,12 @@ import { PermissionService } from '../../core/services/permission.service';
 
 interface CustomerDto {
   id: number;
+  customerType?: number; // 0 = Privatperson, 1 = Organisation
   firstName?: string;
   name: string;
   email: string;
   ahvNum: string;
+  companyName?: string;
 
   advisorId?: number | null;
   advisorEmail?: string | null;
@@ -44,6 +46,7 @@ export class CustomersPage implements OnInit {
   customers: CustomerDto[] = [];
   filteredCustomers: CustomerDto[] = [];
   searchTerm = '';
+  typeFilter: 'all' | 'private' | 'org' = 'all';
   loading = false;
   error = '';
   sortColumn: keyof CustomerDto | '' = '';
@@ -82,36 +85,50 @@ export class CustomersPage implements OnInit {
     });
   }
 
+  setTypeFilter(filter: 'all' | 'private' | 'org'): void {
+    this.typeFilter = filter;
+    this.applyFilter();
+  }
+
   applyFilter(): void {
     const term = this.searchTerm.toLowerCase().trim();
 
-    if (!term) {
-      this.filteredCustomers = [...this.customers];
-      this.applySorting();
-      return;
+    let filtered = [...this.customers];
+
+    // Apply type filter
+    if (this.typeFilter === 'private') {
+      filtered = filtered.filter(c => c.customerType === 0 || c.customerType === undefined);
+    } else if (this.typeFilter === 'org') {
+      filtered = filtered.filter(c => c.customerType === 1);
     }
 
-    this.filteredCustomers = this.customers.filter(c => {
-      const firstName = c.firstName?.toLowerCase() ?? '';
-      const lastName = c.name?.toLowerCase() ?? '';
-      const email = c.email?.toLowerCase() ?? '';
-      const ahv = c.ahvNum?.toLowerCase() ?? '';
+    // Apply search filter
+    if (term) {
+      filtered = filtered.filter(c => {
+        const firstName = c.firstName?.toLowerCase() ?? '';
+        const lastName = c.name?.toLowerCase() ?? '';
+        const email = c.email?.toLowerCase() ?? '';
+        const ahv = c.ahvNum?.toLowerCase() ?? '';
+        const companyName = c.companyName?.toLowerCase() ?? '';
 
-      const advFirst = c.advisorFirstName?.toLowerCase() ?? '';
-      const advLast = c.advisorLastName?.toLowerCase() ?? '';
-      const advEmail = c.advisorEmail?.toLowerCase() ?? '';
+        const advFirst = c.advisorFirstName?.toLowerCase() ?? '';
+        const advLast = c.advisorLastName?.toLowerCase() ?? '';
+        const advEmail = c.advisorEmail?.toLowerCase() ?? '';
 
-      return (
-        firstName.includes(term) ||
-        lastName.includes(term) ||
-        email.includes(term) ||
-        ahv.includes(term) ||
-        advFirst.includes(term) ||
-        advLast.includes(term) ||
-        advEmail.includes(term)
-      );
-    });
+        return (
+          firstName.includes(term) ||
+          lastName.includes(term) ||
+          email.includes(term) ||
+          ahv.includes(term) ||
+          companyName.includes(term) ||
+          advFirst.includes(term) ||
+          advLast.includes(term) ||
+          advEmail.includes(term)
+        );
+      });
+    }
 
+    this.filteredCustomers = filtered;
     this.applySorting();
   }
 
@@ -194,6 +211,20 @@ export class CustomersPage implements OnInit {
 
     if (fn && ln) return `${fn} ${ln}`;
     if (email) return email;
+    return '–';
+  }
+
+  getDisplayName(c: CustomerDto): string {
+    // For Organisation, show company name
+    if (c.customerType === 1) {
+      return c.companyName || '–';
+    }
+    // For Privatperson, show "Vorname Nachname"
+    const firstName = c.firstName?.trim() || '';
+    const lastName = c.name?.trim() || '';
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (lastName) return lastName;
+    if (firstName) return firstName;
     return '–';
   }
 }

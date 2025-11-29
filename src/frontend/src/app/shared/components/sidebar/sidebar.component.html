@@ -1,5 +1,17 @@
 <div class="sidebar">
-  <div class="sidebar__logo">Tenant Logo</div>
+  <div class="sidebar__logo">
+    <!-- Show logo if available -->
+    <img 
+      *ngIf="logoData" 
+      [src]="logoData" 
+      [alt]="tenantName + ' Logo'"
+      class="sidebar__logo-img"
+    />
+    <!-- Show placeholder if no logo -->
+    <div *ngIf="!logoData" class="sidebar__logo-placeholder">
+      <span class="sidebar__logo-placeholder-text">Firmen Logo</span>
+    </div>
+  </div>
 
   <nav class="sidebar__nav">
     <a
