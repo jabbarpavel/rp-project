@@ -83,9 +83,6 @@ interface CustomerDetailDto {
           <p class="subline">
             {{ getHeaderDisplay(customer) }}
           </p>
-          <p class="customer-number" *ngIf="customer">
-            {{ customer.customerNumber }}
-          </p>
           <span *ngIf="isPrimaryContact" class="primary-contact-badge">Hauptansprechperson</span>
           <span *ngIf="customer?.customerType === 1" class="org-badge">Organisation</span>
         </div>
@@ -105,9 +102,10 @@ interface CustomerDetailDto {
         <div class="left-column">
 
           <!-- Stammdaten -->
-          <section class="card">
-            <div class="card-header">
+          <section class="card" *ngIf="customer.customerType === 0">
+            <div class="card-header with-customer-number">
               <h2>Stammdaten</h2>
+              <span class="customer-number-inline">{{ customer.customerNumber }}</span>
             </div>
             <dl class="detail-list">
 
@@ -255,8 +253,9 @@ interface CustomerDetailDto {
 
           <!-- Organisation Details -->
           <section class="card" *ngIf="customer.customerType === 1">
-            <div class="card-header">
+            <div class="card-header with-customer-number">
               <h2>Firmendaten</h2>
+              <span class="customer-number-inline">{{ customer.customerNumber }}</span>
             </div>
             <dl class="detail-list">
 
@@ -269,6 +268,23 @@ interface CustomerDetailDto {
                 <div>
                   <dt>Rechtsform</dt>
                   <dd>{{ customer.legalForm || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- E-Mail + Sprache -->
+              <div class="double-row">
+                <div>
+                  <dt>E-Mail</dt>
+                  <dd>
+                    <a *ngIf="customer.email" class="link" href="mailto:{{ customer.email }}">
+                      {{ customer.email }}
+                    </a>
+                    <span *ngIf="!customer.email">–</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Sprache</dt>
+                  <dd>{{ customer.language || '–' }}</dd>
                 </div>
               </div>
 
@@ -337,10 +353,27 @@ interface CustomerDetailDto {
                 </div>
               </div>
 
-              <!-- Ansprechperson Section -->
-              <div class="address-section">
-                <h3>Ansprechperson</h3>
+              <!-- Erstellt + Zuletzt geändert -->
+              <div class="double-row">
+                <div>
+                  <dt>Erstellt am</dt>
+                  <dd>{{ customer.createdAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+                </div>
+                <div>
+                  <dt>Zuletzt geändert</dt>
+                  <dd>{{ customer.updatedAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+                </div>
               </div>
+
+            </dl>
+          </section>
+
+          <!-- Ansprechperson Section (Organisation) -->
+          <section class="card" *ngIf="customer.customerType === 1">
+            <div class="card-header">
+              <h2>Ansprechperson</h2>
+            </div>
+            <dl class="detail-list">
 
               <!-- Anrede + Name -->
               <div class="double-row">
@@ -480,13 +513,6 @@ interface CustomerDetailDto {
       color: #6b7280;
     }
 
-    .customer-number {
-      margin-top: .15rem;
-      font-size: .85rem;
-      color: #6b7280;
-      font-weight: 500;
-    }
-
     .primary-contact-badge {
       display: inline-block;
       padding: .25rem .7rem;
@@ -592,6 +618,18 @@ interface CustomerDetailDto {
 
     .card-header {
       margin-bottom: .65rem;
+    }
+
+    .card-header.with-customer-number {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .customer-number-inline {
+      font-size: .85rem;
+      font-weight: 500;
+      color: #9ca3af;
     }
 
     .card-header h2 {

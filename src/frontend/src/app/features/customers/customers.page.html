@@ -9,14 +9,39 @@
     <button class="add-btn" type="button" (click)="createCustomer()">+ Neuer Kunde</button>
   </div>
 
-  <div class="search-bar">
-    <input
-      type="text"
-      placeholder="Suche nach Kunde oder Berater (Name, E-Mail, AHV)…"
-      [(ngModel)]="searchTerm"
-      (input)="applyFilter()"
-      class="search-input"
-    />
+  <div class="filter-bar">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Suche nach Kunde oder Berater (Name, E-Mail, AHV)…"
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter()"
+        class="search-input"
+      />
+    </div>
+    <div class="type-filter">
+      <button 
+        class="filter-btn" 
+        [class.active]="typeFilter === 'all'" 
+        (click)="setTypeFilter('all')"
+      >
+        Alle
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="typeFilter === 'private'" 
+        (click)="setTypeFilter('private')"
+      >
+        Privatpersonen
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="typeFilter === 'org'" 
+        (click)="setTypeFilter('org')"
+      >
+        Organisationen
+      </button>
+    </div>
   </div>
 
   <div *ngIf="loading" class="loading">Lade Kunden...</div>
@@ -27,14 +52,14 @@
       <thead>
         <tr>
           <th></th>
-          <th (click)="sortBy('id')">
-            ID
-            <span class="sort-icon" *ngIf="sortColumn === 'id'">
+          <th (click)="sortBy('customerType')">
+            Typ
+            <span class="sort-icon" *ngIf="sortColumn === 'customerType'">
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
           </th>
           <th (click)="sortBy('firstName')">
-            Vorname
+            Vorname / Firma
             <span class="sort-icon" *ngIf="sortColumn === 'firstName'">
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
@@ -75,9 +100,13 @@
       <tbody>
         <tr *ngFor="let c of filteredCustomers">
           <td class="icon-cell" (click)="viewCustomer(c)">🔍</td>
-          <td>{{ c.id }}</td>
-          <td>{{ c.firstName }}</td>
-          <td>{{ c.name }}</td>
+          <td>
+            <span class="type-badge" [class.org]="c.customerType === 1">
+              {{ c.customerType === 1 ? 'Organisation' : 'Privatperson' }}
+            </span>
+          </td>
+          <td>{{ c.customerType === 1 ? c.companyName : c.firstName }}</td>
+          <td>{{ c.customerType === 1 ? '' : c.name }}</td>
           <td>{{ c.email }}</td>
           <td>{{ c.ahvNum }}</td>
           <td>{{ getAdvisorDisplay(c) }}</td>

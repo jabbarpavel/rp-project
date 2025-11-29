@@ -26,7 +26,8 @@ export const RelationshipTypes = {
   Parent: 'Eltern',
   Child: 'Kind',
   Sibling: 'Geschwister',
-  SameHousehold: 'GleicherHaushalt'
+  SameHousehold: 'GleicherHaushalt',
+  OrganisationMember: 'MitgliedEinerOrganisation'
 };
 
 @Injectable({

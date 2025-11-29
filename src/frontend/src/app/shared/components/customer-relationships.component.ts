@@ -68,6 +68,7 @@ interface CustomerSearchResult {
             <option [value]="RelationshipTypes.Child">{{ RelationshipTypes.Child }}</option>
             <option [value]="RelationshipTypes.Sibling">{{ RelationshipTypes.Sibling }}</option>
             <option [value]="RelationshipTypes.SameHousehold">{{ RelationshipTypes.SameHousehold }}</option>
+            <option [value]="RelationshipTypes.OrganisationMember">Mitglied einer Organisation</option>
           </select>
         </div>
 
