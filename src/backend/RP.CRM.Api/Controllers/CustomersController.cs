@@ -48,7 +48,9 @@ namespace RP.CRM.Api.Controllers
                 TenantId = c.TenantId,
                 IsDeleted = c.IsDeleted,
                 CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt
+                UpdatedAt = c.UpdatedAt,
+                // Always include CompanyName for customer list display
+                CompanyName = c.CompanyName
             };
 
             if (includeAllFields)
@@ -68,8 +70,7 @@ namespace RP.CRM.Api.Controllers
                 dto.Locality = c.Locality;
                 dto.Canton = c.Canton;
 
-                // Organisation fields
-                dto.CompanyName = c.CompanyName;
+                // Organisation fields (additional)
                 dto.LegalForm = c.LegalForm;
                 dto.Industry = c.Industry;
                 dto.UidNumber = c.UidNumber;
