@@ -119,12 +119,14 @@ git checkout dev
 # ... Code ändern ...
 git add .
 git commit -m "Meine Änderung"
+git push origin dev  # Sichern auf GitHub
 
 # 2. Testen auf TEST
 git checkout test
 git merge dev
+git push origin test  # Sichern auf GitHub
 
-# 3. Freigeben auf MAIN
+# 3. Freigeben auf MAIN (idealerweise via Pull Request)
 git checkout main
 git merge test
 git push origin main
@@ -157,8 +159,8 @@ Falls etwas schiefgeht:
 # Letzte Commits anzeigen
 git log --oneline -5
 
-# Zurück zu vorherigem Commit
-git checkout <commit-hash>
+# Zurück zu vorherigem Commit (bleibt auf main Branch)
+git reset --hard <commit-hash>
 
 # Container neu starten
 docker-compose up -d --build
