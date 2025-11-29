@@ -7,6 +7,6 @@ namespace RP.CRM.Domain.Enums
         public const string Child = "Kind";
         public const string Sibling = "Geschwister";
         public const string SameHousehold = "GleicherHaushalt";
-        public const string OrganisationMember = "MitgliedEinerOrganisation";
+        public const string OrganisationMember = "Mitglied einer Organisation";
     }
 }
