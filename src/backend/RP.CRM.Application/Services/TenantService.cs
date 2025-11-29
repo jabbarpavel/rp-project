@@ -21,6 +21,9 @@ namespace RP.CRM.Application.Services
         public async Task<Tenant> CreateAsync(Tenant tenant) =>
             await _repository.CreateAsync(tenant);
 
+        public async Task<Tenant> UpdateAsync(Tenant tenant) =>
+            await _repository.UpdateAsync(tenant);
+
         public async Task<bool> DeleteAsync(int id) =>
             await _repository.DeleteAsync(id);
 
