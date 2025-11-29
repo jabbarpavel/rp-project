@@ -1,27 +1,22 @@
 # 🚀 Deployment auf Production - Schnellanleitung
 
-## ⚠️ WICHTIG: Voraussetzung (VOR den 3 Schritten!)
+## ✅ Voraussetzung
 
-Deine Änderungen müssen **auf GitHub gepusht** sein, bevor du deployen kannst!
+Deine Änderungen sind bereits auf GitHub im `main` Branch? **Dann direkt zu den 3 Schritten!** ⬇️
 
-### Prüfe zuerst (auf deinem lokalen Computer):
+<details>
+<summary>⚠️ Falls du lokale Änderungen hast, die noch nicht auf GitHub sind:</summary>
 
 ```bash
-# 1. Bist du auf dem main Branch?
-git branch
-
-# 2. Sind alle Änderungen committed?
-git status
-
-# 3. Falls nicht committed, dann:
+# Auf deinem lokalen Computer:
 git add .
-git commit -m "Deine Änderung (z.B. Kundentyp hinzugefügt)"
-
-# 4. ⭐ WICHTIG: Push zu GitHub!
-git push origin main
+git commit -m "Deine Änderung"
+git push origin main    # ⭐ Push zu GitHub!
 ```
 
-> **❌ Ohne `git push origin main` sieht der Production Server deine Änderungen NICHT!**
+> Ohne `git push origin main` sieht der Production Server deine Änderungen nicht!
+
+</details>
 
 ---
 
@@ -57,6 +52,34 @@ docker-compose up -d --build
 
 # Warte 30-60 Sekunden, dann Status prüfen
 docker-compose ps
+```
+
+---
+
+## 🔍 Troubleshooting: Änderungen erscheinen nicht?
+
+Falls deine Änderungen nach den 3 Schritten nicht sichtbar sind:
+
+```bash
+# 1. Prüfe ob git pull erfolgreich war
+cd /opt/kynso/prod/app
+git log --oneline -3
+# ➜ Siehst du deinen Commit? Falls nicht: git pull origin main
+
+# 2. Prüfe ob Container neu gebaut wurden
+docker-compose ps
+# ➜ Alle Container müssen "running (healthy)" zeigen
+
+# 3. Falls Container nicht healthy: Logs prüfen
+docker-compose logs backend | tail -50
+docker-compose logs frontend | tail -50
+
+# 4. Container komplett neu bauen (ohne Cache)
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+
+# 5. Browser-Cache leeren (Ctrl+Shift+R oder Inkognito-Modus)
 ```
 
 ---
