@@ -27,6 +27,14 @@
   font-style: italic;
   font-weight: normal;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar__logo-hint {
+  font-size: 0.65rem;
+  color: #6b7280;
 }
 
 .sidebar__nav {

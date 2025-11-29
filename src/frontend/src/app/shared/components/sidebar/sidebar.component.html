@@ -7,9 +7,12 @@
       (error)="onLogoError()"
       class="sidebar__logo-img"
     />
-    <span *ngIf="!logoUrl || logoError" class="sidebar__logo-missing">
-      Firmen Logo fehlt
-    </span>
+    <div *ngIf="!logoUrl || logoError" class="sidebar__logo-missing">
+      <span>Firmen Logo fehlt</span>
+      <span *ngIf="expectedLogoFilename" class="sidebar__logo-hint">
+        ({{ expectedLogoFilename }})
+      </span>
+    </div>
   </div>
 
   <nav class="sidebar__nav">

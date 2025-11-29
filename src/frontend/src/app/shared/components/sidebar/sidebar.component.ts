@@ -33,6 +33,7 @@ export class SidebarComponent implements OnInit {
   logoUrl: string | null = null;
   logoError = false;
   tenantName = '';
+  expectedLogoFilename = '';
 
   constructor(private api: ApiService) {}
 
@@ -43,6 +44,7 @@ export class SidebarComponent implements OnInit {
   loadTenantLogo(): void {
     const tenantId = localStorage.getItem('tenant_id');
     if (!tenantId) {
+      console.warn('Sidebar: No tenant_id found in localStorage');
       this.logoError = true;
       return;
     }
@@ -53,15 +55,21 @@ export class SidebarComponent implements OnInit {
         // Try to load logo based on tenant domain
         // Logo files should be named: {domain}.png (e.g., finaro.png)
         const domain = tenant.domain?.toLowerCase() || tenant.name?.toLowerCase().replace(/\s+/g, '_');
+        this.expectedLogoFilename = `${domain}.png`;
         this.logoUrl = `assets/logos/${domain}.png`;
+        console.log(`Sidebar: Loading logo for tenant "${tenant.name}" (domain: "${tenant.domain}")`);
+        console.log(`Sidebar: Expected logo file: assets/logos/${domain}.png`);
       },
-      error: () => {
+      error: (err) => {
+        console.error('Sidebar: Failed to load tenant info', err);
         this.logoError = true;
       }
     });
   }
 
   onLogoError(): void {
+    console.warn(`Sidebar: Logo file not found. Expected: assets/logos/${this.expectedLogoFilename}`);
+    console.warn('Sidebar: Make sure to place your logo file in src/frontend/src/assets/logos/ with the filename matching your tenant domain.');
     this.logoError = true;
     this.logoUrl = null;
   }
