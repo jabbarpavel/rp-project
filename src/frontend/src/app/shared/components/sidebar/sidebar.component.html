@@ -1,18 +1,29 @@
 <div class="sidebar">
-  <div class="sidebar__logo">
+  <div class="sidebar__logo" (click)="triggerFileInput()">
+    <!-- Show logo if available -->
     <img 
-      *ngIf="logoUrl && !logoError" 
-      [src]="logoUrl" 
+      *ngIf="logoData" 
+      [src]="logoData" 
       [alt]="tenantName + ' Logo'"
-      (error)="onLogoError()"
       class="sidebar__logo-img"
     />
-    <div *ngIf="!logoUrl || logoError" class="sidebar__logo-missing">
-      <span>Firmen Logo fehlt</span>
-      <span *ngIf="expectedLogoFilename" class="sidebar__logo-hint">
-        ({{ expectedLogoFilename }})
-      </span>
+    <!-- Show upload button if no logo -->
+    <div *ngIf="!logoData && !uploading" class="sidebar__logo-upload">
+      <span class="sidebar__logo-upload-icon">📷</span>
+      <span class="sidebar__logo-upload-text">Logo hinzufügen</span>
     </div>
+    <!-- Show uploading indicator -->
+    <div *ngIf="uploading" class="sidebar__logo-uploading">
+      <span>Hochladen...</span>
+    </div>
+    <!-- Hidden file input -->
+    <input 
+      type="file" 
+      #fileInput 
+      (change)="onFileSelected($event)" 
+      accept="image/*"
+      style="display: none;"
+    />
   </div>
 
   <nav class="sidebar__nav">
