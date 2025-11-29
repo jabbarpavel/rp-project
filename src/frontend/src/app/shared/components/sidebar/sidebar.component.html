@@ -1,5 +1,16 @@
 <div class="sidebar">
-  <div class="sidebar__logo">Tenant Logo</div>
+  <div class="sidebar__logo">
+    <img 
+      *ngIf="logoUrl && !logoError" 
+      [src]="logoUrl" 
+      [alt]="tenantName + ' Logo'"
+      (error)="onLogoError()"
+      class="sidebar__logo-img"
+    />
+    <span *ngIf="!logoUrl || logoError" class="sidebar__logo-missing">
+      Firmen Logo fehlt
+    </span>
+  </div>
 
   <nav class="sidebar__nav">
     <a
