@@ -78,9 +78,9 @@ docker-compose logs frontend | tail -50
 docker-compose down
 docker-compose build --no-cache
 docker-compose up -d
-
-# 5. Browser-Cache leeren (Ctrl+Shift+R oder Inkognito-Modus)
 ```
+
+> **Hinweis:** Mit dem aktuellen nginx.conf Fix sollte der Browser automatisch neue Änderungen laden. Die `index.html` wird nicht mehr gecacht, daher sehen Benutzer sofort neue Versionen ohne Ctrl+Shift+R.
 
 ---
 
