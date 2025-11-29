@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <div class="sidebar__logo" (click)="triggerFileInput()">
+  <div class="sidebar__logo">
     <!-- Show logo if available -->
     <img 
       *ngIf="logoData" 
@@ -7,23 +7,10 @@
       [alt]="tenantName + ' Logo'"
       class="sidebar__logo-img"
     />
-    <!-- Show upload button if no logo -->
-    <div *ngIf="!logoData && !uploading" class="sidebar__logo-upload">
-      <span class="sidebar__logo-upload-icon">📷</span>
-      <span class="sidebar__logo-upload-text">Logo hinzufügen</span>
+    <!-- Show placeholder if no logo -->
+    <div *ngIf="!logoData" class="sidebar__logo-placeholder">
+      <span class="sidebar__logo-placeholder-text">Firmen Logo</span>
     </div>
-    <!-- Show uploading indicator -->
-    <div *ngIf="uploading" class="sidebar__logo-uploading">
-      <span>Hochladen...</span>
-    </div>
-    <!-- Hidden file input -->
-    <input 
-      type="file" 
-      #fileInput 
-      (change)="onFileSelected($event)" 
-      accept="image/*"
-      style="display: none;"
-    />
   </div>
 
   <nav class="sidebar__nav">
