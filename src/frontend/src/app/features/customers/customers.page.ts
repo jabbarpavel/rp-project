@@ -213,4 +213,18 @@ export class CustomersPage implements OnInit {
     if (email) return email;
     return '–';
   }
+
+  getDisplayName(c: CustomerDto): string {
+    // For Organisation, show company name
+    if (c.customerType === 1) {
+      return c.companyName || '–';
+    }
+    // For Privatperson, show "Vorname Nachname"
+    const firstName = c.firstName?.trim() || '';
+    const lastName = c.name?.trim() || '';
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (lastName) return lastName;
+    if (firstName) return firstName;
+    return '–';
+  }
 }

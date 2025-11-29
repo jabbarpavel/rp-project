@@ -58,14 +58,8 @@
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
           </th>
-          <th (click)="sortBy('firstName')">
-            Vorname / Firma
-            <span class="sort-icon" *ngIf="sortColumn === 'firstName'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
           <th (click)="sortBy('name')">
-            Nachname
+            Name / Firma
             <span class="sort-icon" *ngIf="sortColumn === 'name'">
               {{ sortDirection === 'asc' ? '▲' : '▼' }}
             </span>
@@ -105,8 +99,7 @@
               {{ c.customerType === 1 ? 'Organisation' : 'Privatperson' }}
             </span>
           </td>
-          <td>{{ c.customerType === 1 ? c.companyName : c.firstName }}</td>
-          <td>{{ c.customerType === 1 ? '' : c.name }}</td>
+          <td>{{ getDisplayName(c) }}</td>
           <td>{{ c.email }}</td>
           <td>{{ c.ahvNum }}</td>
           <td>{{ getAdvisorDisplay(c) }}</td>
