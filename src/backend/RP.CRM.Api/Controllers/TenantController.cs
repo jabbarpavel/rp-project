@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RP.CRM.Application.DTOs;
 using RP.CRM.Application.Interfaces;
 using RP.CRM.Domain.Entities;
+using RP.CRM.Infrastructure.Context;
 
 namespace RP.CRM.Api.Controllers
 {
@@ -10,10 +12,12 @@ namespace RP.CRM.Api.Controllers
     public class TenantController : ControllerBase
     {
         private readonly ITenantService _tenantService;
+        private readonly TenantContext _tenantContext;
 
-        public TenantController(ITenantService tenantService)
+        public TenantController(ITenantService tenantService, TenantContext tenantContext)
         {
             _tenantService = tenantService;
+            _tenantContext = tenantContext;
         }
 
         [HttpGet]
@@ -24,7 +28,8 @@ namespace RP.CRM.Api.Controllers
             { 
                 Id = t.Id, 
                 Name = t.Name, 
-                Domain = t.Domain 
+                Domain = t.Domain,
+                LogoData = t.LogoData
             });
 
             return Ok(result);
@@ -41,7 +46,8 @@ namespace RP.CRM.Api.Controllers
             { 
                 Id = tenant.Id, 
                 Name = tenant.Name, 
-                Domain = tenant.Domain 
+                Domain = tenant.Domain,
+                LogoData = tenant.LogoData
             });
         }
 
@@ -68,8 +74,65 @@ namespace RP.CRM.Api.Controllers
                 { 
                     Id = created.Id, 
                     Name = created.Name, 
-                    Domain = created.Domain 
+                    Domain = created.Domain,
+                    LogoData = created.LogoData
                 });
+        }
+
+        [HttpPut("{id}/logo")]
+        [Authorize]
+        public async Task<IActionResult> UpdateLogo(int id, [FromBody] UpdateTenantLogoDto dto)
+        {
+            // Only allow updating logo for the current tenant
+            if (id != _tenantContext.TenantId)
+                return Forbid();
+
+            var tenant = await _tenantService.GetByIdAsync(id);
+            if (tenant == null)
+                return NotFound();
+
+            // Validate base64 image data
+            if (string.IsNullOrWhiteSpace(dto.LogoData))
+            {
+                // Clear the logo
+                tenant.LogoData = null;
+            }
+            else
+            {
+                // Check if it's a valid data URL (e.g., data:image/png;base64,...)
+                if (!dto.LogoData.StartsWith("data:image/"))
+                    return BadRequest("Invalid image format. Expected data URL with image type.");
+
+                tenant.LogoData = dto.LogoData;
+            }
+
+            await _tenantService.UpdateAsync(tenant);
+
+            return Ok(new TenantDto
+            {
+                Id = tenant.Id,
+                Name = tenant.Name,
+                Domain = tenant.Domain,
+                LogoData = tenant.LogoData
+            });
+        }
+
+        [HttpDelete("{id}/logo")]
+        [Authorize]
+        public async Task<IActionResult> DeleteLogo(int id)
+        {
+            // Only allow deleting logo for the current tenant
+            if (id != _tenantContext.TenantId)
+                return Forbid();
+
+            var tenant = await _tenantService.GetByIdAsync(id);
+            if (tenant == null)
+                return NotFound();
+
+            tenant.LogoData = null;
+            await _tenantService.UpdateAsync(tenant);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

@@ -40,6 +40,13 @@ namespace RP.CRM.Infrastructure.Repositories
             return tenant;
         }
 
+        public async Task<Tenant> UpdateAsync(Tenant tenant)
+        {
+            _context.Tenants.Update(tenant);
+            await _context.SaveChangesAsync();
+            return tenant;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var tenant = await _context.Tenants.FindAsync(id);

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-settings-overview',
@@ -14,6 +15,11 @@ import { RouterModule } from '@angular/router';
         <a class="card" [routerLink]="['/settings/profile']">
           <h3>Mein Profil</h3>
           <p>Vorname, Nachname und Telefon verwalten.</p>
+        </a>
+
+        <a *ngIf="isAdmin" class="card" [routerLink]="['/settings/company']">
+          <h3>Firmeneinstellungen</h3>
+          <p>Firmen Logo ändern.</p>
         </a>
 
         <!-- Platzhalter für künftige Bereiche -->
@@ -39,4 +45,12 @@ import { RouterModule } from '@angular/router';
     .card.disabled { opacity: .5; pointer-events: none; }
   `]
 })
-export class SettingsOverviewPage {}
+export class SettingsOverviewPage implements OnInit {
+  isAdmin = false;
+
+  constructor(private auth: AuthService) {}
+
+  ngOnInit(): void {
+    this.isAdmin = this.auth.isAdmin();
+  }
+}

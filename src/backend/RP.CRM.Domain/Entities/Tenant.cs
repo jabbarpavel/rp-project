@@ -10,6 +10,9 @@ namespace RP.CRM.Domain.Entities
         // neue Spalte für Subdomain-Zuordnung
         public string Domain { get; set; } = string.Empty;
 
+        // Logo als Base64-String gespeichert
+        public string? LogoData { get; set; }
+
         [JsonIgnore]
         public ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
