@@ -3,6 +3,7 @@
 A modern, multi-tenant CRM system built with .NET 8 and Angular.
 
 > **🎯 Quick Start?** See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for **ONE clear way** to start each environment (Dev/Test/Prod)!  
+> **🚀 Deploy to Production?** See [DEPLOY_TO_PRODUCTION.md](DEPLOY_TO_PRODUCTION.md) for a **simple 3-step guide** to deploy your changes!  
 > **🚑 Production Issue?** See [PRODUCTION_QUICK_FIX.md](PRODUCTION_QUICK_FIX.md) for **SCHNELLHILFE** or [PRODUCTION_FIX_SUMMARY.md](PRODUCTION_FIX_SUMMARY.md) for complete overview.  
 > **⚠️ demo.kynso.ch Problem?** Run `./apply-production-fix.sh` (all-in-one) or `sudo ./fix-demo-nginx.sh` on your production server!
 
@@ -143,7 +144,9 @@ DEV (develop features) → TEST (validate changes) → PROD (deploy live)
 
 | Document | Description |
 |----------|-------------|
-| **[PRODUCTION_FIX_SUMMARY.md](PRODUCTION_FIX_SUMMARY.md)** | **⭐ Complete Overview** - All fixes and instructions |
+| **[DEPLOY_TO_PRODUCTION.md](DEPLOY_TO_PRODUCTION.md)** | **⭐ START HERE** - Simple 3-step deployment guide |
+| **[DEPLOYMENT_WORKFLOW.md](docs/DEPLOYMENT_WORKFLOW.md)** | **📋 Detailed** - Complete Dev → Test → Production workflow |
+| **[PRODUCTION_FIX_SUMMARY.md](PRODUCTION_FIX_SUMMARY.md)** | **🔧 Complete Overview** - All fixes and instructions |
 | **[PRODUCTION_QUICK_FIX.md](PRODUCTION_QUICK_FIX.md)** | **🚨 SCHNELLHILFE** - Fix demo.kynso.ch & unhealthy containers |
 | **[apply-production-fix.sh](apply-production-fix.sh)** | **🚀 All-in-One** - Single command to fix everything |
 | **[fix-demo-nginx.sh](fix-demo-nginx.sh)** | **🔧 Script** - Auto-fix nginx config for demo.kynso.ch |
