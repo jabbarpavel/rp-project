@@ -195,7 +195,6 @@ type AdvisorDto = {
           <div class="form-group">
             <label for="birthDate">Geburtsdatum</label>
             <input id="birthDate" type="date" [(ngModel)]="model.birthDate" name="birthDate" />
-            <small class="hint">Format: TT.MM.JJJJ</small>
           </div>
 
           <!-- Address Section -->

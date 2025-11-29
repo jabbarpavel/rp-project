@@ -83,7 +83,7 @@ namespace RP.CRM.Application.DTOs
         public string Email { get; set; } = string.Empty;
 
         [RegularExpression(@"^(756\.\d{4}\.\d{4}\.\d{2})?$",
-            ErrorMessage = "AHV-Nummer muss dem Format 756.xxxx.xxxx.xx entsprechen.")]
+            ErrorMessage = "AHV-Nummer ist optional, muss aber dem Format 756.xxxx.xxxx.xx entsprechen wenn angegeben.")]
         public string? AHVNum { get; set; }
 
         public int? AdvisorId { get; set; }
