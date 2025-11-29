@@ -27,13 +27,15 @@ import { ToastService } from '../../core/services/toast.service';
   styleUrls: ['./customers.page.scss']
 })
 export class CreateCustomerPage implements OnInit {
-  customer = {
+  customer: any = {
+    customerType: 0, // 0 = Privatperson, 1 = Organisation
     firstName: '',
     name: '',
     email: '',
     ahvNum: '',
     advisorId: null as number | null,
 
+    // Privatperson fields
     civilStatus: null as string | null,
     religion: null as string | null,
     gender: null as string | null,
@@ -48,7 +50,28 @@ export class CreateCustomerPage implements OnInit {
     locality: '',
     canton: null as string | null,
     
-    isPrimaryContact: true // Default true for new customers
+    isPrimaryContact: true, // Default true for new customers
+
+    // Organisation fields
+    companyName: '',
+    legalForm: null as string | null,
+    industry: '',
+    uidNumber: '',
+    foundingDate: null as string | null,
+    homepage: '',
+    activityType: '',
+    nogaCode: '',
+    revenue: null as number | null,
+    vtbg: null as number | null,
+    employeeCount: null as string | null,
+    totalSalary: null as number | null,
+
+    // Organisation contact fields
+    contactSalutation: null as string | null,
+    contactFirstName: '',
+    contactName: '',
+    contactPhone: '',
+    contactEmail: ''
   };
 
   error = '';

@@ -14,6 +14,8 @@ import { CustomerRelationshipService } from '../../core/services/customer-relati
 
 interface CustomerDetailDto {
   id: number;
+  customerNumber: string;
+  customerType: number; // 0 = Privatperson, 1 = Organisation
   firstName: string;
   name: string;
   email: string;
@@ -25,6 +27,7 @@ interface CustomerDetailDto {
   advisorPhone: string | null;
   advisorIsActive: boolean | null;
 
+  // Privatperson fields
   civilStatus?: string | null;
   religion?: string | null;
   gender?: string | null;
@@ -38,6 +41,27 @@ interface CustomerDetailDto {
   postalCode?: string | null;
   locality?: string | null;
   canton?: string | null;
+
+  // Organisation fields
+  companyName?: string | null;
+  legalForm?: string | null;
+  industry?: string | null;
+  uidNumber?: string | null;
+  foundingDate?: string | null;
+  homepage?: string | null;
+  activityType?: string | null;
+  nogaCode?: string | null;
+  revenue?: number | null;
+  vtbg?: number | null;
+  employeeCount?: string | null;
+  totalSalary?: number | null;
+
+  // Organisation contact fields
+  contactSalutation?: string | null;
+  contactFirstName?: string | null;
+  contactName?: string | null;
+  contactPhone?: string | null;
+  contactEmail?: string | null;
   
   isPrimaryContact: boolean;
 
@@ -59,7 +83,11 @@ interface CustomerDetailDto {
           <p class="subline">
             {{ getHeaderDisplay(customer) }}
           </p>
+          <p class="customer-number" *ngIf="customer">
+            {{ customer.customerNumber }}
+          </p>
           <span *ngIf="isPrimaryContact" class="primary-contact-badge">Hauptansprechperson</span>
+          <span *ngIf="customer?.customerType === 1" class="org-badge">Organisation</span>
         </div>
 
         <div class="header-actions">
@@ -153,8 +181,8 @@ interface CustomerDetailDto {
             </dl>
           </section>
 
-          <!-- Persönliche Angaben -->
-          <section class="card">
+          <!-- Persönliche Angaben (Privatperson) -->
+          <section class="card" *ngIf="customer.customerType === 0">
             <div class="card-header">
               <h2>Persönliche Angaben</h2>
             </div>
@@ -219,6 +247,127 @@ interface CustomerDetailDto {
                 <div>
                   <dt>Kanton</dt>
                   <dd>{{ customer.canton || '–' }}</dd>
+                </div>
+              </div>
+
+            </dl>
+          </section>
+
+          <!-- Organisation Details -->
+          <section class="card" *ngIf="customer.customerType === 1">
+            <div class="card-header">
+              <h2>Firmendaten</h2>
+            </div>
+            <dl class="detail-list">
+
+              <!-- Firmenname + Rechtsform -->
+              <div class="double-row">
+                <div>
+                  <dt>Firmenname</dt>
+                  <dd>{{ customer.companyName || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Rechtsform</dt>
+                  <dd>{{ customer.legalForm || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Branche + UID -->
+              <div class="double-row">
+                <div>
+                  <dt>Branche</dt>
+                  <dd>{{ customer.industry || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>UID-Nummer</dt>
+                  <dd>{{ customer.uidNumber || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Gründungsdatum + Homepage -->
+              <div class="double-row">
+                <div>
+                  <dt>Gründungsdatum</dt>
+                  <dd>{{ customer.foundingDate ? (customer.foundingDate | date: 'dd.MM.yyyy') : '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Homepage</dt>
+                  <dd>
+                    <a *ngIf="customer.homepage" class="link" [href]="customer.homepage" target="_blank" rel="noopener">
+                      {{ customer.homepage }}
+                    </a>
+                    <span *ngIf="!customer.homepage">–</span>
+                  </dd>
+                </div>
+              </div>
+
+              <!-- Art der Tätigkeit + NOGA Code -->
+              <div class="double-row">
+                <div>
+                  <dt>Art der Tätigkeit</dt>
+                  <dd>{{ customer.activityType || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>NOGA Code</dt>
+                  <dd>{{ customer.nogaCode || '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Umsatz + VTBG -->
+              <div class="double-row">
+                <div>
+                  <dt>Umsatz</dt>
+                  <dd>{{ customer.revenue ? (customer.revenue | number:'1.0-0') + ' CHF' : '–' }}</dd>
+                </div>
+                <div>
+                  <dt>VTBG</dt>
+                  <dd>{{ customer.vtbg ? (customer.vtbg | number:'1.0-0') + ' CHF' : '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Anzahl Mitarbeiter + Lohnsumme -->
+              <div class="double-row">
+                <div>
+                  <dt>Anzahl Mitarbeiter</dt>
+                  <dd>{{ customer.employeeCount || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Lohnsumme</dt>
+                  <dd>{{ customer.totalSalary ? (customer.totalSalary | number:'1.0-0') + ' CHF' : '–' }}</dd>
+                </div>
+              </div>
+
+              <!-- Ansprechperson Section -->
+              <div class="address-section">
+                <h3>Ansprechperson</h3>
+              </div>
+
+              <!-- Anrede + Name -->
+              <div class="double-row">
+                <div>
+                  <dt>Anrede</dt>
+                  <dd>{{ customer.contactSalutation || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>Name</dt>
+                  <dd>{{ getContactFullName(customer) }}</dd>
+                </div>
+              </div>
+
+              <!-- Telefon + E-Mail -->
+              <div class="double-row">
+                <div>
+                  <dt>Telefon</dt>
+                  <dd>{{ customer.contactPhone || '–' }}</dd>
+                </div>
+                <div>
+                  <dt>E-Mail</dt>
+                  <dd>
+                    <a *ngIf="customer.contactEmail" class="link" href="mailto:{{ customer.contactEmail }}">
+                      {{ customer.contactEmail }}
+                    </a>
+                    <span *ngIf="!customer.contactEmail">–</span>
+                  </dd>
                 </div>
               </div>
 
@@ -331,6 +480,13 @@ interface CustomerDetailDto {
       color: #6b7280;
     }
 
+    .customer-number {
+      margin-top: .15rem;
+      font-size: .85rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
     .primary-contact-badge {
       display: inline-block;
       padding: .25rem .7rem;
@@ -339,6 +495,18 @@ interface CustomerDetailDto {
       font-weight: 600;
       background: #dbeafe;
       color: #1e40af;
+      margin-top: .4rem;
+      margin-right: .4rem;
+    }
+
+    .org-badge {
+      display: inline-block;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+      background: #fef3c7;
+      color: #92400e;
       margin-top: .4rem;
     }
 
@@ -719,9 +887,21 @@ export class CustomerDetailPage implements OnInit {
 
   getHeaderDisplay(c: CustomerDetailDto | null): string {
     if (!c) return '';
+    // For Organisation, show company name
+    if (c.customerType === 1) {
+      return c.companyName || c.name || '';
+    }
+    // For Privatperson
     if (c.gender === 'weiblich') return `Frau ${c.firstName} ${c.name}`;
     if (c.gender === 'männlich') return `Herr ${c.firstName} ${c.name}`;
     return `${c.firstName} ${c.name}`;
+  }
+
+  getContactFullName(c: CustomerDetailDto): string {
+    const fn = c.contactFirstName?.trim() || '';
+    const ln = c.contactName?.trim() || '';
+    if (fn && ln) return `${fn} ${ln}`;
+    return fn || ln || '–';
   }
 
   getAdvisorName(c: CustomerDetailDto): string {

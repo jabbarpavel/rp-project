@@ -28,6 +28,118 @@ namespace RP.CRM.Api.Controllers
             _tenantContext = tenantContext;
         }
 
+        private static CustomerDto MapToDto(Customer c, bool includeAllFields = false)
+        {
+            var dto = new CustomerDto
+            {
+                Id = c.Id,
+                CustomerType = c.CustomerType,
+                Name = c.Name,
+                FirstName = c.FirstName,
+                Email = c.Email,
+                AHVNum = c.AHVNum,
+                AdvisorId = c.AdvisorId,
+                AdvisorEmail = c.Advisor?.Email,
+                AdvisorFirstName = c.Advisor?.FirstName,
+                AdvisorLastName = c.Advisor?.Name,
+                AdvisorPhone = c.Advisor?.Phone,
+                AdvisorIsActive = c.Advisor?.IsActive,
+                IsPrimaryContact = c.IsPrimaryContact,
+                TenantId = c.TenantId,
+                IsDeleted = c.IsDeleted,
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt
+            };
+
+            if (includeAllFields)
+            {
+                // Privatperson fields
+                dto.CivilStatus = c.CivilStatus;
+                dto.Religion = c.Religion;
+                dto.Gender = c.Gender;
+                dto.Salutation = c.Salutation;
+                dto.BirthDate = c.BirthDate;
+                dto.Profession = c.Profession;
+                dto.Language = c.Language;
+                
+                // Address fields
+                dto.Street = c.Street;
+                dto.PostalCode = c.PostalCode;
+                dto.Locality = c.Locality;
+                dto.Canton = c.Canton;
+
+                // Organisation fields
+                dto.CompanyName = c.CompanyName;
+                dto.LegalForm = c.LegalForm;
+                dto.Industry = c.Industry;
+                dto.UidNumber = c.UidNumber;
+                dto.FoundingDate = c.FoundingDate;
+                dto.Homepage = c.Homepage;
+                dto.ActivityType = c.ActivityType;
+                dto.NogaCode = c.NogaCode;
+                dto.Revenue = c.Revenue;
+                dto.Vtbg = c.Vtbg;
+                dto.EmployeeCount = c.EmployeeCount;
+                dto.TotalSalary = c.TotalSalary;
+
+                // Organisation contact fields
+                dto.ContactSalutation = c.ContactSalutation;
+                dto.ContactFirstName = c.ContactFirstName;
+                dto.ContactName = c.ContactName;
+                dto.ContactPhone = c.ContactPhone;
+                dto.ContactEmail = c.ContactEmail;
+            }
+
+            return dto;
+        }
+
+        private static void MapFromDto(CreateCustomerDto dto, Customer customer)
+        {
+            customer.CustomerType = dto.CustomerType;
+            customer.Name = dto.Name.Trim();
+            customer.FirstName = dto.FirstName?.Trim() ?? string.Empty;
+            customer.Email = dto.Email.Trim();
+            customer.AHVNum = dto.AHVNum?.Trim() ?? string.Empty;
+            customer.AdvisorId = dto.AdvisorId;
+            customer.IsPrimaryContact = dto.IsPrimaryContact;
+
+            // Privatperson fields
+            customer.CivilStatus = dto.CivilStatus;
+            customer.Religion = dto.Religion;
+            customer.Gender = dto.Gender;
+            customer.Salutation = dto.Salutation;
+            customer.BirthDate = dto.BirthDate;
+            customer.Profession = dto.Profession;
+            customer.Language = dto.Language;
+
+            // Address fields
+            customer.Street = dto.Street;
+            customer.PostalCode = dto.PostalCode;
+            customer.Locality = dto.Locality;
+            customer.Canton = dto.Canton;
+
+            // Organisation fields
+            customer.CompanyName = dto.CompanyName;
+            customer.LegalForm = dto.LegalForm;
+            customer.Industry = dto.Industry;
+            customer.UidNumber = dto.UidNumber;
+            customer.FoundingDate = dto.FoundingDate;
+            customer.Homepage = dto.Homepage;
+            customer.ActivityType = dto.ActivityType;
+            customer.NogaCode = dto.NogaCode;
+            customer.Revenue = dto.Revenue;
+            customer.Vtbg = dto.Vtbg;
+            customer.EmployeeCount = dto.EmployeeCount;
+            customer.TotalSalary = dto.TotalSalary;
+
+            // Organisation contact fields
+            customer.ContactSalutation = dto.ContactSalutation;
+            customer.ContactFirstName = dto.ContactFirstName;
+            customer.ContactName = dto.ContactName;
+            customer.ContactPhone = dto.ContactPhone;
+            customer.ContactEmail = dto.ContactEmail;
+        }
+
         [HttpGet]
         [RequirePermission(Permission.ViewCustomers)]
         public async Task<IActionResult> GetAll()
@@ -36,24 +148,7 @@ namespace RP.CRM.Api.Controllers
 
             var result = customers
                 .Where(c => c.TenantId == _tenantContext.TenantId)
-                .Select(c => new CustomerDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    FirstName = c.FirstName,
-                    Email = c.Email,
-                    AHVNum = c.AHVNum,
-                    AdvisorId = c.AdvisorId,
-                    AdvisorEmail = c.Advisor != null ? c.Advisor.Email : null,
-                    AdvisorFirstName = c.Advisor != null ? c.Advisor.FirstName : null,
-                    AdvisorLastName = c.Advisor != null ? c.Advisor.Name : null,
-                    AdvisorPhone = c.Advisor != null ? c.Advisor.Phone : null,          
-                    AdvisorIsActive = c.Advisor != null ? c.Advisor.IsActive : null, 
-                    TenantId = c.TenantId,
-                    IsDeleted = c.IsDeleted,
-                    CreatedAt = c.CreatedAt,
-                    UpdatedAt = c.UpdatedAt
-                });
+                .Select(c => MapToDto(c, false));
 
             return Ok(result);
         }
@@ -69,36 +164,7 @@ namespace RP.CRM.Api.Controllers
             if (customer.TenantId != _tenantContext.TenantId)
                 return Forbid();
 
-            return Ok(new CustomerDto
-            {
-                Id = customer.Id,
-                Name = customer.Name,
-                FirstName = customer.FirstName,
-                Email = customer.Email,
-                AHVNum = customer.AHVNum,
-                AdvisorId = customer.AdvisorId,
-                AdvisorEmail = customer.Advisor != null ? customer.Advisor.Email : null,
-                AdvisorFirstName = customer.Advisor != null ? customer.Advisor.FirstName : null,
-                AdvisorLastName = customer.Advisor != null ? customer.Advisor.Name : null,
-                AdvisorPhone = customer.Advisor != null ? customer.Advisor.Phone : null,        
-                AdvisorIsActive = customer.Advisor != null ? customer.Advisor.IsActive : null,
-                CivilStatus = customer.CivilStatus,
-                Religion = customer.Religion,
-                Gender = customer.Gender,
-                Salutation = customer.Salutation,
-                BirthDate = customer.BirthDate,
-                Profession = customer.Profession,
-                Language = customer.Language,
-                Street = customer.Street,
-                PostalCode = customer.PostalCode,
-                Locality = customer.Locality,
-                Canton = customer.Canton,
-                IsPrimaryContact = customer.IsPrimaryContact,
-                TenantId = customer.TenantId,
-                IsDeleted = customer.IsDeleted,
-                CreatedAt = customer.CreatedAt,
-                UpdatedAt = customer.UpdatedAt
-            });
+            return Ok(MapToDto(customer, true));
         }
 
         [HttpPost]
@@ -110,58 +176,13 @@ namespace RP.CRM.Api.Controllers
 
             var newCustomer = new Customer
             {
-                Name = dto.Name.Trim(),
-                FirstName = dto.FirstName.Trim(),
-                Email = dto.Email.Trim(),
-                AHVNum = dto.AHVNum.Trim(),
-                TenantId = _tenantContext.TenantId,
-                AdvisorId = dto.AdvisorId,
-                
-                // Personal information fields
-                CivilStatus = dto.CivilStatus,
-                Religion = dto.Religion,
-                Gender = dto.Gender,
-                Salutation = dto.Salutation,
-                BirthDate = dto.BirthDate,
-                Profession = dto.Profession,
-                Language = dto.Language,
-                
-                // Address fields
-                Street = dto.Street,
-                PostalCode = dto.PostalCode,
-                Locality = dto.Locality,
-                Canton = dto.Canton,
-                
-                IsPrimaryContact = dto.IsPrimaryContact // Default true from DTO
+                TenantId = _tenantContext.TenantId
             };
+            MapFromDto(dto, newCustomer);
 
             var created = await _customerService.CreateAsync(newCustomer);
 
-            var response = new CustomerDto
-            {
-                Id = created.Id,
-                Name = created.Name,
-                FirstName = created.FirstName,
-                Email = created.Email,
-                AHVNum = created.AHVNum,
-                AdvisorId = created.AdvisorId,
-                AdvisorEmail = created.Advisor?.Email,
-                AdvisorFirstName = created.Advisor?.FirstName,
-                AdvisorLastName = created.Advisor?.Name,
-                AdvisorPhone = created.Advisor?.Phone,                 
-                AdvisorIsActive = created.Advisor?.IsActive,
-                Street = created.Street,
-                PostalCode = created.PostalCode,
-                Locality = created.Locality,
-                Canton = created.Canton,
-                IsPrimaryContact = created.IsPrimaryContact,
-                TenantId = created.TenantId,
-                IsDeleted = created.IsDeleted,
-                CreatedAt = created.CreatedAt,
-                UpdatedAt = created.UpdatedAt
-            };
-
-            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, MapToDto(created, true));
         }
 
         [HttpPut("{id:int}")]
@@ -178,63 +199,13 @@ namespace RP.CRM.Api.Controllers
             if (existing.TenantId != _tenantContext.TenantId)
                 return Forbid();
 
-            existing.Name = dto.Name.Trim();
-            existing.FirstName = dto.FirstName.Trim();
-            existing.Email = dto.Email.Trim();
-            existing.AHVNum = dto.AHVNum.Trim();
-            existing.AdvisorId = dto.AdvisorId;
-            
-            // Update personal information fields
-            existing.CivilStatus = dto.CivilStatus;
-            existing.Religion = dto.Religion;
-            existing.Gender = dto.Gender;
-            existing.Salutation = dto.Salutation;
-            existing.BirthDate = dto.BirthDate;
-            existing.Profession = dto.Profession;
-            existing.Language = dto.Language;
-            
-            // Update address fields
-            existing.Street = dto.Street;
-            existing.PostalCode = dto.PostalCode;
-            existing.Locality = dto.Locality;
-            existing.Canton = dto.Canton;
-            
-            existing.IsPrimaryContact = dto.IsPrimaryContact;
+            MapFromDto(dto, existing);
 
             var updated = await _customerService.UpdateAsync(id, existing);
             if (updated is null)
                 return NotFound();
 
-            return Ok(new CustomerDto
-            {
-                Id = updated.Id,
-                Name = updated.Name,
-                FirstName = updated.FirstName,
-                Email = updated.Email,
-                AHVNum = updated.AHVNum,
-                AdvisorId = updated.AdvisorId,
-                AdvisorEmail = updated.Advisor?.Email,
-                AdvisorFirstName = updated.Advisor?.FirstName,
-                AdvisorLastName = updated.Advisor?.Name,
-                AdvisorPhone = updated.Advisor?.Phone,                 
-                AdvisorIsActive = updated.Advisor?.IsActive,
-                CivilStatus = updated.CivilStatus,
-                Religion = updated.Religion,
-                Gender = updated.Gender,
-                Salutation = updated.Salutation,
-                BirthDate = updated.BirthDate,
-                Profession = updated.Profession,
-                Language = updated.Language,
-                Street = updated.Street,
-                PostalCode = updated.PostalCode,
-                Locality = updated.Locality,
-                Canton = updated.Canton,
-                IsPrimaryContact = updated.IsPrimaryContact,
-                TenantId = updated.TenantId,
-                IsDeleted = updated.IsDeleted,
-                CreatedAt = updated.CreatedAt,
-                UpdatedAt = updated.UpdatedAt
-            });
+            return Ok(MapToDto(updated, true));
         }
 
         public class ChangeAdvisorRequest { public int? AdvisorId { get; set; } }
@@ -252,24 +223,7 @@ namespace RP.CRM.Api.Controllers
 
             var updated = await _customerService.GetByIdAsync(id);
 
-            return Ok(new CustomerDto
-            {
-                Id = updated!.Id,
-                FirstName = updated.FirstName,
-                Name = updated.Name,
-                Email = updated.Email,
-                AHVNum = updated.AHVNum,
-                AdvisorId = updated.AdvisorId,
-                AdvisorEmail = updated.Advisor?.Email,
-                AdvisorFirstName = updated.Advisor?.FirstName,
-                AdvisorLastName = updated.Advisor?.Name,
-                AdvisorPhone = updated.Advisor?.Phone,                 
-                AdvisorIsActive = updated.Advisor?.IsActive,
-                TenantId = updated.TenantId,
-                IsDeleted = updated.IsDeleted,
-                CreatedAt = updated.CreatedAt,
-                UpdatedAt = updated.UpdatedAt
-            });
+            return Ok(MapToDto(updated!, true));
         }
 
         [HttpDelete("{id:int}")]
@@ -351,6 +305,9 @@ namespace RP.CRM.Api.Controllers
             customer.IsPrimaryContact = isPrimaryContact;
             var updated = await _customerService.UpdateAsync(id, customer);
             
+            if (updated == null)
+                return NotFound();
+
             return Ok(new { isPrimaryContact = updated.IsPrimaryContact });
         }
 
