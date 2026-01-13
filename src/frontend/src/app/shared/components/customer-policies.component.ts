@@ -567,7 +567,10 @@ export class CustomerPoliciesComponent implements OnInit {
   }
 
   getCompanyOptions(): CompanyOption[] {
-    switch (this.newPolicy.type) {
+    // Convert to number to handle string values from select binding
+    const type = Number(this.newPolicy.type);
+    
+    switch (type) {
       case PolicyType.Krankenkasse:
         return [
           { value: 'AXA', label: 'AXA' },
