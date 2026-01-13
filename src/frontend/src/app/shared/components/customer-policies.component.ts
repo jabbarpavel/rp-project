@@ -611,15 +611,15 @@ export class CustomerPoliciesComponent implements OnInit {
 
     const policyData: CreatePolicyDto = {
       policyNumber: this.newPolicy.policyNumber,
-      type: this.newPolicy.type!,
+      type: Number(this.newPolicy.type) as PolicyType,
       company: this.newPolicy.company!,
       organizationalUnit: this.newPolicy.organizationalUnit!,
       productName: this.newPolicy.productName || undefined,
-      mutationReason: this.newPolicy.mutationReason || undefined,
+      mutationReason: this.newPolicy.mutationReason ? Number(this.newPolicy.mutationReason) as MutationReason : undefined,
       customerNumber: this.newPolicy.customerNumber || undefined,
       startDate: this.newPolicy.startDate || undefined,
       endDate: this.newPolicy.endDate || undefined,
-      paymentFrequency: this.newPolicy.paymentFrequency || undefined,
+      paymentFrequency: this.newPolicy.paymentFrequency ? Number(this.newPolicy.paymentFrequency) as PaymentFrequency : undefined,
       annualPremium: this.newPolicy.annualPremium || undefined,
       advisor: this.newPolicy.advisor || undefined,
       status: this.newPolicy.status || undefined,
