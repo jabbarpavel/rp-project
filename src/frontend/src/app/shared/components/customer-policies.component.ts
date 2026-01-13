@@ -507,8 +507,13 @@ export class CustomerPoliciesComponent implements OnInit {
         this.policies = policies;
         this.loading = false;
       },
-      error: () => {
-        this.error = 'Fehler beim Laden der Policen';
+      error: (err) => {
+        // Only show error if it's not a 404 (customer not found is handled elsewhere)
+        if (err.status === 404) {
+          this.policies = [];
+        } else {
+          this.error = 'Fehler beim Laden der Policen';
+        }
         this.loading = false;
       }
     });
@@ -547,6 +552,11 @@ export class CustomerPoliciesComponent implements OnInit {
   nextStep(): void {
     if (this.currentStep < 4) {
       this.currentStep++;
+      // Reset company when moving from step 1 to step 2
+      // because company options depend on the selected type
+      if (this.currentStep === 2) {
+        this.newPolicy.company = '';
+      }
     }
   }
 
