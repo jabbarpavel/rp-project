@@ -157,6 +157,9 @@ builder.Services.AddScoped<ICustomerTaskService, CustomerTaskService>();
 builder.Services.AddScoped<ICustomerRelationshipRepository, CustomerRelationshipRepository>();
 builder.Services.AddScoped<ICustomerRelationshipService, CustomerRelationshipService>();
 
+builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
+builder.Services.AddScoped<IPolicyService, PolicyService>();
+
 
 builder.Services.AddControllers();
 

@@ -22,6 +22,7 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<Document> Documents => Set<Document>();
         public DbSet<CustomerTask> CustomerTasks => Set<CustomerTask>();
         public DbSet<CustomerRelationship> CustomerRelationships => Set<CustomerRelationship>();
+        public DbSet<Policy> Policies => Set<Policy>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -137,6 +138,27 @@ namespace RP.CRM.Infrastructure.Data
                 entity.HasIndex(r => new { r.CustomerId, r.RelatedCustomerId });
             });
 
+            // ====== Policy-Konfiguration ======
+            modelBuilder.Entity<Policy>(entity =>
+            {
+                entity.HasOne(p => p.Customer)
+                    .WithMany()
+                    .HasForeignKey(p => p.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(p => p.Document)
+                    .WithMany()
+                    .HasForeignKey(p => p.DocumentId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(p => p.Tenant)
+                    .WithMany()
+                    .HasForeignKey(p => p.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(p => new { p.TenantId, p.CustomerId });
+            });
+
             // ====== Seed-Daten ======
             modelBuilder.Entity<Tenant>().HasData(
                 new Tenant
@@ -190,6 +212,12 @@ namespace RP.CRM.Infrastructure.Data
             }
 
             foreach (var entry in ChangeTracker.Entries<CustomerRelationship>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<Policy>())
             {
                 if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
                     entry.Entity.TenantId = _tenantContext.TenantId;

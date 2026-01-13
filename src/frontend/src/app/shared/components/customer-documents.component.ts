@@ -13,7 +13,7 @@ import { PermissionService } from '../../core/services/permission.service';
   template: `
     <section class="card documents-card">
       <div class="card-header">
-        <h2>Dokumente</h2>
+        <h2>Weitere Dokumente</h2>
         <button class="upload-btn" (click)="showUploadDialog = true" [disabled]="uploading">
           {{ uploading ? 'Wird hochgeladen...' : '+ Hochladen' }}
         </button>
@@ -26,7 +26,6 @@ import { PermissionService } from '../../core/services/permission.service';
           <div class="form-group">
             <label>Kategorie</label>
             <select [(ngModel)]="selectedCategory" class="form-control">
-              <option value="Police">Police</option>
               <option value="ID/Pass">ID/Pass</option>
               <option value="Sonstige">Sonstige</option>
             </select>
