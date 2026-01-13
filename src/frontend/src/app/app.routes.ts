@@ -45,6 +45,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/customers/customerDetail.page').then(m => m.CustomerDetailPage)
       },
+      // -------------Policies------------------------------------
+      {
+        path: 'policy/:id',
+        loadComponent: () =>
+          import('./features/policies/policyDetail.page').then(m => m.PolicyDetailPage)
+      },
       // -------------Settings------------------------------------
       {
         path: 'settings',

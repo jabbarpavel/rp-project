@@ -9,6 +9,7 @@ import { AdvisorChangeDialogComponent } from '../../shared/components/advisor-ch
 import { CustomerDocumentsComponent } from '../../shared/components/customer-documents.component';
 import { CustomerTasksComponent } from '../../shared/components/customer-tasks.component';
 import { CustomerRelationshipsComponent } from '../../shared/components/customer-relationships.component';
+import { CustomerPoliciesComponent } from '../../shared/components/customer-policies.component';
 import { PermissionService } from '../../core/services/permission.service';
 import { CustomerRelationshipService } from '../../core/services/customer-relationship.service';
 
@@ -74,7 +75,7 @@ interface CustomerDetailDto {
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent, CustomerRelationshipsComponent],
+  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent, CustomerRelationshipsComponent, CustomerPoliciesComponent],
   template: `
     <div class="page">
       <div class="page-header">
@@ -479,6 +480,11 @@ interface CustomerDetailDto {
         </aside>
       </div>
 
+      <!-- Policies Section (Full Width) -->
+      <div *ngIf="!loading && !error && customer" class="full-width-section">
+        <app-customer-policies [customerId]="customer.id"></app-customer-policies>
+      </div>
+
       <app-advisor-change-dialog
         *ngIf="showAdvisorDialog"
         (confirmed)="confirmAdvisorChange($event)"
@@ -842,6 +848,11 @@ interface CustomerDetailDto {
       font-weight: 600;
       color: #374151;
       margin: 0 0 0.5rem;
+    }
+
+    .full-width-section {
+      margin-top: 1.5rem;
+    }
     }
   `]
 })
