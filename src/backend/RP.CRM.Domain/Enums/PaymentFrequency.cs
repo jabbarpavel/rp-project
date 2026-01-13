@@ -5,9 +5,9 @@ namespace RP.CRM.Domain.Enums
         None = 0,
         Monatlich = 1,
         ZweiMonatlich = 2,
-        Vierteljährlich = 3,
-        Halbjährlich = 4,
-        Jährlich = 5,
+        Vierteljahrlich = 3,
+        Halbjahrlich = 4,
+        Jahrlich = 5,
         Einmaleinlage = 6
     }
 }

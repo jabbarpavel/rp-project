@@ -13,17 +13,17 @@ export enum PaymentFrequency {
   None = 0,
   Monatlich = 1,
   ZweiMonatlich = 2,
-  Vierteljährlich = 3,
-  Halbjährlich = 4,
-  Jährlich = 5,
+  Vierteljahrlich = 3,
+  Halbjahrlich = 4,
+  Jahrlich = 5,
   Einmaleinlage = 6
 }
 
 export enum MutationReason {
   Unbekannt = 0,
-  Neugeschäft = 1,
+  Neugeschaft = 1,
   Mutation = 2,
-  Bestandsübernahme = 3,
+  Bestandsubernahme = 3,
   Ersatz = 4
 }
 

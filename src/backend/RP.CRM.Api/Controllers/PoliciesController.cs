@@ -180,9 +180,9 @@ namespace RP.CRM.Api.Controllers
             return reason switch
             {
                 MutationReason.Unbekannt => "Unbekannt",
-                MutationReason.Neugeschäft => "Neugeschäft",
+                MutationReason.Neugeschaft => "Neugeschäft",
                 MutationReason.Mutation => "Mutation",
-                MutationReason.Bestandsübernahme => "Bestandsübernahme",
+                MutationReason.Bestandsubernahme => "Bestandsübernahme",
                 MutationReason.Ersatz => "Ersatz",
                 _ => reason.ToString()
             };
@@ -195,9 +195,9 @@ namespace RP.CRM.Api.Controllers
                 Domain.Enums.PaymentFrequency.None => "-",
                 Domain.Enums.PaymentFrequency.Monatlich => "monatlich",
                 Domain.Enums.PaymentFrequency.ZweiMonatlich => "2-monatlich",
-                Domain.Enums.PaymentFrequency.Vierteljährlich => "vierteljährlich",
-                Domain.Enums.PaymentFrequency.Halbjährlich => "halbjährlich",
-                Domain.Enums.PaymentFrequency.Jährlich => "jährlich",
+                Domain.Enums.PaymentFrequency.Vierteljahrlich => "vierteljährlich",
+                Domain.Enums.PaymentFrequency.Halbjahrlich => "halbjährlich",
+                Domain.Enums.PaymentFrequency.Jahrlich => "jährlich",
                 Domain.Enums.PaymentFrequency.Einmaleinlage => "Einmaleinlage",
                 _ => frequency.ToString()
             };

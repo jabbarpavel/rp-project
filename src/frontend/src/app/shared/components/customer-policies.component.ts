@@ -102,9 +102,9 @@ interface CompanyOption {
               <select [(ngModel)]="newPolicy.mutationReason" class="form-control">
                 <option [value]="null">- Auswählen -</option>
                 <option [value]="MutationReason.Unbekannt">Unbekannt</option>
-                <option [value]="MutationReason.Neugeschäft">Neugeschäft</option>
+                <option [value]="MutationReason.Neugeschaft">Neugeschäft</option>
                 <option [value]="MutationReason.Mutation">Mutation</option>
-                <option [value]="MutationReason.Bestandsübernahme">Bestandsübernahme</option>
+                <option [value]="MutationReason.Bestandsubernahme">Bestandsübernahme</option>
                 <option [value]="MutationReason.Ersatz">Ersatz</option>
               </select>
             </div>
@@ -126,9 +126,9 @@ interface CompanyOption {
                 <option [value]="null">-</option>
                 <option [value]="PaymentFrequency.Monatlich">monatlich</option>
                 <option [value]="PaymentFrequency.ZweiMonatlich">2-monatlich</option>
-                <option [value]="PaymentFrequency.Vierteljährlich">vierteljährlich</option>
-                <option [value]="PaymentFrequency.Halbjährlich">halbjährlich</option>
-                <option [value]="PaymentFrequency.Jährlich">jährlich</option>
+                <option [value]="PaymentFrequency.Vierteljahrlich">vierteljährlich</option>
+                <option [value]="PaymentFrequency.Halbjahrlich">halbjährlich</option>
+                <option [value]="PaymentFrequency.Jahrlich">jährlich</option>
                 <option [value]="PaymentFrequency.Einmaleinlage">Einmaleinlage</option>
               </select>
             </div>

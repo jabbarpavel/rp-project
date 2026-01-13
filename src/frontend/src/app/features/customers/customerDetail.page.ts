@@ -853,7 +853,6 @@ interface CustomerDetailDto {
     .full-width-section {
       margin-top: 1.5rem;
     }
-    }
   `]
 })
 export class CustomerDetailPage implements OnInit {
