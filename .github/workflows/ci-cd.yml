@@ -137,6 +137,9 @@ jobs:
         file: ./Dockerfile.frontend
         push: false
         tags: rp-crm-frontend:latest
+        build-args: |
+          GIT_HASH=${{ github.sha }}
+          GIT_BRANCH=${{ github.ref_name }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 

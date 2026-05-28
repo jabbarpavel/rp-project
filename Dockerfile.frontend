@@ -2,6 +2,10 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
+# Git-Info als Build-Argumente (von CI/CD übergeben)
+ARG GIT_HASH=unknown
+ARG GIT_BRANCH=main
+
 # Kopiere package files
 COPY src/frontend/package*.json ./
 
@@ -11,8 +15,8 @@ RUN npm ci --production=false
 # Kopiere source code
 COPY src/frontend/ ./
 
-# Build production
-RUN npm run build -- --configuration production
+# Build production (generate-build-info.js generiert build-info.ts vor dem Build)
+RUN GIT_HASH=$GIT_HASH GIT_BRANCH=$GIT_BRANCH node generate-build-info.js && npm run build -- --configuration production
 
 # Stage 2: Serve mit Nginx
 FROM nginx:alpine
