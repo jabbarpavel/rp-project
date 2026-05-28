@@ -52,6 +52,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTenantDto dto)
         {
             if (!ModelState.IsValid)
@@ -136,6 +137,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _tenantService.DeleteAsync(id);

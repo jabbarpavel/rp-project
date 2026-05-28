@@ -49,18 +49,19 @@ services:
     networks:
       - kynso-network
 
-  # Frontend
+  # Frontend (Port 8080 nur ohne nginx-proxy aktiv)
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     container_name: kynso-frontend
     restart: unless-stopped
+    # HINWEIS: Port 8080 wird vom nginx-proxy (--profile production) übernommen.
+    # Ohne nginx-proxy: Port 8080 direkt nutzen. MIT nginx-proxy: diese Zeilen auskommentieren.
     ports:
       - "8080:80"
     depends_on:
       - backend
-    healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
       timeout: 10s

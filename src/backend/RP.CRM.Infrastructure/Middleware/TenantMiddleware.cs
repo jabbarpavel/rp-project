@@ -36,7 +36,8 @@ namespace RP.CRM.Infrastructure.Middleware
             // =====================================================
             if (path.Contains("/user/login") ||
                 path.Contains("/user/register") ||
-                path.Contains("/tenant"))
+                path.Contains("/tenant") ||
+                path.Contains("/api/health"))
             {
                 Console.WriteLine($"[TenantMiddleware] Looking up tenant for host: '{host}' (path: {path})");
                 var tenant = await tenantRepository.GetByDomainAsync(host);
