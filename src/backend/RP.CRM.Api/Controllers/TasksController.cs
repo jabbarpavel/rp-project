@@ -106,7 +106,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpPost]
-        [RequirePermission(Permission.ViewCustomers)]
+        [RequirePermission(Permission.EditCustomers)]
         public async Task<IActionResult> Create([FromBody] CreateCustomerTaskDto dto)
         {
             if (!ModelState.IsValid)
@@ -141,7 +141,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        [RequirePermission(Permission.ViewCustomers)]
+        [RequirePermission(Permission.EditCustomers)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerTaskDto dto)
         {
             var task = await _taskService.GetByIdAsync(id);
@@ -168,7 +168,7 @@ namespace RP.CRM.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [RequirePermission(Permission.ViewCustomers)]
+        [RequirePermission(Permission.EditCustomers)]
         public async Task<IActionResult> Delete(int id)
         {
             var task = await _taskService.GetByIdAsync(id);

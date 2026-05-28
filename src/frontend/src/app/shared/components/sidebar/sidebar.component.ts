@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
+import { BUILD_INFO } from '../../../core/build-info';
 
 interface MenuItem {
   label: string;
@@ -33,8 +34,14 @@ export class SidebarComponent implements OnInit {
 
   logoData: string | null = null;
   tenantName = '';
+  buildLabel = '';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) {
+    const d = new Date(BUILD_INFO.timestamp);
+    const date = d.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const time = d.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
+    this.buildLabel = `${BUILD_INFO.branch}@${BUILD_INFO.gitHash}\n${date} ${time}`;
+  }
 
   ngOnInit(): void {
     this.loadTenantLogo();

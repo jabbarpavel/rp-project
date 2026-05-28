@@ -36,7 +36,8 @@ namespace RP.CRM.Infrastructure.Middleware
             // =====================================================
             if (path.Contains("/user/login") ||
                 path.Contains("/user/register") ||
-                path.Contains("/tenant"))
+                path.Contains("/tenant") ||
+                path.Contains("/api/health"))
             {
                 Console.WriteLine($"[TenantMiddleware] Looking up tenant for host: '{host}' (path: {path})");
                 var tenant = await tenantRepository.GetByDomainAsync(host);
@@ -49,7 +50,17 @@ namespace RP.CRM.Infrastructure.Middleware
                 {
                     Console.WriteLine($"[TenantMiddleware] No tenant found for domain: '{host}'");
                     
-                    // Fallback für /register: Wenn Domain nicht gefunden (z.B. bei IP-Zugriff via SSH),
+                    // Fallback für localhost/127.0.0.1 im Test-Modus: ersten Tenant verwenden
+                    if (host == "localhost" || host == "127.0.0.1")
+                    {
+                        var firstTenant = await tenantRepository.GetAllAsync();
+                        var fallback = firstTenant.FirstOrDefault();
+                        if (fallback != null)
+                        {
+                            Console.WriteLine($"[TenantMiddleware] localhost-Fallback → Tenant: {fallback.Name} (ID: {fallback.Id})");
+                            tenantId = fallback.Id;
+                        }
+                    }
                     // versuche tenantId aus Request Body zu extrahieren
                     if (path.Contains("/user/register") && context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                     {

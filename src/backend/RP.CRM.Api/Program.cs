@@ -219,8 +219,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // -----------------------------
 // JWT + Identity
 // -----------------------------
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? "your_super_secret_key_here_your_super_secret_key_here";
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    if (builder.Environment.IsProduction())
+        throw new InvalidOperationException("❌ Jwt:Key ist nicht konfiguriert! Setze die Umgebungsvariable Jwt__Key.");
+    else
+        jwtKey = "your_super_secret_key_here_your_super_secret_key_here";
+}
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
 {

@@ -6,6 +6,7 @@ dist/
 # Frontend
 node_modules/
 .angular/
+src/frontend/src/app/core/build-info.ts
 
 # IDE
 .vs/
@@ -51,3 +52,7 @@ tmp/
 temp/
 *.tmp
 test-config.html
+
+# GitHub Token (NEVER commit!)
+token.env
+*.env.local

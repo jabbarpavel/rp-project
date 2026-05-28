@@ -78,7 +78,9 @@ export class AuthService {
     if (!token) return null;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.userId ?? null;
+      // JWT uses 'sub' claim for user ID (set in UserService.LoginAsync)
+      const sub = payload.sub ?? payload.userId ?? null;
+      return sub ? parseInt(sub, 10) : null;
     } catch {
       return null;
     }

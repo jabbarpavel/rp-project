@@ -47,7 +47,7 @@ namespace RP.CRM.Application.Services
                 Name = string.Empty,
                 Phone = string.Empty,
                 IsActive = true,
-                Role = "Admin"
+                Role = "User"
             };
 
 
