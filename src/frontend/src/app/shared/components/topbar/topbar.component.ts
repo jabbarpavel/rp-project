@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { BUILD_INFO } from '../../../core/build-info';
 
 @Component({
   selector: 'app-topbar',
@@ -15,12 +16,19 @@ export class TopbarComponent implements OnInit {
 
   displayName = '';
   isIncomplete = false;
+  buildLabel = '';
 
   constructor(
     private api: ApiService,
     private router: Router,
     private auth: AuthService
-  ) {}
+  ) {
+    // Zeige: "test@a183c1b · 28.05.2026 18:03"
+    const d = new Date(BUILD_INFO.timestamp);
+    const date = d.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const time = d.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
+    this.buildLabel = `${BUILD_INFO.branch}@${BUILD_INFO.gitHash} · ${date} ${time}`;
+  }
 
   ngOnInit(): void {
     this.loadUser();

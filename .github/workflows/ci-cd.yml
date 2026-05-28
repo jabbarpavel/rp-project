@@ -83,6 +83,7 @@ jobs:
     - name: Build
       run: |
         cd src/frontend
+        node generate-build-info.js
         npm run build -- --configuration production
     
     - name: Test

@@ -6,14 +6,24 @@
 
 .topbar__user {
   font-weight: 500;
-  color: #f8fafc; /* gleiche Farbe wie Tenant Logo */
+  color: #f8fafc;
   cursor: default;
 }
 
 .topbar__user.incomplete {
-  color: #fbbf24; /* Warnfarbe */
-  cursor: pointer; /* klickbar */
+  color: #fbbf24;
+  cursor: pointer;
   text-decoration: underline;
+}
+
+.topbar__build {
+  flex: 1;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .topbar__btn {
