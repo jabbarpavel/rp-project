@@ -8,5 +8,10 @@
     "Id": 2,
     "Name": "Demo Corp",
     "Domain": "democorp.localhost"
+  },
+  {
+    "Id": 99,
+    "Name": "Local Dev",
+    "Domain": "localhost"
   }
 ]
