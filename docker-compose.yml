@@ -54,6 +54,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        GIT_HASH: ${GIT_HASH:-unknown}
+        GIT_BRANCH: ${GIT_BRANCH:-main}
     container_name: kynso-frontend
     restart: unless-stopped
     # HINWEIS: Port 8080 wird vom nginx-proxy (--profile production) übernommen.
