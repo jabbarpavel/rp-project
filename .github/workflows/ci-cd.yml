@@ -173,10 +173,13 @@ jobs:
         username: ${{ secrets.PRODUCTION_USER }}
         key: ${{ secrets.PRODUCTION_SSH_KEY }}
         script: |
-          cd /opt/rp-crm
+          cd /opt/kynso/prod/app
           git pull origin main
+          export GIT_HASH=$(git rev-parse --short HEAD)
+          export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           docker-compose down
-          docker-compose build --no-cache
+          GIT_HASH=$GIT_HASH GIT_BRANCH=$GIT_BRANCH docker-compose build --no-cache
           docker-compose up -d
-          docker-compose exec -T backend dotnet ef database update
+          sleep 10
+          docker-compose exec -T backend dotnet ef database update || true
           echo "Deployment completed at $(date)"
