@@ -7,14 +7,14 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-let gitHash = 'local';
-let gitBranch = 'local';
+let gitHash = process.env.GIT_HASH || 'local';
+let gitBranch = process.env.GIT_BRANCH || 'local';
 
 try {
-  gitHash = execSync('git rev-parse --short HEAD').toString().trim();
-  gitBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  if (gitHash === 'local') gitHash = execSync('git rev-parse --short HEAD').toString().trim();
+  if (gitBranch === 'local') gitBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 } catch {
-  // Kein Git vorhanden (z.B. in CI ohne Checkout)
+  // Kein Git vorhanden (z.B. Docker Build)
 }
 
 const now = new Date();
