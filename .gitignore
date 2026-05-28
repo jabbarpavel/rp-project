@@ -51,3 +51,7 @@ tmp/
 temp/
 *.tmp
 test-config.html
+
+# GitHub Token (NEVER commit!)
+token.env
+*.env.local

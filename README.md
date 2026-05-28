@@ -2,10 +2,9 @@
 
 A modern, multi-tenant CRM system built with .NET 8 and Angular.
 
-> **🎯 Quick Start?** See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for **ONE clear way** to start each environment (Dev/Test/Prod)!  
+> **🎯 Quick Start?** See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for **ONE clear way** to start each environment (Test/Prod)!  
 > **🚀 Deploy to Production?** See [DEPLOY_TO_PRODUCTION.md](DEPLOY_TO_PRODUCTION.md) for a **simple 3-step guide** to deploy your changes!  
-> **🚑 Production Issue?** See [PRODUCTION_QUICK_FIX.md](PRODUCTION_QUICK_FIX.md) for **SCHNELLHILFE** or [PRODUCTION_FIX_SUMMARY.md](PRODUCTION_FIX_SUMMARY.md) for complete overview.  
-> **⚠️ demo.kynso.ch Problem?** Run `./apply-production-fix.sh` (all-in-one) or `sudo ./fix-demo-nginx.sh` on your production server!
+> **🚑 Production Issue?** See [QUICK_FIX_GUIDE.md](QUICK_FIX_GUIDE.md) for quick help.
 
 ---
 
@@ -48,49 +47,41 @@ chmod +x setup-environment.sh
 This script will:
 - ✅ Check prerequisites
 - ✅ Install required tools
-- ✅ Create dev and test branches
-- ✅ Create databases (kynso_dev, kynso_test)
+- ✅ Create test branch
+- ✅ Create database (kynso_test)
 - ✅ Apply migrations
 
-### Start Development Environment
+### Start Test Environment
 
 **Terminal 1 - Backend:**
 ```bash
 cd src/backend/RP.CRM.Api
-dotnet run --launch-profile Development
+dotnet run --launch-profile Test
 ```
-Backend runs on: **http://localhost:5015**  
-API Docs: **http://localhost:5015/scalar/v1**  
-Health Check: **http://localhost:5015/api/health**
+Backend runs on: **http://localhost:5016**  
+API Docs: **http://localhost:5016/scalar/v1**  
+Health Check: **http://localhost:5016/api/health**
 
 **Terminal 2 - Frontend:**
 ```bash
 cd src/frontend
 npm install  # First time only
-npm start
+npm run start:test
 ```
-Frontend runs on: **http://localhost:4200**
+Frontend runs on: **http://localhost:4300**
 
 ### Test Services
 
 To verify that both frontend and backend are running correctly:
 
-**Linux/Mac:**
-```bash
-./test-services.sh
-```
-
 **Windows (PowerShell):**
 ```powershell
-.\test-services.ps1
+.\test-services.ps1 -Environment Test
 ```
 
-**For Test Environment:**
+**Linux/Mac:**
 ```bash
 ./test-services.sh Test
-```
-```powershell
-.\test-services.ps1 -Environment Test
 ```
 
 This script will check:
@@ -102,17 +93,16 @@ This script will check:
 
 ## 🌍 Environments
 
-The project uses three separate environments:
+The project uses two environments:
 
 | Environment | Branch | Database | Backend Port | Frontend Port |
 |------------|--------|----------|--------------|---------------|
-| **DEV** | `dev` | kynso_dev | 5015 | 4200 |
 | **TEST** | `test` | kynso_test | 5016 | 4300 |
-| **PROD** | `main` | Production | 5020 | - |
+| **PROD** | `main` | Production | 5000 | - |
 
-**Development Flow:**
+**Workflow:**
 ```
-DEV (develop features) → TEST (validate changes) → PROD (deploy live)
+TEST (entwickeln & testen) → PROD (live schalten via PR → main)
 ```
 
 ---
@@ -218,21 +208,14 @@ See [Kynso_Setup_guide.md](docs/Kynso_Setup_guide.md) for production details.
 
 ### Daily Development
 
-1. **Develop** in DEV environment (branch: `dev`)
-2. **Test** in TEST environment (branch: `test`)
-3. **Deploy** to PRODUCTION (branch: `main`)
+1. **Entwickeln & Testen** im TEST environment (branch: `test`)
+2. **Live schalten** via Pull Request `test → main`
 
 ### Common Commands
 
 ```bash
-# Start DEV backend
-cd src/backend/RP.CRM.Api && dotnet run --launch-profile Development
-
 # Start TEST backend
 cd src/backend/RP.CRM.Api && dotnet run --launch-profile Test
-
-# Start DEV frontend
-cd src/frontend && npm start
 
 # Start TEST frontend
 cd src/frontend && npm run start:test
@@ -253,7 +236,7 @@ cd src/backend/RP.CRM.Tests && dotnet test
 
 - **Documentation**: See [docs/](docs/) folder
 - **Issues**: Check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
-- **Development**: See [DEVELOPMENT.md](docs/DEVELOPMENT.md)
+- **Startup**: See [STARTUP_GUIDE.md](STARTUP_GUIDE.md)
 - **Tenant Management**: See [TENANT_WORKFLOW.md](docs/TENANT_WORKFLOW.md)
 
 ---
@@ -264,4 +247,4 @@ Copyright © 2025 Kynso
 
 ---
 
-**Ready to start?** 👉 See [DEVELOPMENT.md](docs/DEVELOPMENT.md) for detailed setup instructions!
+**Ready to start?** 👉 See [STARTUP_GUIDE.md](STARTUP_GUIDE.md) for the quick start guide!

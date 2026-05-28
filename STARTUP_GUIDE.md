@@ -1,6 +1,6 @@
 # 🚀 Startup Guide - Kynso CRM
 
-This guide provides **ONE clear way** to start the application in each environment (Development, Test, Production).
+This guide provides **ONE clear way** to start the application in each environment (Test, Production).
 
 ---
 
@@ -9,105 +9,58 @@ This guide provides **ONE clear way** to start the application in each environme
 Before starting, ensure you have:
 - **.NET 8.0 SDK** (Version 8.0.416 or higher)
 - **Node.js** 20.x or higher  
-- **PostgreSQL** 14 or higher (for Development/Test)
+- **PostgreSQL** 14 or higher (for Test)
 - **Docker** and **Docker Compose** (for Production)
 
 ---
 
 ## 🌍 Environment Overview
 
-| Environment | Backend Port | Frontend Port | Database | Purpose |
-|------------|--------------|---------------|----------|---------|
-| **Development** | 5015 | 4200 | kynso_dev | Local development |
-| **Test** | 5016 | 4300 | kynso_test | Pre-production testing |
-| **Production** | 5000 | 8080 | Production DB | Live system |
+| Environment | Branch | Backend Port | Frontend Port | Database | Purpose |
+|------------|--------|--------------|---------------|----------|---------|
+| **Test** | `test` | 5016 | 4300 | kynso_test | Entwicklung & Testing |
+| **Production** | `main` | 5000 | 8080 | Production DB | Live System (finaro.kynso.ch) |
 
 ---
 
-## 🔧 Development Environment
+## 🧪 Test Environment (Tägliche Arbeit)
 
-### Backend
+### Backend starten
 
 **Windows (PowerShell):**
 ```powershell
 cd src\backend\RP.CRM.Api
-$env:ASPNETCORE_ENVIRONMENT="Development"
-dotnet run
+dotnet run --launch-profile Test
 ```
 
 **Linux/Mac (Bash):**
-```bash
-cd src/backend/RP.CRM.Api
-ASPNETCORE_ENVIRONMENT=Development dotnet run
-```
-
-**Alternative (all platforms):**
-```bash
-cd src/backend/RP.CRM.Api
-dotnet run --launch-profile Development
-```
-
-✅ Backend will be available at: **http://localhost:5015**
-
-### Frontend
-
-```bash
-cd src/frontend
-npm install  # First time only
-npm start
-```
-
-✅ Frontend will be available at: **http://localhost:4200**
-
-### Verify
-
-Open your browser at **http://localhost:4200**
-
----
-
-## 🧪 Test Environment
-
-### Backend
-
-**Windows (PowerShell):**
-```powershell
-cd src\backend\RP.CRM.Api
-$env:ASPNETCORE_ENVIRONMENT="Test"
-dotnet run
-```
-
-**Linux/Mac (Bash):**
-```bash
-cd src/backend/RP.CRM.Api
-ASPNETCORE_ENVIRONMENT=Test dotnet run
-```
-
-**Alternative (all platforms):**
 ```bash
 cd src/backend/RP.CRM.Api
 dotnet run --launch-profile Test
 ```
 
-✅ Backend will be available at: **http://localhost:5016**
+✅ Backend läuft auf: **http://localhost:5016**  
+✅ API Docs: **http://localhost:5016/scalar/v1**
 
-### Frontend
+### Frontend starten
 
 ```bash
 cd src/frontend
+npm install  # Nur beim ersten Mal
 npm run start:test
 ```
 
-✅ Frontend will be available at: **http://localhost:4300**
+✅ Frontend läuft auf: **http://localhost:4300**
 
-### Verify
+### Verifizieren
 
-Open your browser at **http://localhost:4300**
+Browser öffnen: **http://localhost:4300**
 
 ---
 
 ## 🚀 Production Environment
 
-Production runs in Docker with both frontend and backend containerized.
+Production läuft in Docker auf dem Server.
 
 ### Start Everything
 
@@ -118,17 +71,14 @@ docker-compose up --build -d
 ### Verify
 
 ```bash
-# Check container status
+# Container-Status prüfen
 docker-compose ps
 
-# Test backend health
+# Backend-Health prüfen
 curl http://localhost:8080/api/health
-
-# Open frontend in browser
-open http://localhost:8080
 ```
 
-✅ Application will be available at: **http://localhost:8080**
+✅ Live System: **https://finaro.kynso.ch**
 
 ### Stop Everything
 
@@ -140,99 +90,75 @@ docker-compose down
 
 ## 🔍 Health Checks
 
-### Backend Health Endpoints
-
-- **Development:** http://localhost:5015/api/health
 - **Test:** http://localhost:5016/api/health
-- **Production:** http://localhost:8080/api/health
+- **Production:** https://finaro.kynso.ch/api/health
 
 ### API Documentation
 
-- **Development:** http://localhost:5015/scalar/v1
 - **Test:** http://localhost:5016/scalar/v1
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Backend won't start
+### Backend startet nicht
 
 **Problem:** "Database connection failed"
 
-**Solution:** Make sure PostgreSQL is running and the database exists:
+**Lösung:** PostgreSQL läuft? Datenbank existiert?
 
-```bash
-# Check PostgreSQL status
-sudo systemctl status postgresql  # Linux
-# or check if it's running in Task Manager on Windows
-
-# Create database if needed (in psql):
-CREATE DATABASE kynso_dev;
+```sql
+-- In psql ausführen:
 CREATE DATABASE kynso_test;
 ```
 
-### Port already in use
-
-**Problem:** "Address already in use"
-
-**Solution:** Kill the process using the port:
+### Port bereits belegt
 
 **Windows:**
 ```powershell
-# Find process using port 5015
-netstat -ano | findstr :5015
-# Kill it (replace PID with actual process ID)
+netstat -ano | findstr :5016
 taskkill /PID <PID> /F
 ```
 
 **Linux/Mac:**
 ```bash
-# Find and kill process using port 5015
-lsof -ti:5015 | xargs kill -9
+lsof -ti:5016 | xargs kill -9
 ```
 
-### Frontend build errors
+### Frontend Build-Fehler
 
-**Problem:** npm install fails or build errors
-
-**Solution:**
 ```bash
 cd src/frontend
 rm -rf node_modules package-lock.json
 npm install
-npm start
+npm run start:test
 ```
 
-### Docker issues
+### Docker-Probleme
 
-**Problem:** Containers not starting
-
-**Solution:**
 ```bash
-# Clean up and rebuild
 docker-compose down -v
 docker-compose build --no-cache
 docker-compose up -d
-
-# Check logs
 docker-compose logs -f backend
-docker-compose logs -f frontend
 ```
 
 ---
 
-## 📝 Notes
+## 📝 Workflow
 
-- **Development** is for active development and experiments
-- **Test** is for testing before deploying to production  
-- **Production** should only be deployed after successful testing
-- Each environment has its own database and configuration
-- The frontend automatically detects which backend to connect to based on the port it's running on
+```
+test branch → Entwickeln & Testen lokal
+     ↓
+Pull Request erstellen (test → main)
+     ↓
+main branch → Automatisch auf finaro.kynso.ch deployed
+```
 
 ---
 
-## 🔗 Additional Resources
+## 🔗 Weitere Ressourcen
 
-- [README.md](README.md) - Project overview
-- [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) - Detailed development guide
-- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [README.md](README.md) - Projektübersicht
+- [DEPLOY_TO_PRODUCTION.md](DEPLOY_TO_PRODUCTION.md) - Deployment Guide
+- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - Häufige Probleme
