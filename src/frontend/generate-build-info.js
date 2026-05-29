@@ -9,16 +9,19 @@ const path = require('path');
 
 let gitHash = process.env.GIT_HASH || 'local';
 let gitBranch = process.env.GIT_BRANCH || 'local';
+let commitTime = process.env.GIT_COMMIT_TIME || '';
 
 try {
   if (gitHash === 'local') gitHash = execSync('git rev-parse --short HEAD').toString().trim();
   if (gitBranch === 'local') gitBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  if (!commitTime) commitTime = execSync('git log -1 --format=%cI').toString().trim();
 } catch {
   // Kein Git vorhanden (z.B. Docker Build)
 }
 
-const now = new Date();
-const buildTime = now.toISOString();
+// Timestamp = Commit-Zeit von HEAD (nicht Build-Zeit).
+// So ändert sich der Wert nur, wenn ein neuer Commit existiert.
+const buildTime = commitTime || new Date().toISOString();
 
 const content = `// AUTO-GENERIERT – Nicht manuell bearbeiten!
 // Wird durch generate-build-info.js erstellt.
