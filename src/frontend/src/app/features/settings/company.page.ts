@@ -228,7 +228,7 @@ export class CompanySettingsPage implements OnInit {
 
     this.uploading = true;
 
-    this.api.put<TenantInfo>(`/api/tenant/${this.tenantId}/logo`, { logoData: null }).subscribe({
+    this.api.delete<void>(`/api/tenant/${this.tenantId}/logo`).subscribe({
       next: () => {
         this.logoData = null;
         this.toast.show('Logo entfernt', 'success');
