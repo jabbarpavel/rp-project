@@ -22,6 +22,9 @@ namespace RP.CRM.Infrastructure.Data
         public DbSet<Document> Documents => Set<Document>();
         public DbSet<CustomerTask> CustomerTasks => Set<CustomerTask>();
         public DbSet<CustomerRelationship> CustomerRelationships => Set<CustomerRelationship>();
+        public DbSet<CustomerNote> CustomerNotes => Set<CustomerNote>();
+        public DbSet<CustomerNoteHistory> CustomerNoteHistories => Set<CustomerNoteHistory>();
+        public DbSet<Policy> Policies => Set<Policy>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -137,6 +140,121 @@ namespace RP.CRM.Infrastructure.Data
                 entity.HasIndex(r => new { r.CustomerId, r.RelatedCustomerId });
             });
 
+            // ====== CustomerNote-Konfiguration ======
+            modelBuilder.Entity<CustomerNote>(entity =>
+            {
+                entity.Property(n => n.Text)
+                    .IsRequired();
+
+                entity.Property(n => n.IsDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(n => n.Customer)
+                    .WithMany()
+                    .HasForeignKey(n => n.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(n => n.CreatedByUser)
+                    .WithMany()
+                    .HasForeignKey(n => n.CreatedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(n => n.UpdatedByUser)
+                    .WithMany()
+                    .HasForeignKey(n => n.UpdatedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(n => n.DeletedByUser)
+                    .WithMany()
+                    .HasForeignKey(n => n.DeletedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(n => n.Tenant)
+                    .WithMany()
+                    .HasForeignKey(n => n.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(n => new { n.TenantId, n.CustomerId, n.CreatedAt });
+                entity.HasIndex(n => n.IsDeleted);
+            });
+
+            // ====== CustomerNoteHistory-Konfiguration ======
+            modelBuilder.Entity<CustomerNoteHistory>(entity =>
+            {
+                entity.Property(h => h.Text)
+                    .IsRequired();
+
+                entity.HasOne(h => h.CustomerNote)
+                    .WithMany(n => n.History)
+                    .HasForeignKey(h => h.CustomerNoteId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(h => h.EditedByUser)
+                    .WithMany()
+                    .HasForeignKey(h => h.EditedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(h => h.Tenant)
+                    .WithMany()
+                    .HasForeignKey(h => h.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(h => new { h.TenantId, h.CustomerNoteId, h.EditedAt });
+            });
+
+            // ====== Policy-Konfiguration ======
+            modelBuilder.Entity<Policy>(entity =>
+            {
+                entity.Property(p => p.PolicyNumber)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(p => p.Type)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(p => p.Company)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(p => p.OrganizationalUnit)
+                    .HasMaxLength(150)
+                    .IsRequired(false);
+
+                entity.Property(p => p.DocumentFileName).HasMaxLength(255);
+                entity.Property(p => p.DocumentContentType).HasMaxLength(150);
+
+                entity.Property(p => p.IsDeleted).HasDefaultValue(false);
+
+                entity.HasOne(p => p.Customer)
+                    .WithMany()
+                    .HasForeignKey(p => p.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(p => p.Advisor)
+                    .WithMany()
+                    .HasForeignKey(p => p.AdvisorUserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(p => p.CreatedByUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.CreatedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.DeletedByUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.DeletedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.Tenant)
+                    .WithMany()
+                    .HasForeignKey(p => p.TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(p => new { p.TenantId, p.CustomerId, p.StartDate });
+                entity.HasIndex(p => p.IsDeleted);
+            });
+
             // ====== Seed-Daten ======
             modelBuilder.Entity<Tenant>().HasData(
                 new Tenant
@@ -190,6 +308,24 @@ namespace RP.CRM.Infrastructure.Data
             }
 
             foreach (var entry in ChangeTracker.Entries<CustomerRelationship>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<CustomerNote>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<CustomerNoteHistory>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
+                    entry.Entity.TenantId = _tenantContext.TenantId;
+            }
+
+            foreach (var entry in ChangeTracker.Entries<Policy>())
             {
                 if (entry.State == EntityState.Added && entry.Entity.TenantId == 0)
                     entry.Entity.TenantId = _tenantContext.TenantId;

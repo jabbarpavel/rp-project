@@ -9,6 +9,7 @@ import { AdvisorChangeDialogComponent } from '../../shared/components/advisor-ch
 import { CustomerDocumentsComponent } from '../../shared/components/customer-documents.component';
 import { CustomerTasksComponent } from '../../shared/components/customer-tasks.component';
 import { CustomerRelationshipsComponent } from '../../shared/components/customer-relationships.component';
+import { CustomerNotesComponent } from '../../shared/components/customer-notes.component';
 import { PermissionService } from '../../core/services/permission.service';
 import { CustomerRelationshipService } from '../../core/services/customer-relationship.service';
 
@@ -74,7 +75,7 @@ interface CustomerDetailDto {
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent, CustomerRelationshipsComponent],
+  imports: [CommonModule, FormsModule, AdvisorChangeDialogComponent, CustomerDocumentsComponent, CustomerTasksComponent, CustomerRelationshipsComponent, CustomerNotesComponent],
   template: `
     <div class="page">
       <div class="page-header">
@@ -470,6 +471,9 @@ interface CustomerDetailDto {
               </button>
             </div>
           </section>
+
+          <!-- Notes Section -->
+          <app-customer-notes [customerId]="customer.id"></app-customer-notes>
 
           <!-- Documents Section -->
           <app-customer-documents [customerId]="customer.id"></app-customer-documents>

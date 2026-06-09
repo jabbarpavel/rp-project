@@ -61,6 +61,30 @@
   color: #fff;
 }
 
+.sidebar__submenu {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.025);
+  border-left: 2px solid rgba(255, 255, 255, 0.08);
+  margin-left: 1.6rem;
+}
+
+.sidebar__link--sub {
+  padding: 0.45rem 1rem 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  color: #b9c1d1;
+}
+
+.sidebar__link--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.sidebar__link--disabled:hover {
+  background: transparent;
+  color: #b9c1d1;
+}
+
 .sidebar__icon {
   width: 1.3rem;
   text-align: center;

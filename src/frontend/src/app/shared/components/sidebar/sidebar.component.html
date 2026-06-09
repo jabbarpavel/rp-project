@@ -14,15 +14,36 @@
   </div>
 
   <nav class="sidebar__nav">
-    <a
-      *ngFor="let item of menu"
-      [routerLink]="item.link"
-      routerLinkActive="active"
-      class="sidebar__link"
-    >
-      <span class="sidebar__icon">{{ item.icon }}</span>
-      <span>{{ item.label }}</span>
-    </a>
+    <ng-container *ngFor="let item of menu">
+      <a
+        [routerLink]="item.link"
+        routerLinkActive="active"
+        class="sidebar__link"
+      >
+        <span class="sidebar__icon">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+
+      <div *ngIf="item.subMenu && isMenuExpanded(item)" class="sidebar__submenu">
+        <ng-container *ngFor="let sub of item.subMenu">
+          <a
+            *ngIf="isSubItemEnabled(sub); else disabledSub"
+            [routerLink]="subItemLink(sub)"
+            routerLinkActive="active"
+            class="sidebar__link sidebar__link--sub"
+          >
+            <span class="sidebar__icon">{{ sub.icon }}</span>
+            <span>{{ sub.label }}</span>
+          </a>
+          <ng-template #disabledSub>
+            <span class="sidebar__link sidebar__link--sub sidebar__link--disabled" [title]="'Kunden öffnen, um ' + sub.label + ' anzuzeigen'">
+              <span class="sidebar__icon">{{ sub.icon }}</span>
+              <span>{{ sub.label }}</span>
+            </span>
+          </ng-template>
+        </ng-container>
+      </div>
+    </ng-container>
   </nav>
 
   <div class="sidebar__build" title="Branch · Commit · Build-Zeitpunkt">

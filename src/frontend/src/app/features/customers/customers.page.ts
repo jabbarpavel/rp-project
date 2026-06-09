@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf, NgFor, DatePipe } from '@angular/common';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { Subscription } from 'rxjs';
@@ -38,7 +38,7 @@ interface CustomerDto {
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgIf, NgFor, DatePipe],
+  imports: [CommonModule, FormsModule, NgIf, NgFor],
   templateUrl: './customers.page.html',
   styleUrls: ['./customers.page.scss']
 })

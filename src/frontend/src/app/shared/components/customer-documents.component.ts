@@ -26,7 +26,6 @@ import { PermissionService } from '../../core/services/permission.service';
           <div class="form-group">
             <label>Kategorie</label>
             <select [(ngModel)]="selectedCategory" class="form-control">
-              <option value="Police">Police</option>
               <option value="ID/Pass">ID/Pass</option>
               <option value="Sonstige">Sonstige</option>
             </select>

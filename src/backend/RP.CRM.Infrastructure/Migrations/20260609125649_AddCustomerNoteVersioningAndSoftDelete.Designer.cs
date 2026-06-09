@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RP.CRM.Infrastructure.Data;
@@ -11,9 +12,11 @@ using RP.CRM.Infrastructure.Data;
 namespace RP.CRM.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260609125649_AddCustomerNoteVersioningAndSoftDelete")]
+    partial class AddCustomerNoteVersioningAndSoftDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -447,102 +450,6 @@ namespace RP.CRM.Infrastructure.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("RP.CRM.Domain.Entities.Policy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AdvisorUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CreatedByUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("DeletedByUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("DocumentContentType")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<string>("DocumentFileName")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("DocumentFilePath")
-                        .HasColumnType("text");
-
-                    b.Property<long?>("DocumentFileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("OrganizationalUnit")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<string>("PolicyNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdvisorUserId");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DeletedByUserId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("TenantId", "CustomerId", "StartDate");
-
-                    b.ToTable("Policies");
-                });
-
             modelBuilder.Entity("RP.CRM.Domain.Entities.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -804,47 +711,6 @@ namespace RP.CRM.Infrastructure.Migrations
                     b.Navigation("Tenant");
 
                     b.Navigation("UploadedBy");
-                });
-
-            modelBuilder.Entity("RP.CRM.Domain.Entities.Policy", b =>
-                {
-                    b.HasOne("RP.CRM.Domain.Entities.User", "Advisor")
-                        .WithMany()
-                        .HasForeignKey("AdvisorUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("RP.CRM.Domain.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RP.CRM.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RP.CRM.Domain.Entities.User", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("RP.CRM.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Advisor");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("RP.CRM.Domain.Entities.User", b =>

@@ -45,6 +45,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/customers/customerDetail.page').then(m => m.CustomerDetailPage)
       },
+      {
+        path: 'customers/:id/policies',
+        loadComponent: () =>
+          import('./features/customers/customer-policies.page').then(m => m.CustomerPoliciesPage)
+      },
       // -------------Settings------------------------------------
       {
         path: 'settings',
